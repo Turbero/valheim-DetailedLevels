@@ -1,0 +1,9 @@
+{
+  "name": "DetailedLevels",
+  "version_number": "1.0.2",
+  "website_url": "https://github.com/Turbero/valheim-DetailedLevels",
+  "description": "Shows levels numbers with decimals. Enough guessing progress only with the bottom bar.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2202"
+  ]
+}

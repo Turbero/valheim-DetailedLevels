@@ -35,19 +35,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\..\source\Libs\0Harmony.dll</HintPath>
+      <HintPath>..\..\..\..\source\Libs\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="assembly_guiutils">
-      <HintPath>..\..\..\..\..\..\source\Libs\assembly_guiutils.dll</HintPath>
+      <HintPath>..\..\..\..\source\Libs\assembly_guiutils.dll</HintPath>
     </Reference>
     <Reference Include="assembly_utils">
-      <HintPath>..\..\..\..\..\..\source\Libs\assembly_utils.dll</HintPath>
+      <HintPath>..\..\..\..\source\Libs\assembly_utils.dll</HintPath>
     </Reference>
     <Reference Include="assembly_valheim">
-      <HintPath>..\..\..\..\..\..\source\Libs\assembly_valheim.dll</HintPath>
+      <HintPath>..\..\..\..\source\Libs\assembly_valheim.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>..\..\..\..\..\..\source\Libs\BepInEx.dll</HintPath>
+      <HintPath>..\..\..\..\source\Libs\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -58,24 +58,32 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\..\..\..\..\..\source\Libs\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>..\..\..\..\source\Libs\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\source\Libs\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\source\Libs\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\..\..\source\Libs\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\source\Libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\..\..\..\source\Libs\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\..\..\..\source\Libs\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\..\..\..\..\..\source\Libs\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>..\..\..\..\source\Libs\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>..\..\..\..\source\Libs\UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+      <HintPath>..\..\..\..\..\..\source\Libs\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
     <Compile Include="DetailedLevels.cs" />
+    <Compile Include="Experiments\BuffIconMod.cs" />
+    <Compile Include="Experiments\EquipBuff.cs" />
     <Compile Include="Features\PlayerShowSkillAsBuff.cs" />
     <Compile Include="Features\PlayerSkillupDecimals.cs" />
     <Compile Include="Features\PlayerSkillupMessage.cs" />

@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using static Utils;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
+using static Utils;
 
 namespace DetailedLevels.Features
 {

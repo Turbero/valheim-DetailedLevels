@@ -13,7 +13,7 @@ namespace DetailedLevels.Features
             int multipleValue = Math.Max(1, Math.Min(100, ConfigurationFile.skillUpMessageAfterMultipleLevel.Value));
             if ((int)level % multipleValue == 0)
             {
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"$msg_skillup $skill_{skill.ToString().ToLower()}: {level}");
+                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"$msg_skillup $skill_{skill.ToString().ToLower()}: {(int)level}");
             }
         }
     }

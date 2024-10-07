@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using HarmonyLib;
-using static Utils;
 
 namespace DetailedLevels
 {
