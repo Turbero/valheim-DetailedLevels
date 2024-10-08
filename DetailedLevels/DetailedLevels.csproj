@@ -43,15 +43,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MODGEN\CHANGELOG.md" />
-    <None Include="generate_mod.sh" />
-    <None Include="MODGEN\manifest.json" />
-    <None Include="MODGEN\README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MODGEN\icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\..\..\source\Libs\0Harmony.dll</HintPath>
     </Reference>
@@ -98,6 +89,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "Release" (powershell Compress-Archive -Path '$(SolutionDir)MODGEN\*' -DestinationPath '$(SolutionDir)MODGEN\$(ProjectName).zip' -Force)

@@ -9,7 +9,7 @@ using static Utils;
 
 namespace DetailedLevels.Features
 {
-    [HarmonyPatch(typeof(SkillsDialog), nameof(SkillsDialog.Setup))]
+    //[HarmonyPatch(typeof(SkillsDialog), nameof(SkillsDialog.Setup))]
     class SkillsDialog_Patch
     {
         // Diccionario para rastrear si la habilidad tiene un buff activo
@@ -55,7 +55,7 @@ namespace DetailedLevels.Features
                 RemoveSkillBuff(player, skill);
                 skillBuffs[skillName] = false;
 
-                // Restablecer el fondo de la fila al color original
+                // FIXME Restablecer el fondo de la fila al color original
                 skillRow.GetComponent<Image>().color = Color.white;
             }
             else
