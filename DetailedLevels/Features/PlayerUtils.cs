@@ -32,7 +32,7 @@ namespace DetailedLevels.Features
                 levelText = (float)Math.Round(skillLevel + levelPercentage, Math.Min(15, Math.Max(0, ConfigurationFile.numberOfDecimals.Value)));
             }
 
-            float nextLevelRequirement = GetNextLevelRequirement(skill.m_level);
+            float nextLevelRequirement = GetNextLevelRequirement(skill);
             Logger.Log($"******* {skill.m_info.m_skill.ToString()} *********");
             Logger.Log($"skillLevel: {skill.m_level}, skillLevelRounded: {skillLevel}, accumulator: {accumulator}");
             Logger.Log($"nextLevelRequirement: {nextLevelRequirement}, levelPercentage: {levelPercentage}, levelText: {levelText}");
@@ -40,11 +40,12 @@ namespace DetailedLevels.Features
             return levelText;
         }
 
-        //method is private in game code, I bring it here. Hopefully it will never change!
-        private static float GetNextLevelRequirement(float m_level)
+        private static float GetNextLevelRequirement(Skills.Skill skill)
         {
-            return Mathf.Pow(Mathf.Floor(m_level + 1f), 1.5f) * 0.5f + 0.5f;
+            var getSkillMethod = skill.GetType().GetMethod("GetNextLevelRequirement", BindingFlags.NonPublic | BindingFlags.Instance);
+            return getSkillMethod != null ? (float)getSkillMethod.Invoke(skill, new object[] {} ) : 0;
         }
+
         public static string GetValueForNameHash(Skills.Skill skill)
         {
             return skill.m_info.m_skill.ToString();
