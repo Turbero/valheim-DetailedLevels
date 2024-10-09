@@ -1,79 +1,71 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 using static Utils;
+using static ItemDrop;
 
 namespace DetailedLevels.Features
 {
-    //[HarmonyPatch(typeof(SkillsDialog), nameof(SkillsDialog.Setup))]
-    class SkillsDialog_Patch
+    [HarmonyPatch(typeof(SkillsDialog), nameof(SkillsDialog.Setup))]
+    class SkillsDialog_SkillStatusEffects_Patch
     {
-        // Diccionario para rastrear si la habilidad tiene un buff activo
-        private static Dictionary<string, bool> skillBuffs = new Dictionary<string, bool>();
+        private static bool listenersAdded = false;
 
-        private static int hashCode;
+        // active status effects
+        public static Dictionary<string, int> skillStatusEffects = new Dictionary<string, int>();
 
         static void Postfix(ref Player player, ref List<GameObject> ___m_elements)
         {
-            if (!ConfigurationFile.modEnabled.Value || InventoryGui.instance == null) return;
+            if (!ConfigurationFile.modEnabled.Value || InventoryGui.instance == null || listenersAdded) return;
 
-            // Crear una copia de la variable player para evitar problemas de captura en la lambda
+            // copy to use ref variable inside listener
             var currentPlayer = player;
 
-            // Agregar listeners de clic a cada fila de habilidades
+            // Add listeners to skill rows
             for (int i = 0; i < ___m_elements.Count; i++)
             {
                 GameObject skillRow = ___m_elements[i];
 
-                // Capturar el índice de la habilidad
-                int skillIndex = i;
-
-                // Agregar listener para el clic
+                var row = i;
                 skillRow.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    Skills.Skill skill = currentPlayer.GetSkills().GetSkillList()[skillIndex];
+                    Skills.Skill skill = currentPlayer.GetSkills().GetSkillList()[row];
                     OnSkillClicked(currentPlayer, skill, skillRow);
                 });
             }
+            listenersAdded = true;
         }
 
         private static void OnSkillClicked(Player player, Skills.Skill skill, GameObject skillRow)
         {
-            // Obtener el nombre de la habilidad
-            string skillName = "Buff for " + skill.m_info.m_skill.ToString();
+            string skillName = skill.m_info.m_skill.ToString();
 
-            // Comprobar si el buff ya está activo
-            bool hasBuff = skillBuffs.ContainsKey(skillName) && skillBuffs[skillName];
+            Logger.Log($"skillStatusEffects: {skillStatusEffects}");
+            Logger.Log($"containsKey: {skillStatusEffects.ContainsKey(skillName)}");
 
-            if (hasBuff)
+            if (!skillStatusEffects.ContainsKey(skillName))
             {
-                // Si el buff ya está activo, eliminarlo
-                RemoveSkillBuff(player, skill);
-                skillBuffs[skillName] = false;
+                Sprite skillIcon = GetSkillIcon(skillRow);  // Skill icon
+                AddSkillBuff(player, skill, skillIcon, skillRow);
 
-                // FIXME Restablecer el fondo de la fila al color original
-                skillRow.GetComponent<Image>().color = Color.white;
+                // FIXME
+                //skillRow.GetComponent<Image>().color = Color.blue;
             }
             else
             {
-                // Si el buff no está activo, agregar el buff
-                Sprite skillIcon = GetSkillIcon(skillRow);  // Obtener el ícono de la habilidad
-                AddSkillBuff(player, skill, skillIcon, skillRow);
-                skillBuffs[skillName] = true;
+                RemoveSkillBuff(player, skill);
 
-                // TODO Cambiar el fondo de la fila a azul
-                //skillRow.GetComponent<Image>().color = Color.blue;
+                // FIXME
+                //skillRow.GetComponent<Image>().color = Color.white;                
             }
         }
 
-        // Método para obtener el ícono de la habilidad desde la fila de habilidad
         private static Sprite GetSkillIcon(GameObject skillRow)
         {
-            // Busca el componente de imagen (ícono) en la fila
+            // Find icon component under icon_bkg component in the row and return sprite
             Image skillIcon = skillRow
                 .transform.Find("icon_bkg").GetComponent<Image>()
                 .transform.Find("icon").GetComponent<Image>();
@@ -86,71 +78,110 @@ namespace DetailedLevels.Features
 
         private static void AddSkillBuff(Player player, Skills.Skill skill, Sprite skillIcon, GameObject skillRow)
         {
-            // Usar reflection para obtener el campo m_seman
-            var seManField = typeof(Player).GetField("m_seman", BindingFlags.NonPublic | BindingFlags.Instance);
-            if (seManField != null)
-            {
-                SEMan seMan = (SEMan)seManField.GetValue(player);
+            SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
 
-                // Crear un nuevo efecto de estado personalizado (buff)
-                SE_Stats customBuff = ScriptableObject.CreateInstance<SE_Stats>();
+            String value = Utils.FindChild(skillRow.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text;
+            Logger.Log("Skill current value: " + value);
 
-                // Personalizar los atributos del buff
-                customBuff.m_name = "Buff for " + skill.m_info.m_skill;
-                customBuff.m_tooltip = $"This is a custom buff based on {skill.m_info.m_skill}";
-                customBuff.m_icon = skillIcon; // Usar el ícono de la habilidad
+            // Create new custom status effect
+            SE_Stats customBuff = ScriptableObject.CreateInstance<SE_Stats>();
+            customBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {value}";
+            customBuff.m_tooltip = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}_description";
+            customBuff.m_icon = skillIcon; // Use skill icon
+            customBuff.name = PlayerUtils.GetValueForNameHash(skill); // to produce distinct hash values
 
+            // Apply buff to player
+            int nameHash = customBuff.NameHash();
+            Logger.Log($"name: {customBuff.name}, m_name: {customBuff.m_name}, nameHash: {nameHash}");
+            seMan.AddStatusEffect(customBuff);
 
-                //NIVEL ACTUAL DE LA SKILL SELECCIONADA
-                /*int skillLevel = (int)skill.m_level; 
-                float levelText = skillLevel;
-                float levelPercentage = skill.GetLevelPercentage();
+            string skillName = skill.m_info.m_skill.ToString();
+            skillStatusEffects.Add(skillName, nameHash);
 
-                // Number of decimals
-                if (skill.m_accumulator > 0)
-                {
-                    levelText = (float)Math.Round(skillLevel + levelPercentage, Math.Min(15, Math.Max(0, numberOfDecimals.Value)));
-                }
-                customBuff.m_cooldown = levelText;*/
-
-                //NIVEL ACTUAL SIN CALCULAR
-                String value = Utils.FindChild(skillRow.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text;
-                Logger.Log("*** Valor para el buff: " + value);
-                customBuff.m_cooldown = float.Parse(value);
-                //customBuff.m_addMaxHealth = skill.m_level; // Aumentar la vida según el nivel de la habilidad
-                //customBuff.m_addMaxStamina = skill.m_level / 2f; // Aumentar la estamina
-
-                // Aplicar el buff al jugador
-                hashCode = customBuff.GetHashCode();
-                seMan.AddStatusEffect(customBuff);
-
-                Logger.Log($"Buff añadido: {skill.m_info.m_skill} con nivel {skill.m_level}");
-            }
-            else
-            {
-                Logger.LogError("No se pudo acceder al campo m_seman del jugador.");
-            }
+            Logger.Log($"Added buff: {customBuff.m_name}");
         }
 
         private static void RemoveSkillBuff(Player player, Skills.Skill skill)
         {
-            // Usar reflection para obtener el campo m_seman
-            var seManField = typeof(Player).GetField("m_seman", BindingFlags.NonPublic | BindingFlags.Instance);
-            if (seManField != null)
-            {
-                SEMan seMan = (SEMan)seManField.GetValue(player);
+            SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
 
-                // Encontrar y eliminar el efecto de estado (buff) que corresponde a la habilidad
-                StatusEffect existingBuff = seMan.GetStatusEffect(hashCode);
-                if (existingBuff != null)
+            // Find and delete buff
+            string skillName = skill.m_info.m_skill.ToString();
+            int nameHash = skillStatusEffects.GetValueSafe(skillName);
+            StatusEffect existingBuff = seMan.GetStatusEffect(nameHash);
+            if (existingBuff != null)
+            {
+                seMan.RemoveStatusEffect(existingBuff);
+                skillStatusEffects.Remove(skillName);
+                Logger.Log($"Deleted buff: {existingBuff.m_name}");
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.OnAttackTrigger))]
+    class Humanoid_OnAttackTrigger_Patch
+    {
+        static void Postfix()
+        {
+            Player player = Player.m_localPlayer;
+
+            List<ItemData> equippedItems = player.GetInventory().GetEquippedItems(); // Equipped weapons
+
+            for (int i = 0; i < equippedItems.Count; i++)
+            {
+                ItemData equippedItem = equippedItems[i];
+
+                if (equippedItem.m_shared.m_name != "$item_chest_rags") // Only real weapons
                 {
-                    seMan.RemoveStatusEffect(existingBuff);
-                    Logger.Log($"Buff eliminado: {skill.m_info.m_skill}");
+                    //Find associated skill
+                    var skillType = equippedItem.m_shared.m_skillType;
+                    Skills.Skill skill = GetPlayerSkill(player, skillType);
+                    if (skill == null)
+                        return; // if not found, return
+
+                    Logger.Log($"skill type found: {skill.m_info.m_skill.ToString()}");
+                    UpdateWeaponBuffIfExists(player, skill, equippedItem);
                 }
             }
-            else
+        }
+
+        private static Skills.Skill GetPlayerSkill(Player player, Skills.SkillType skillType)
+        {
+            List<Skills.Skill> playerSkills = player.GetSkills().GetSkillList();
+            for (int i = 0; i < playerSkills.Count; i++)
             {
-                Logger.LogError("No se pudo acceder al campo m_seman del jugador.");
+                Skills.Skill skill = playerSkills[i];
+                if (skill.m_info.m_skill == skillType)
+                    return skill;
+            }
+            return null;
+        }
+
+        private static void UpdateWeaponBuffIfExists(Player player, Skills.Skill skill, ItemDrop.ItemData equippedItem)
+        {
+            SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
+
+            string skillName = skill.m_info.m_skill.ToString();
+            int valueForHashCode = PlayerUtils.GetValueForHashCode(skill);
+            Logger.Log($"skillName to find corresponding buff: {skillName} with hash {valueForHashCode}");
+
+            StatusEffect existingBuff = seMan.GetStatusEffect(valueForHashCode.GetHashCode());
+            if (existingBuff != null)
+            {
+                float currentSkillLevel = PlayerUtils.GetCurrentSkillLevelProgress(skill);
+                Logger.Log($"About to update buff: $skill_{skillName.ToLower()} with skill level: {currentSkillLevel}.");
+
+                string newBuffName = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {currentSkillLevel}";
+                Logger.Log($"Old buff name: {existingBuff.m_name}. New buff name: {newBuffName}");
+                if (existingBuff.m_name != newBuffName)
+                {
+                    existingBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {currentSkillLevel}";
+                    Logger.Log($"Updated buff: {skillName} with skill level: {currentSkillLevel}");
+                } else
+                {
+                    Logger.Log("No need to update buff");
+                }
+
             }
         }
     }

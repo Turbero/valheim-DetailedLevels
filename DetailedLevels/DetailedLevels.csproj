@@ -39,6 +39,7 @@
     <Compile Include="Features\PlayerShowSkillAsBuff.cs" />
     <Compile Include="Features\PlayerSkillupDecimals.cs" />
     <Compile Include="Features\PlayerSkillupMessage.cs" />
+    <Compile Include="Features\PlayerUtils.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
