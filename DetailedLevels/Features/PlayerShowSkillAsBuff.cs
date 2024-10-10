@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using static Utils;
 using static ItemDrop;
+using static Skills;
 
 namespace DetailedLevels.Features
 {
@@ -32,14 +33,14 @@ namespace DetailedLevels.Features
                 var row = i;
                 skillRow.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    Skills.Skill skill = currentPlayer.GetSkills().GetSkillList()[row];
+                    Skill skill = currentPlayer.GetSkills().GetSkillList()[row];
                     OnSkillClicked(currentPlayer, skill, skillRow);
                 });
             }
             listenersAdded = true;
         }
 
-        private static void OnSkillClicked(Player player, Skills.Skill skill, GameObject skillRow)
+        private static void OnSkillClicked(Player player, Skill skill, GameObject skillRow)
         {
             string skillName = skill.m_info.m_skill.ToString();
 
@@ -80,7 +81,7 @@ namespace DetailedLevels.Features
             return null;
         }
 
-        private static void AddSkillBuff(Player player, Skills.Skill skill, Sprite skillIcon, GameObject skillRow)
+        private static void AddSkillBuff(Player player, Skill skill, Sprite skillIcon, GameObject skillRow)
         {
             SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
 
@@ -105,7 +106,7 @@ namespace DetailedLevels.Features
             Logger.Log($"Added buff: {customBuff.m_name}");
         }
 
-        private static void RemoveSkillBuff(Player player, Skills.Skill skill)
+        private static void RemoveSkillBuff(Player player, Skill skill)
         {
             SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
 
@@ -127,41 +128,44 @@ namespace DetailedLevels.Features
     {
         static void Postfix()
         {
+            if (!ConfigurationFile.equipBuffs.Value) return;
+
             Player player = Player.m_localPlayer;
 
-            List<ItemData> equippedItems = player.GetInventory().GetEquippedItems(); // Equipped weapons
-
+            //Check always (not optimal)
+            UpdateWeaponBuffIfExists(player, GetPlayerSkill(player, SkillType.Unarmed));
+            UpdateWeaponBuffIfExists(player, GetPlayerSkill(player, SkillType.Blocking));
+            UpdateWeaponBuffIfExists(player, GetPlayerSkill(player, SkillType.Bows));
+            
+            List<ItemData> equippedItems = player.GetInventory().GetEquippedItems();
             for (int i = 0; i < equippedItems.Count; i++)
             {
                 ItemData equippedItem = equippedItems[i];
+                var skillType = equippedItem.m_shared.m_skillType;
+                string lowerName = equippedItem.m_shared.m_name.ToLower();
 
-                if (equippedItem.m_shared.m_name != "$item_chest_rags") // Only real weapons
-                {
-                    //Find associated skill
-                    var skillType = equippedItem.m_shared.m_skillType;
-                    Skills.Skill skill = GetPlayerSkill(player, skillType);
-                    if (skill == null)
-                        return; // if not found, return
+                if (skillType == SkillType.Swords && !lowerName.Contains("sword")) //non weapon equipped item
+                    continue;
 
-                    Logger.Log($"skill type found: {skill.m_info.m_skill.ToString()}");
-                    UpdateWeaponBuffIfExists(player, skill, equippedItem);
-                }
+                Skill skill = GetPlayerSkill(player, skillType); //game uses "Swords" as default value but I discarded fake weapons before
+                Logger.Log($"skill type found: {skill.m_info.m_skill.ToString()}");
+                UpdateWeaponBuffIfExists(player, skill);
             }
         }
 
-        private static Skills.Skill GetPlayerSkill(Player player, Skills.SkillType skillType)
+        private static Skill GetPlayerSkill(Player player, SkillType skillType)
         {
-            List<Skills.Skill> playerSkills = player.GetSkills().GetSkillList();
+            List<Skill> playerSkills = player.GetSkills().GetSkillList();
             for (int i = 0; i < playerSkills.Count; i++)
             {
-                Skills.Skill skill = playerSkills[i];
+                Skill skill = playerSkills[i];
                 if (skill.m_info.m_skill == skillType)
                     return skill;
             }
             return null;
         }
 
-        private static void UpdateWeaponBuffIfExists(Player player, Skills.Skill skill, ItemDrop.ItemData equippedItem)
+        private static void UpdateWeaponBuffIfExists(Player player, Skill skill)
         {
             SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
 
