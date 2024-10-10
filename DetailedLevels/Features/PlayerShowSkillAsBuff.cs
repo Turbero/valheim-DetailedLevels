@@ -48,19 +48,23 @@ namespace DetailedLevels.Features
 
             if (!skillStatusEffects.ContainsKey(skillName))
             {
-                Sprite skillIcon = GetSkillIcon(skillRow);  // Skill icon
+                Sprite skillIcon = GetSkillIcon(skillRow);
                 AddSkillBuff(player, skill, skillIcon, skillRow);
-
-                // FIXME
-                //skillRow.GetComponent<Image>().color = Color.blue;
+                setSkillRowBackgroundColor(skillRow, Color.cyan);
             }
             else
             {
                 RemoveSkillBuff(player, skill);
-
-                // FIXME
-                //skillRow.GetComponent<Image>().color = Color.white;                
+                setSkillRowBackgroundColor(skillRow, new Color(0f, 0f, 0f, 0f));
             }
+        }
+
+        private static void setSkillRowBackgroundColor(GameObject skillRow, Color color)
+        {
+            //using temp variable to avoid CS1612
+            ColorBlock skillRowButtonColors = skillRow.GetComponentInChildren<Button>().colors;
+            skillRowButtonColors.normalColor = color;
+            skillRow.GetComponentInChildren<Button>().colors = skillRowButtonColors;
         }
 
         private static Sprite GetSkillIcon(GameObject skillRow)
