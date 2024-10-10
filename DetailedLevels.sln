@@ -5,6 +5,19 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DetailedLevels", "DetailedLevels\DetailedLevels.csproj", "{F302FE77-1481-495A-84B9-5BA829A4CF2B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{538F84AC-D342-416C-B214-066BE08D6ABF}"
+	ProjectSection(SolutionItems) = preProject
+		generate_mod.sh = generate_mod.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MODGEN", "MODGEN", "{AA1812EB-283C-4F54-AC51-5AE24381560A}"
+	ProjectSection(SolutionItems) = preProject
+		MODGEN\CHANGELOG.md = MODGEN\CHANGELOG.md
+		MODGEN\icon.png = MODGEN\icon.png
+		MODGEN\manifest.json = MODGEN\manifest.json
+		MODGEN\README.md = MODGEN\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +31,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AA1812EB-283C-4F54-AC51-5AE24381560A} = {538F84AC-D342-416C-B214-066BE08D6ABF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CD541807-E84F-4369-BF95-AB6DDEA624E5}

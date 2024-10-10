@@ -9,6 +9,7 @@ namespace DetailedLevels
         public static ConfigEntry<bool> debug;
         public static ConfigEntry<int> numberOfDecimals;
         public static ConfigEntry<int> skillUpMessageAfterMultipleLevel;
+        public static ConfigEntry<bool> equipBuffs;
 
         private static ConfigFile config;
 
@@ -21,6 +22,7 @@ namespace DetailedLevels
                 debug = config.Bind<bool>("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)");
                 numberOfDecimals = config.Bind<int>("2 - Levels Data", "NumberOfDecimals", 2, "Number of decimals to show in your levels information (default = 2, min = 0, max = 15)");
                 skillUpMessageAfterMultipleLevel = config.Bind<int>("2 - Levels Data", "SkillUpMessageAfterMultipleLevel", 5, "Shows skill up message after the new level is multiple of the indicated level (0 = disabled, default = 5)");
+                equipBuffs = config.Bind<bool>("2 - Levels Data", "equipBuffs", true, "Allows selecting buffs in the skills dialog to show them as buffs and look at how it is progressed");
             }
         }
     }

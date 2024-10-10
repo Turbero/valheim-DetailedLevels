@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.1.0
+
+* 
+
 ## 1.0.3
 
 * Small fix for removing error in log when loading mod
