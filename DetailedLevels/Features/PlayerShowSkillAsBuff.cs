@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Reflection;
 using static Utils;
-using static ItemDrop;
 using static Skills;
 
 namespace DetailedLevels.Features.SkillBuffs
@@ -58,7 +58,7 @@ namespace DetailedLevels.Features.SkillBuffs
             }
         }
 
-        private static void setSkillRowBackgroundColor(GameObject skillRow, Color color)
+        public static void setSkillRowBackgroundColor(GameObject skillRow, Color color)
         {
             //using temp variable to avoid CS1612
             ColorBlock skillRowButtonColors = skillRow.GetComponentInChildren<Button>().colors;
@@ -96,7 +96,7 @@ namespace DetailedLevels.Features.SkillBuffs
             // Apply buff to player
             int nameHash = customBuff.NameHash();
             Logger.Log($"name: {customBuff.name}, m_name: {customBuff.m_name}, nameHash: {nameHash}");
-            
+
             seMan.AddStatusEffect(customBuff);
             PlayerUtils.skillStatusEffects.Add(skill.m_info.m_skill, nameHash);
 
@@ -142,42 +142,15 @@ namespace DetailedLevels.Features.SkillBuffs
         }
     }*/
 
-    [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.OnAttackTrigger))]
-    class Humanoid_OnAttackTrigger_Patch
+    [HarmonyPatch(typeof(Player), nameof(Player.RaiseSkill))]
+    public class Player_RaiseSkill_Patch
     {
-        static void Postfix()
+        // Este método se ejecutará después de que el jugador gane experiencia en cualquier habilidad
+        static void Postfix(Player __instance, Skills.SkillType skill, float value)
         {
-            if (!ConfigurationFile.equipBuffs.Value) return;
-
-            Logger.Log("Running Humanoid.OnAttackTrigger.Postfix");
-
-            Player player = Player.m_localPlayer;
-
-            bool someUnarmed = false;
-            bool someBlocking = false;
-
-            List<ItemData> equippedItems = player.GetInventory().GetEquippedItems();
-            for (int i = 0; i < equippedItems.Count; i++)
-            {
-                ItemData equippedItem = equippedItems[i];
-                SkillType skillType = equippedItem.m_shared.m_skillType;
-                if (!someUnarmed && skillType == SkillType.Unarmed) someUnarmed = true;
-                if (!someBlocking && skillType == SkillType.Blocking) someBlocking = true;
-
-                bool exists = PlayerUtils.skillStatusEffects.TryGetValue(skillType, out int nameHash);
-                if (exists)
-                    updateSkillTypeBuff(player, skillType, nameHash);
-            }
-            
-            //Update Unarmed in case to have thrown a punch
-            bool existBuffUnarmed = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.Unarmed, out int nameHash2);
-            if (existBuffUnarmed)
-                updateSkillTypeBuff(player, SkillType.Unarmed, nameHash2);
-
-            // Update Blocking in case to have blocked with two handed weapon (claws, staves, etc)
-            bool existBuffBlocking = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.Blocking, out int nameHash3);
-            if (existBuffBlocking)
-                updateSkillTypeBuff(player, SkillType.Blocking, nameHash3);
+            bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(skill, out int nameHash);
+            if (existBuff)
+                updateSkillTypeBuff(__instance, skill, nameHash);
         }
 
         private static void updateSkillTypeBuff(Player player, SkillType skillType, int nameHash)
@@ -190,7 +163,7 @@ namespace DetailedLevels.Features.SkillBuffs
             StatusEffect existingBuff = seMan.GetStatusEffect(nameHash);
             if (existingBuff != null)
             {
-                Skill playerSkill = findPlayerSkill(player, skillType);
+                Skill playerSkill = FindPlayerSkill(player, skillType);
                 float currentSkillLevel = PlayerUtils.GetCurrentSkillLevelProgress(playerSkill);
 
                 Logger.Log($"About to update buff: $skill_{skillName.ToLower()} with skill level: {currentSkillLevel}.");
@@ -209,7 +182,7 @@ namespace DetailedLevels.Features.SkillBuffs
             }
         }
 
-        private static Skill findPlayerSkill(Player player, SkillType skillType)
+        private static Skill FindPlayerSkill(Player player, SkillType skillType)
         {
             Skill playerSkill = null;
             foreach (var skill in player.GetSkills().GetSkillList())
@@ -220,7 +193,6 @@ namespace DetailedLevels.Features.SkillBuffs
                     break;
                 }
             }
-
             return playerSkill;
         }
     }
