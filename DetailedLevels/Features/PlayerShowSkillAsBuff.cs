@@ -8,19 +8,16 @@ using static Utils;
 using static ItemDrop;
 using static Skills;
 
-namespace DetailedLevels.Features
+namespace DetailedLevels.Features.SkillBuffs
 {
     [HarmonyPatch(typeof(SkillsDialog), nameof(SkillsDialog.Setup))]
     class SkillsDialog_SkillStatusEffects_Patch
     {
         private static bool listenersAdded = false;
 
-        // active status effects
-        public static Dictionary<string, int> skillStatusEffects = new Dictionary<string, int>();
-
         static void Postfix(ref Player player, ref List<GameObject> ___m_elements)
         {
-            if (!ConfigurationFile.modEnabled.Value || InventoryGui.instance == null || listenersAdded) return;
+            if (!ConfigurationFile.modEnabled.Value || listenersAdded || InventoryGui.instance == null) return;
 
             // copy to use ref variable inside listener
             var currentPlayer = player;
@@ -42,12 +39,13 @@ namespace DetailedLevels.Features
 
         private static void OnSkillClicked(Player player, Skill skill, GameObject skillRow)
         {
+            SkillType skillType = skill.m_info.m_skill;
+
             string skillName = skill.m_info.m_skill.ToString();
 
-            Logger.Log($"skillStatusEffects: {skillStatusEffects}");
-            Logger.Log($"containsKey: {skillStatusEffects.ContainsKey(skillName)}");
-
-            if (!skillStatusEffects.ContainsKey(skillName))
+            bool skillStatusEffectsContainsKey = PlayerUtils.skillStatusEffects.ContainsKey(skillType);
+            Logger.Log($"skillStatusEffects.ContainsKey: {skillStatusEffectsContainsKey}");
+            if (!skillStatusEffectsContainsKey)
             {
                 Sprite skillIcon = GetSkillIcon(skillRow);
                 AddSkillBuff(player, skill, skillIcon, skillRow);
@@ -98,10 +96,9 @@ namespace DetailedLevels.Features
             // Apply buff to player
             int nameHash = customBuff.NameHash();
             Logger.Log($"name: {customBuff.name}, m_name: {customBuff.m_name}, nameHash: {nameHash}");
+            
             seMan.AddStatusEffect(customBuff);
-
-            string skillName = skill.m_info.m_skill.ToString();
-            skillStatusEffects.Add(skillName, nameHash);
+            PlayerUtils.skillStatusEffects.Add(skill.m_info.m_skill, nameHash);
 
             Logger.Log($"Added buff: {customBuff.m_name}");
         }
@@ -112,16 +109,38 @@ namespace DetailedLevels.Features
 
             // Find and delete buff
             string skillName = skill.m_info.m_skill.ToString();
-            int nameHash = skillStatusEffects.GetValueSafe(skillName);
+            int nameHash = PlayerUtils.skillStatusEffects.GetValueSafe(skill.m_info.m_skill);
             StatusEffect existingBuff = seMan.GetStatusEffect(nameHash);
             if (existingBuff != null)
             {
                 seMan.RemoveStatusEffect(existingBuff);
-                skillStatusEffects.Remove(skillName);
+                PlayerUtils.skillStatusEffects.Remove(skill.m_info.m_skill);
                 Logger.Log($"Deleted buff: {existingBuff.m_name}");
             }
         }
     }
+
+    /*[HarmonyPatch(typeof(Player), "OnDeath")]
+    public class Player_OnDeath_Patch
+    {
+        // Este Postfix se ejecuta después de que OnDeath se complete
+        static void Postfix(Player __instance)
+        {
+            //Reset skills in skillDialog
+            Player player = __instance.GetComponent<Player>();
+            var field = typeof(SkillsDialog).GetField("m_elements", BindingFlags.NonPublic | BindingFlags.Instance);
+            List<GameObject> skillRows = (List<GameObject>) field.GetValue(InventoryGui.instance.m_skillsDialog);
+            foreach (GameObject skillRow in skillRows)
+            {
+                SkillsDialog_SkillStatusEffects_Patch.setSkillRowBackgroundColor(skillRow, new Color(0f, 0f, 0f, 0f));
+            }
+
+            //Clear stored buffs
+            SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
+            seMan.RemoveAllStatusEffects();
+            PlayerUtils.skillStatusEffects.Clear();
+        }
+    }*/
 
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.OnAttackTrigger))]
     class Humanoid_OnAttackTrigger_Patch
@@ -130,67 +149,79 @@ namespace DetailedLevels.Features
         {
             if (!ConfigurationFile.equipBuffs.Value) return;
 
+            Logger.Log("Running Humanoid.OnAttackTrigger.Postfix");
+
             Player player = Player.m_localPlayer;
 
-            //Check always (not optimal)
-            UpdateWeaponBuffIfExists(player, GetPlayerSkill(player, SkillType.Unarmed));
-            UpdateWeaponBuffIfExists(player, GetPlayerSkill(player, SkillType.Blocking));
-            UpdateWeaponBuffIfExists(player, GetPlayerSkill(player, SkillType.Bows));
-            
+            bool someUnarmed = false;
+            bool someBlocking = false;
+
             List<ItemData> equippedItems = player.GetInventory().GetEquippedItems();
             for (int i = 0; i < equippedItems.Count; i++)
             {
                 ItemData equippedItem = equippedItems[i];
-                var skillType = equippedItem.m_shared.m_skillType;
-                string lowerName = equippedItem.m_shared.m_name.ToLower();
+                SkillType skillType = equippedItem.m_shared.m_skillType;
+                if (!someUnarmed && skillType == SkillType.Unarmed) someUnarmed = true;
+                if (!someBlocking && skillType == SkillType.Blocking) someBlocking = true;
 
-                if (skillType == SkillType.Swords && !lowerName.Contains("sword")) //non weapon equipped item
-                    continue;
-
-                Skill skill = GetPlayerSkill(player, skillType); //game uses "Swords" as default value but I discarded fake weapons before
-                Logger.Log($"skill type found: {skill.m_info.m_skill.ToString()}");
-                UpdateWeaponBuffIfExists(player, skill);
+                bool exists = PlayerUtils.skillStatusEffects.TryGetValue(skillType, out int nameHash);
+                if (exists)
+                    updateSkillTypeBuff(player, skillType, nameHash);
             }
+            
+            //Update Unarmed in case to have thrown a punch
+            bool existBuffUnarmed = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.Unarmed, out int nameHash2);
+            if (existBuffUnarmed)
+                updateSkillTypeBuff(player, SkillType.Unarmed, nameHash2);
+
+            // Update Blocking in case to have blocked with two handed weapon (claws, staves, etc)
+            bool existBuffBlocking = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.Blocking, out int nameHash3);
+            if (existBuffBlocking)
+                updateSkillTypeBuff(player, SkillType.Blocking, nameHash3);
         }
 
-        private static Skill GetPlayerSkill(Player player, SkillType skillType)
+        private static void updateSkillTypeBuff(Player player, SkillType skillType, int nameHash)
         {
-            List<Skill> playerSkills = player.GetSkills().GetSkillList();
-            for (int i = 0; i < playerSkills.Count; i++)
-            {
-                Skill skill = playerSkills[i];
-                if (skill.m_info.m_skill == skillType)
-                    return skill;
-            }
-            return null;
-        }
+            string skillName = skillType.ToString();
+            int valueForHashCode = PlayerUtils.GetValueForHashCode(skillType);
+            Logger.Log($"skillName to find corresponding buff: {skillName} with hash {valueForHashCode}. Stored nameHash: {nameHash}");
 
-        private static void UpdateWeaponBuffIfExists(Player player, Skill skill)
-        {
             SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
-
-            string skillName = skill.m_info.m_skill.ToString();
-            int valueForHashCode = PlayerUtils.GetValueForHashCode(skill);
-            Logger.Log($"skillName to find corresponding buff: {skillName} with hash {valueForHashCode}");
-
-            StatusEffect existingBuff = seMan.GetStatusEffect(valueForHashCode.GetHashCode());
+            StatusEffect existingBuff = seMan.GetStatusEffect(nameHash);
             if (existingBuff != null)
             {
-                float currentSkillLevel = PlayerUtils.GetCurrentSkillLevelProgress(skill);
+                Skill playerSkill = findPlayerSkill(player, skillType);
+                float currentSkillLevel = PlayerUtils.GetCurrentSkillLevelProgress(playerSkill);
+
                 Logger.Log($"About to update buff: $skill_{skillName.ToLower()} with skill level: {currentSkillLevel}.");
 
-                string newBuffName = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {currentSkillLevel}";
+                string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {currentSkillLevel}";
                 Logger.Log($"Old buff name: {existingBuff.m_name}. New buff name: {newBuffName}");
                 if (existingBuff.m_name != newBuffName)
                 {
-                    existingBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {currentSkillLevel}";
+                    existingBuff.m_name = $"$skill_{skillType.ToString().ToLower()}: {currentSkillLevel}";
                     Logger.Log($"Updated buff: {skillName} with skill level: {currentSkillLevel}");
-                } else
+                }
+                else
                 {
                     Logger.Log("No need to update buff");
                 }
-
             }
+        }
+
+        private static Skill findPlayerSkill(Player player, SkillType skillType)
+        {
+            Skill playerSkill = null;
+            foreach (var skill in player.GetSkills().GetSkillList())
+            {
+                if (skill.m_info.m_skill == skillType)
+                {
+                    playerSkill = skill;
+                    break;
+                }
+            }
+
+            return playerSkill;
         }
     }
 }

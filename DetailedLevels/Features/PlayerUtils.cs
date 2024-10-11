@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
-using UnityEngine;
+using static Skills;
 
 namespace DetailedLevels.Features
 {
     public class PlayerUtils
     {
+        // active status effects
+        public static Dictionary<SkillType, int> skillStatusEffects = new Dictionary<SkillType, int>();
+
         public static string FIELD_BUFFS = "m_seman";
         public static object getPlayerNonPublicField(Player player, string fieldName)
         {
@@ -18,6 +22,7 @@ namespace DetailedLevels.Features
             }
             return field.GetValue(player);
         }
+
         public static float GetCurrentSkillLevelProgress(Skills.Skill skill)
         {
             float accumulator = skill.m_accumulator;
@@ -53,6 +58,10 @@ namespace DetailedLevels.Features
         public static int GetValueForHashCode(Skills.Skill skill)
         {
             return GetValueForNameHash(skill).GetHashCode();
+        }
+        public static int GetValueForHashCode(Skills.SkillType skillType)
+        {
+            return skillType.ToString().GetHashCode();
         }
     }
 }
