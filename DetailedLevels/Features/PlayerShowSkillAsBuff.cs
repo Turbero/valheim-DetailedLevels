@@ -200,12 +200,9 @@ namespace DetailedLevels.Features.SkillBuffs
     {
         static void Postfix(Character __instance, HitData hit)
         {
-            // Verificar si el objeto dañado es un enemigo
             if (__instance != null && __instance.IsMonsterFaction(0f))
             {
-                var enemy = __instance;
-                // Verificar si el atacante es una mascota del jugador
-                var attacker = hit.GetAttacker();
+                Character attacker = hit.GetAttacker();
                 if (attacker != null && attacker.IsTamed())
                 {
                     bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.BloodMagic, out int nameHash);
