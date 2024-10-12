@@ -2,7 +2,7 @@
 
 ## 1.1.0
 
-* 
+* Added new feature to select skills and attach them to the buff UI and check progress continuosly while fighting, running, building, etc
 
 ## 1.0.3
 
