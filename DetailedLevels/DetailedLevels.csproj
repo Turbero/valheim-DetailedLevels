@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
     <Compile Include="DetailedLevels.cs" />
+    <Compile Include="LanguageConfig.cs" />
     <Compile Include="Features\PlayerKillingBirds.cs" />
     <Compile Include="Features\PlayerShowSkillAsBuff.cs" />
     <Compile Include="Features\PlayerSkillupDecimals.cs" />

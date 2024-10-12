@@ -152,7 +152,7 @@ namespace DetailedLevels.Features.SkillBuffs
                 updateSkillTypeBuff(__instance, skill, nameHash);
         }
 
-        public static void updateSkillTypeBuff(Player player, SkillType skillType, int nameHash)
+        public static void updateSkillTypeBuff(Player player, SkillType skillType, int nameHash, bool forceUpdate = false)
         {
             string skillName = skillType.ToString();
             int valueForHashCode = PlayerUtils.GetValueForHashCode(skillType);
@@ -169,7 +169,7 @@ namespace DetailedLevels.Features.SkillBuffs
 
                 string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {currentSkillLevel}";
                 Logger.Log($"Old buff name: {existingBuff.m_name}. New buff name: {newBuffName}");
-                if (existingBuff.m_name != newBuffName)
+                if (existingBuff.m_name != newBuffName || forceUpdate)
                 {
                     existingBuff.m_name = $"$skill_{skillType.ToString().ToLower()}: {currentSkillLevel}";
                     Logger.Log($"Updated buff: {skillName} with skill level: {currentSkillLevel}");
