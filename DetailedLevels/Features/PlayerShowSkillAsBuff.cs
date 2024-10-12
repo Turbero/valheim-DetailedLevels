@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 using System.Threading.Tasks;
+using System.Reflection;
 using static Utils;
 using static Skills;
 
@@ -19,9 +20,6 @@ namespace DetailedLevels.Features.SkillBuffs
         {
             if (!ConfigurationFile.modEnabled.Value || listenersAdded || InventoryGui.instance == null) return;
 
-            // copy to use ref variable inside listener
-            var currentPlayer = player;
-
             // Add listeners to skill rows
             for (int i = 0; i < ___m_elements.Count; i++)
             {
@@ -30,6 +28,7 @@ namespace DetailedLevels.Features.SkillBuffs
                 var row = i;
                 skillRow.GetComponent<Button>().onClick.AddListener(() =>
                 {
+                    var currentPlayer = Player.m_localPlayer; // use current player instance to refresh after dying
                     Skill skill = currentPlayer.GetSkills().GetSkillList()[row];
                     OnSkillClicked(currentPlayer, skill, skillRow);
                 });
@@ -120,13 +119,12 @@ namespace DetailedLevels.Features.SkillBuffs
         }
     }
 
-    /*[HarmonyPatch(typeof(Player), "OnDeath")]
+    [HarmonyPatch(typeof(Player), "OnDeath")]
     public class Player_OnDeath_Patch
     {
-        // Este Postfix se ejecuta después de que OnDeath se complete
         static void Postfix(Player __instance)
         {
-            //Reset skills in skillDialog
+            //Reset skills background in skillDialog
             Player player = __instance.GetComponent<Player>();
             var field = typeof(SkillsDialog).GetField("m_elements", BindingFlags.NonPublic | BindingFlags.Instance);
             List<GameObject> skillRows = (List<GameObject>) field.GetValue(InventoryGui.instance.m_skillsDialog);
@@ -136,11 +134,9 @@ namespace DetailedLevels.Features.SkillBuffs
             }
 
             //Clear stored buffs
-            SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
-            seMan.RemoveAllStatusEffects();
             PlayerUtils.skillStatusEffects.Clear();
         }
-    }*/
+    }
 
     [HarmonyPatch(typeof(Player), nameof(Player.RaiseSkill))]
     public class Player_RaiseSkill_Patch
