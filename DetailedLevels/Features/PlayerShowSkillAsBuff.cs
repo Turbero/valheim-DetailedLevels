@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Threading.Tasks;
 using static Utils;
 using static Skills;
 
@@ -196,7 +197,7 @@ namespace DetailedLevels.Features.SkillBuffs
     }
 
     [HarmonyPatch(typeof(Character), "Damage")]
-    public class Character_Damage_Patch
+    public class BloodMagic_BuffUpdate_Patch
     {
         static void Postfix(Character __instance, HitData hit)
         {
@@ -205,11 +206,17 @@ namespace DetailedLevels.Features.SkillBuffs
                 Character attacker = hit.GetAttacker();
                 if (attacker != null && attacker.IsTamed())
                 {
-                    bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.BloodMagic, out int nameHash);
-                    if (existBuff)
-                        Player_RaiseSkill_Patch.updateSkillTypeBuff(Player.m_localPlayer, SkillType.BloodMagic, nameHash);
+                    _ = WaitForSecondsAsync(0.1f); // Small delay in async method to wait for updating blood magic skill
                 }
             }
+        }
+
+        private static async Task WaitForSecondsAsync(float seconds)
+        {
+            await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milisegundos
+            bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.BloodMagic, out int nameHash);
+            if (existBuff)
+                Player_RaiseSkill_Patch.updateSkillTypeBuff(Player.m_localPlayer, SkillType.BloodMagic, nameHash);
         }
     }
 }
