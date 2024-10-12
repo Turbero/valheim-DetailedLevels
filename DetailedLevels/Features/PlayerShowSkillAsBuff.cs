@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
-using System.Reflection;
 using static Utils;
 using static Skills;
 
@@ -145,15 +144,14 @@ namespace DetailedLevels.Features.SkillBuffs
     [HarmonyPatch(typeof(Player), nameof(Player.RaiseSkill))]
     public class Player_RaiseSkill_Patch
     {
-        // Este método se ejecutará después de que el jugador gane experiencia en cualquier habilidad
         static void Postfix(Player __instance, Skills.SkillType skill, float value)
         {
-            bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(skill, out int nameHash);
+             bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(skill, out int nameHash);
             if (existBuff)
                 updateSkillTypeBuff(__instance, skill, nameHash);
         }
 
-        private static void updateSkillTypeBuff(Player player, SkillType skillType, int nameHash)
+        public static void updateSkillTypeBuff(Player player, SkillType skillType, int nameHash)
         {
             string skillName = skillType.ToString();
             int valueForHashCode = PlayerUtils.GetValueForHashCode(skillType);
@@ -194,6 +192,27 @@ namespace DetailedLevels.Features.SkillBuffs
                 }
             }
             return playerSkill;
+        }
+    }
+
+    [HarmonyPatch(typeof(Character), "Damage")]
+    public class Character_Damage_Patch
+    {
+        static void Postfix(Character __instance, HitData hit)
+        {
+            // Verificar si el objeto dañado es un enemigo
+            if (__instance != null && __instance.IsMonsterFaction(0f))
+            {
+                var enemy = __instance;
+                // Verificar si el atacante es una mascota del jugador
+                var attacker = hit.GetAttacker();
+                if (attacker != null && attacker.IsTamed())
+                {
+                    bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.BloodMagic, out int nameHash);
+                    if (existBuff)
+                        Player_RaiseSkill_Patch.updateSkillTypeBuff(Player.m_localPlayer, SkillType.BloodMagic, nameHash);
+                }
+            }
         }
     }
 }
