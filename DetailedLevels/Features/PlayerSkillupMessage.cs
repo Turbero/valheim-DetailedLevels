@@ -10,6 +10,14 @@ namespace DetailedLevels.Features
         {
             if (!ConfigurationFile.modEnabled.Value) return;
 
+            //Check big message first
+            int multipleBigValue = Math.Max(1, Math.Min(100, ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value));
+            if ((int)level % multipleBigValue == 0 || (int)level == 100)
+            {
+                MessageHud.instance.ShowBiomeFoundMsg($"$skill_{skill.ToString().ToLower()}: {(int)level}", true);
+                return;
+            }
+
             int multipleValue = Math.Max(1, Math.Min(100, ConfigurationFile.skillUpMessageAfterMultipleLevel.Value));
             if ((int)level % multipleValue == 0)
             {
