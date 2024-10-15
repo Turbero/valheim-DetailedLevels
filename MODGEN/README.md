@@ -1,5 +1,7 @@
 # Detailed Levels
 
+Showcase link: https://www.youtube.com/watch?v=dhLkLpgBZ7I
+
 [ENG]
 The Detailed Levels plugin shows skills tracking with more details, including float level numbers and buffs to see their progress dynamically without checking the skills dialog all the time.
 
