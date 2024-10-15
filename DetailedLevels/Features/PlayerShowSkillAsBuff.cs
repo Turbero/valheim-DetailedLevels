@@ -9,7 +9,7 @@ using System.Reflection;
 using static Utils;
 using static Skills;
 
-namespace DetailedLevels.Features.SkillBuffs
+namespace DetailedLevels.Features
 {
     [HarmonyPatch(typeof(SkillsDialog), nameof(SkillsDialog.Setup))]
     class SkillsDialog_SkillStatusEffects_Patch
@@ -179,16 +179,14 @@ namespace DetailedLevels.Features.SkillBuffs
 
         private static Skill FindPlayerSkill(Player player, SkillType skillType)
         {
-            Skill playerSkill = null;
             foreach (var skill in player.GetSkills().GetSkillList())
             {
                 if (skill.m_info.m_skill == skillType)
                 {
-                    playerSkill = skill;
-                    break;
+                    return skill;
                 }
             }
-            return playerSkill;
+            return null;
         }
     }
 

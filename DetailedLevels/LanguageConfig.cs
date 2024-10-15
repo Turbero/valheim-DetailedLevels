@@ -1,6 +1,5 @@
 ﻿using DetailedLevels.Features;
 using HarmonyLib;
-using DetailedLevels.Features.SkillBuffs;
 
 namespace DetailedLevels
 {
