@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.1.1
+
+* Added configurable hot key to open/close skills dialog (default = F7)
+* Fixed issue when new skill is learnt, it was not creating the buff at that very moment
+
 ## 1.1.0
 
 * Added new feature to select skills and attach them to the buff UI and check progress continuosly while fighting, running, building, etc
