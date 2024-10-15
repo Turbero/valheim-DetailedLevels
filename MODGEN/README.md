@@ -6,7 +6,7 @@ Showcase link: https://www.youtube.com/watch?v=dhLkLpgBZ7I
 The Detailed Levels plugin shows skills tracking with more details, including float level numbers and buffs to see their progress dynamically without checking the skills dialog all the time.
 
 [ESP]
-El plugin Detailed Levels permite hacer un seguimiento de las skills del jugador con m·s precisiÛn en la interfaz a medida que pelea en la secciÛn de buffs y din·micamente seguir su progreso sin abrir el di·logo de skills.
+El plugin Detailed Levels permite hacer un seguimiento de las skills del jugador con m√°s precisi√≥n en la interfaz a medida que pelea en la secci√≥n de buffs y din√°micamente seguir su progreso sin abrir el di√°logo de skills.
 
 ## Main features
 
@@ -24,13 +24,13 @@ I'll be doing my best! =)
 
 [ESP]
 
-Principales novedades (en la versiÛn actual 1.1.0):
+Principales novedades (en la versi√≥n actual 1.1.0):
 - Elige cualquier skill para hacer seguimiento y que aparezca en la parte de los buffs del jugador
 - Elige cuantos decimales quieres ver de 0 a 15 (2 por defecto)
 - Elige cada cuantos niveles quieres ver un mensaje cuando subes de nivel en el centro de la pantalla, igual que cuando subes el primer nivel de cada skill (cada 5 niveles por defecto)
 - Traducido a TODOS LOS IDIOMAS
 
-Si quieres disfrutar de este mod y muchos m·s, ˙nete a la comunidad de Hijos de Freyja =) : https://discord.gg/hijos-de-freyja-818547021777993748
+Si quieres disfrutar de este mod y muchos m√°s, √∫nete a la comunidad de Hijos de Freyja =) : https://discord.gg/hijos-de-freyja-818547021777993748
 
 [ENG]
 
