@@ -14,11 +14,9 @@ namespace DetailedLevels.Features
     [HarmonyPatch(typeof(SkillsDialog), nameof(SkillsDialog.Setup))]
     class SkillsDialog_SkillStatusEffects_Patch
     {
-        private static bool listenersAdded = false;
-
         static void Postfix(ref Player player, ref List<GameObject> ___m_elements)
         {
-            if (!ConfigurationFile.modEnabled.Value || listenersAdded || InventoryGui.instance == null) return;
+            if (!ConfigurationFile.modEnabled.Value || InventoryGui.instance == null) return;
 
             // Add listeners to skill rows
             for (int i = 0; i < ___m_elements.Count; i++)
@@ -26,6 +24,8 @@ namespace DetailedLevels.Features
                 GameObject skillRow = ___m_elements[i];
 
                 var row = i;
+
+                skillRow.GetComponent<Button>().onClick.RemoveAllListeners(); //remove to avoid creating double click effect
                 skillRow.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     var currentPlayer = Player.m_localPlayer; // use current player instance to refresh after dying
@@ -33,7 +33,6 @@ namespace DetailedLevels.Features
                     OnSkillClicked(currentPlayer, skill, skillRow);
                 });
             }
-            listenersAdded = true;
         }
 
         private static void OnSkillClicked(Player player, Skill skill, GameObject skillRow)
