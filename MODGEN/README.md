@@ -18,19 +18,42 @@ Use the configuration file "Turbero.DetailedLevels.cfg" that will be created onc
 * Enable/disable the mod and the debug logs entirely (logs disabled by default)
 * Translated to ALL LANGUAGES
 
+# About myself
+
+DISCORD: Turbero (Turbero#3465)
+
+STEAM: https://steamcommunity.com/id/turbero
+
+For any concerns or doubts, find me in the Hijos de Freyja Team Discord or in my own channel (click on icons):
+
+[ENG/ESP]
+
+<a href="https://discord.gg/hijos-de-freyja-818547021777993748"><img src="https://i.imgur.com/nWZ5kGc.png"></a>
+
+[ESP]
+
+<a href="https://discord.gg/JKQR3EWRbU"><img src="https://i.imgur.com/WvOS4CK.png"></a>&nbsp;&nbsp;
+<a href="https://discord.gg/y67YeVw62K"><img src="https://i.imgur.com/A9b3EGB.png"></a>
+
+
 This is my first Valheim mod ever after learning the basics. It's difficult to come up with something not created yet by the whole modding community, which is amazing on the other hand.
 
 I'll be doing my best! =)
 
 [ESP]
 
-Principales novedades (en la versión actual 1.1.0):
+Usa el fichero de configuración "Turbero.DetailedLevels.cfg" tras ejecutarlo por primera vez. Principales novedades:
 - Elige cualquier skill para hacer seguimiento y que aparezca en la parte de los buffs del jugador
 - Elige cuantos decimales quieres ver de 0 a 15 (2 por defecto)
 - Elige cada cuantos niveles quieres ver un mensaje cuando subes de nivel en el centro de la pantalla, igual que cuando subes el primer nivel de cada skill (cada 5 niveles por defecto)
 - Traducido a TODOS LOS IDIOMAS
 
 Si quieres disfrutar de este mod y muchos más, únete a la comunidad de Hijos de Freyja =) : https://discord.gg/hijos-de-freyja-818547021777993748
+
+O pregúntame en mis canales personales:
+
+* Turbeheim: https://discord.gg/JKQR3EWRbU
+* Más Turbero: https://discord.gg/y67YeVw62K
 
 [ENG]
 
