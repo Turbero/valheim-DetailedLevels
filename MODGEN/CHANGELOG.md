@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.1.2
+
+* Adding hotkey to skill dialog button tooltip in inventory
+
 ## 1.1.1
 
 * Added configurable hot key to open/close skills dialog (default = F7)
