@@ -31,6 +31,8 @@ namespace DetailedLevels.Features
     {
         static void Postfix(InventoryGui __instance)
         {
+            if (!ConfigurationFile.modEnabled.Value) return;
+
             if (__instance.m_player != null)
             {
                 Debug.Log("InventoryGui.Show.Postfix.buttonTooltip.BEGIN");

@@ -142,7 +142,8 @@ namespace DetailedLevels.Features
     {
         static void Postfix(Player __instance, Skills.SkillType skill, float value)
         {
-             bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(skill, out int nameHash);
+            if (!ConfigurationFile.modEnabled.Value) return;
+            bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(skill, out int nameHash);
             if (existBuff)
                 updateSkillTypeBuff(__instance, skill, nameHash);
         }
@@ -194,6 +195,8 @@ namespace DetailedLevels.Features
     {
         static void Postfix(Character __instance, HitData hit)
         {
+            if (!ConfigurationFile.modEnabled.Value) return;
+            
             if (__instance != null && __instance.IsMonsterFaction(0f))
             {
                 Character attacker = hit.GetAttacker();
