@@ -35,8 +35,6 @@ namespace DetailedLevels.Features
 
             if (__instance.m_player != null)
             {
-                Debug.Log("InventoryGui.Show.Postfix.buttonTooltip.BEGIN");
-
                 var transform = __instance
                     .transform.Find("root")
                     .transform.Find("Info")
@@ -53,7 +51,6 @@ namespace DetailedLevels.Features
                         buttonTooltip.m_text = originalTooltip + customText;
                     }
                 }
-                Debug.Log("InventoryGui.Show.Postfix.buttonTooltip.END");
             }
         }
     }

@@ -36,8 +36,9 @@
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
     <Compile Include="DetailedLevels.cs" />
-    <Compile Include="LanguageConfig.cs" />
     <Compile Include="Experiments\PlayerKillingBirds.cs" />
+    <Compile Include="Experiments\PlayerRavenSkillsDialogTip.cs" />
+    <Compile Include="LanguageConfig.cs" />
     <Compile Include="Features\PlayerShowSkillAsBuff.cs" />
     <Compile Include="Features\PlayerSkillupDialog.cs" />
     <Compile Include="Features\PlayerSkillupMessage.cs" />
