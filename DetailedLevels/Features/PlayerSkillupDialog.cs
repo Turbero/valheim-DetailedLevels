@@ -55,30 +55,4 @@ namespace DetailedLevels.Features
             }
         }
     }
-
-    /*
-    [HarmonyPatch(typeof(Player), "OnSpawned")]
-    class Player_OnSpawned_Patch
-    {
-        static void Postfix(Player __instance)
-        {
-            // Revisar si es la primera vez que el jugador entra al mundo
-            if (__instance.m_firstSpawn)
-            {
-                // Llamar al método que muestra el consejo personalizado
-                ShowHuginCustomTip();
-            }
-        }
-
-        private static void ShowHuginCustomTip()
-        {
-            Raven raven = Raven.m_instance;
-            if (raven != null)
-            {
-                // Añadir un mensaje personalizado
-                string customMessage = "Bienvenido al mundo de Valheim. Recuerda siempre estar preparado para lo inesperado.";
-                raven.m_announce.ShowMessage(raven.m_name, customMessage, true);
-            }
-        }
-    }*/
 }
