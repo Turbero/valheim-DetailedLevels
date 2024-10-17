@@ -1,5 +1,7 @@
 ﻿using BepInEx;
 using HarmonyLib;
+using System.Threading.Tasks;
+using System;
 using UnityEngine;
 
 namespace DetailedLevels
@@ -9,7 +11,7 @@ namespace DetailedLevels
     {
         public const string GUID = "Turbero.DetailedLevels";
         public const string NAME = "Detailed Levels";
-        public const string VERSION = "1.1.1";
+        public const string VERSION = "1.1.2";
 
         private readonly Harmony harmony = new Harmony(GUID);
 
@@ -46,10 +48,15 @@ namespace DetailedLevels
                 else
                 {
                     InventoryGui.instance.Show(null);
-                    InventoryGui.instance.m_skillsDialog.Setup(Player.m_localPlayer);
-                    InventoryGui.instance.m_skillsDialog.gameObject.SetActive(true);
+                    _ = WaitForSecondsAsync(0.1f); // Small delay to avoid coroutine issue in log to wait for showing skills dialog until it is active
                 }
             }
+        }
+        private static async Task WaitForSecondsAsync(float seconds)
+        {
+            await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milisegundos
+            InventoryGui.instance.m_skillsDialog.Setup(Player.m_localPlayer);
+            InventoryGui.instance.m_skillsDialog.gameObject.SetActive(true);
         }
     }
 }
