@@ -10,20 +10,7 @@ namespace DetailedLevels.Features
         // active status effects
         public static Dictionary<SkillType, int> skillStatusEffects = new Dictionary<SkillType, int>();
 
-        public static string FIELD_BUFFS = "m_seman";
-        public static object getPlayerNonPublicField(Player player, string fieldName)
-        {
-            // Using reflection to obtain field
-            var field = typeof(Player).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
-            if (field == null)
-            {
-                Logger.LogError($"Couldn't access the player field {fieldName}.");
-                return null;
-            }
-            return field.GetValue(player);
-        }
-
-        public static float GetCurrentSkillLevelProgress(Skills.Skill skill)
+        public static float GetCurrentSkillLevelProgress(Skill skill)
         {
             float accumulator = skill.m_accumulator;
 

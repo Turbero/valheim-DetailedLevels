@@ -79,7 +79,7 @@ namespace DetailedLevels.Features
 
         private static void AddSkillBuff(Player player, Skill skill, Sprite skillIcon, GameObject skillRow)
         {
-            SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
+            SEMan seMan = player.GetSEMan();
 
             String value = Utils.FindChild(skillRow.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text;
             Logger.Log("Skill current value: " + value);
@@ -103,7 +103,7 @@ namespace DetailedLevels.Features
 
         private static void RemoveSkillBuff(Player player, Skill skill)
         {
-            SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
+            SEMan seMan = player.GetSEMan();
 
             // Find and delete buff
             string skillName = skill.m_info.m_skill.ToString();
@@ -154,7 +154,7 @@ namespace DetailedLevels.Features
             int valueForHashCode = PlayerUtils.GetValueForHashCode(skillType);
             Logger.Log($"skillName to find corresponding buff: {skillName} with hash {valueForHashCode}. Stored nameHash: {nameHash}");
 
-            SEMan seMan = (SEMan)PlayerUtils.getPlayerNonPublicField(player, PlayerUtils.FIELD_BUFFS);
+            SEMan seMan = player.GetSEMan();
             StatusEffect existingBuff = seMan.GetStatusEffect(nameHash);
             if (existingBuff != null)
             {
