@@ -11,11 +11,48 @@ using static Skills;
 
 namespace DetailedLevels.Features
 {
-    [HarmonyPatch(typeof(SkillsDialog), nameof(SkillsDialog.Setup))]
-    class SkillsDialog_SkillStatusEffects_Patch
-    {
-        static void Postfix(ref Player player, ref List<GameObject> ___m_elements)
+    [HarmonyPatch(typeof(Skills), nameof(Skills.GetSkillList))]
+    static class SkillsDialog_GetSkillListSorted_Patch {
+        static void Postfix(ref List<Skill> __result)
         {
+            if (SkillsDialog_SkillStatusEffects_Patch.azSorted == 1)
+            {
+                Logger.Log("SkillsDialog_SkillStatusEffects_Patch.Postfix aZsorted = 1");
+                __result.Sort((a, b) => GetSkillTranslation(a).CompareTo(GetSkillTranslation(b)));
+            }
+            else if (SkillsDialog_SkillStatusEffects_Patch.azSorted == 2)
+            {
+                Logger.Log("SkillsDialog_SkillStatusEffects_Patch.Postfix aZsorted = 2");
+                __result.Sort((a, b) => GetSkillTranslation(b).CompareTo(GetSkillTranslation(a)));
+            }
+            else if (SkillsDialog_SkillStatusEffects_Patch.levelSorted == 1)
+            {
+                Logger.Log("SkillsDialog_SkillStatusEffects_Patch.Postfix levelSorted = 1");
+                __result.Sort((a, b) => PlayerUtils.GetCurrentSkillLevelProgress(a).CompareTo(PlayerUtils.GetCurrentSkillLevelProgress(b)));
+            }
+            else if (SkillsDialog_SkillStatusEffects_Patch.levelSorted == 2)
+            {
+                Logger.Log("SkillsDialog_SkillStatusEffects_Patch.Postfix levelSorted = 2");
+                __result.Sort((a, b) => PlayerUtils.GetCurrentSkillLevelProgress(b).CompareTo(PlayerUtils.GetCurrentSkillLevelProgress(a)));
+            }
+        }
+        
+        private static string GetSkillTranslation(this Skill skill)
+        {
+            return Localization.instance.Localize("$skill_" + skill.m_info.m_skill.ToString().ToLower());
+        }
+    }
+
+    [HarmonyPatch(typeof(SkillsDialog), nameof(SkillsDialog.Setup))]
+    [HarmonyPriority(Priority.VeryHigh)]
+    static class SkillsDialog_SkillStatusEffects_Patch
+    {
+        public static int azSorted = 0;
+        public static int levelSorted = 0;
+
+        static void Postfix(SkillsDialog __instance, ref Player player, ref List<GameObject> ___m_elements)
+        {
+            Logger.Log("** SkillsDialog_SkillStatusEffects_Patch.Postfix");
             if (!ConfigurationFile.modEnabled.Value || InventoryGui.instance == null) return;
 
             // Add listeners to skill rows
@@ -25,14 +62,85 @@ namespace DetailedLevels.Features
 
                 var row = i;
 
-                skillRow.GetComponent<Button>().onClick.RemoveAllListeners(); //remove to avoid creating double click effect
+                skillRow.GetComponent<Button>().onClick = new Button.ButtonClickedEvent(); //avoids creating double click effect
                 skillRow.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     var currentPlayer = Player.m_localPlayer; // use current player instance to refresh after dying
-                    Skill skill = currentPlayer.GetSkills().GetSkillList()[row];
+                    Skill skill = currentPlayer.GetSkills().GetSkillList()[row]; //FIXME find by elements[i].skill-name?
                     OnSkillClicked(currentPlayer, skill, skillRow);
                 });
             }
+            
+            Button closeButton = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("Closebutton").GetComponent<Button>();
+            azButton(closeButton);
+            levelButton(closeButton);
+        }        
+
+        private static void azButton(Button closeButton)
+        {
+            GameObject azButtonObject = GameObject.Instantiate(closeButton.gameObject, closeButton.transform.parent);
+            azButtonObject.name = "AZButton";
+
+            RectTransform closeButtonRect = closeButton.GetComponent<RectTransform>();
+            RectTransform azButtonRect = azButtonObject.GetComponent<RectTransform>();
+
+            azButtonRect.anchoredPosition = new Vector2(-133, 633);
+            azButtonRect.sizeDelta = new Vector2(50, 35);
+
+            TMP_Text buttonText = azButtonObject.GetComponentInChildren<TMP_Text>();
+            buttonText.text = azSorted != 1 ? "A-Z" : "Z-A";
+
+            Button azButton = azButtonObject.GetComponent<Button>();
+            azButton.onClick = new Button.ButtonClickedEvent();
+            azButton.onClick.AddListener(() =>
+            {
+                Logger.Log("AZButton clicked.");
+                levelSorted = 0;
+                if (azSorted != 1)
+                {
+                    azSorted = 1;
+                    buttonText.text = "Z-A";
+                } else
+                {
+                    azSorted = 2;
+                    buttonText.text = "A-Z";
+                }
+                InventoryGui.instance.m_skillsDialog.Setup(Player.m_localPlayer);
+            });
+        }
+
+        private static void levelButton(Button closeButton)
+        {
+            GameObject levelButtonObject = GameObject.Instantiate(closeButton.gameObject, closeButton.transform.parent);
+            levelButtonObject.name = "LevelButton";
+
+            RectTransform closeButtonRect = closeButton.GetComponent<RectTransform>();
+            RectTransform levelButtonRect = levelButtonObject.GetComponent<RectTransform>();
+
+            levelButtonRect.anchoredPosition = new Vector2(133, 633);
+            levelButtonRect.sizeDelta = new Vector2(50, 35);
+
+            TMP_Text buttonText = levelButtonObject.GetComponentInChildren<TMP_Text>();            
+            buttonText.text = levelSorted != 1 ? "1-100" : "100-1";
+
+            Button levelButton = levelButtonObject.GetComponent<Button>();
+            levelButton.onClick = new Button.ButtonClickedEvent();
+            levelButton.onClick.AddListener(() =>
+            {
+                Logger.Log("LevelButton clicked.");
+                azSorted = 0;
+                if (levelSorted != 1)
+                {
+                    levelSorted = 1;
+                    buttonText.text = "100-1";
+                }
+                else
+                {
+                    levelSorted = 2;
+                    buttonText.text = "1-100";
+                }
+                InventoryGui.instance.m_skillsDialog.Setup(Player.m_localPlayer);
+            });
         }
 
         private static void OnSkillClicked(Player player, Skill skill, GameObject skillRow)
