@@ -11,7 +11,7 @@ namespace DetailedLevels
     {
         public const string GUID = "Turbero.DetailedLevels";
         public const string NAME = "Detailed Levels";
-        public const string VERSION = "1.1.2";
+        public const string VERSION = "1.2.0";
 
         private readonly Harmony harmony = new Harmony(GUID);
 
@@ -37,8 +37,8 @@ namespace DetailedLevels
                 InventoryGui.instance.m_skillsDialog.gameObject.SetActive(false);
             }
 
-            // Hotkey to open almanac
-            if (Input.GetKeyDown(ConfigurationFile.hotKey.Value))
+            // Hotkey to open/close skills dialog (if game is not paused)
+            if (Input.GetKeyDown(ConfigurationFile.hotKey.Value) && Time.timeScale > 0)
             {
                 if (InventoryGui.instance.m_skillsDialog.gameObject.activeSelf)
                 {
