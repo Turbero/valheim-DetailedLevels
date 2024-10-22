@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.2.0
+
+* Added new buttons to sort skills dialog by name and by skill, up and down
+* Fixed skill dialog hotfix to avoid opening/closing while game is paused
+
 ## 1.1.2
 
 * Adding hotkey to skill dialog button tooltip in inventory
