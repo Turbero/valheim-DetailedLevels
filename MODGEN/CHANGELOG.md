@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.2.1
+
+* Added small icon and text with exact value of the skills percetage lost when dying
+
 ## 1.2.0
 
 * Added new buttons to sort skills dialog by name and by skill, up and down
