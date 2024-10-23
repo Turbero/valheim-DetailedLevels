@@ -13,6 +13,7 @@ El plugin Detailed Levels permite hacer un seguimiento de las skills del jugador
 [ENG]
 Use the configuration file "Turbero.DetailedLevels.cfg" that will be created once the mod is executed for first time in order to use the next features:
 * Select any skill and see its progress dynamically as a buff on your screen
+* Sort skills by name or level
 * Choose how many decimals you want to see from 0 to 15 (default = 2)
 * Choose how often you want to see the skillup messages in the center of your screen when you skill up (default = each 5 levels)
 * Enable/disable the mod and the debug logs entirely (logs disabled by default)
@@ -44,6 +45,7 @@ I'll be doing my best! =)
 
 Usa el fichero de configuración "Turbero.DetailedLevels.cfg" tras ejecutarlo por primera vez. Principales novedades:
 - Elige cualquier skill para hacer seguimiento y que aparezca en la parte de los buffs del jugador
+- Ordena tus skills por nombre o nivel
 - Elige cuantos decimales quieres ver de 0 a 15 (2 por defecto)
 - Elige cada cuantos niveles quieres ver un mensaje cuando subes de nivel en el centro de la pantalla, igual que cuando subes el primer nivel de cada skill (cada 5 niveles por defecto)
 - Traducido a TODOS LOS IDIOMAS
@@ -57,16 +59,16 @@ O pregúntame en mis canales personales:
 
 [ENG]
 
-![](https://i.imgur.com/V75kj58.png)
+![](https://i.imgur.com/NZL01R2.png)
 
-![](https://i.imgur.com/KOze3M4.jpeg)
+![](https://i.imgur.com/njEVO6d.jpeg)
 
 ![](https://i.imgur.com/e1vTjP5.jpeg)
 
 [ESP]
 
-![](https://i.imgur.com/7ZDQ0T2.png)
+![](https://i.imgur.com/CZ934ga.png)
 
-![](https://i.imgur.com/Tp2tjER.png)
+![](https://i.imgur.com/kYeq0QW.jpeg)
 
 ![](https://i.imgur.com/UmQoBo1.png)
