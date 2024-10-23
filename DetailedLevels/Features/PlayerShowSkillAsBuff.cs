@@ -50,6 +50,8 @@ namespace DetailedLevels.Features
         public static int azSorted = 0;
         public static int levelSorted = 0;
 
+        private static bool init = false;
+
         static void Postfix(SkillsDialog __instance, ref Player player, ref List<GameObject> ___m_elements)
         {
             Logger.Log("** SkillsDialog_SkillStatusEffects_Patch.Postfix");
@@ -70,11 +72,43 @@ namespace DetailedLevels.Features
                     OnSkillClicked(currentPlayer, skill, skillRow);
                 });
             }
-            
-            Button closeButton = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("Closebutton").GetComponent<Button>();
-            azButton(closeButton);
-            levelButton(closeButton);
-        }        
+
+            if (!init)
+            {
+                addSoftDeathInfo(__instance);
+                Button closeButton = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("Closebutton").GetComponent<Button>();
+                azButton(closeButton);
+                levelButton(closeButton);
+                init = true;
+            }
+        }
+
+        private static void addSoftDeathInfo(SkillsDialog skillsDialog)
+        {
+            //Icon
+            GameObject iconObject = new GameObject("NoSkillDrainIcon");
+            Image iconImage = iconObject.AddComponent<Image>();
+            iconImage.sprite = PlayerUtils.getSoftDeathSprite();
+
+            RectTransform iconRect = iconObject.GetComponent<RectTransform>();
+            iconRect.SetParent(skillsDialog.transform, false);
+            iconRect.sizeDelta = new Vector2(25, 25);
+            iconRect.anchoredPosition = new Vector2(-190, -260);
+
+            //Additional text
+            float lossPercentage = Player.m_localPlayer.GetSkills().m_DeathLowerFactor * 100f;
+            GameObject textObject = new GameObject("NoSkillDrainText");
+            Text textComponent = textObject.AddComponent<Text>();
+            textComponent.text = $"= -{lossPercentage}%";
+            textComponent.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            textComponent.fontStyle = FontStyle.Bold;
+            textComponent.color = Color.white;
+
+            RectTransform textRect = textObject.GetComponent<RectTransform>();
+            textRect.SetParent(skillsDialog.transform, false);
+            textRect.sizeDelta = new Vector2(200, 50);
+            textRect.anchoredPosition = new Vector2(-75, -277);
+        }
 
         private static void azButton(Button closeButton)
         {

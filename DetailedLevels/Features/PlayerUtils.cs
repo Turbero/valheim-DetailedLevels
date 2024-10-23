@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine;
 using static Skills;
 
 namespace DetailedLevels.Features
 {
     public class PlayerUtils
     {
+        private static Sprite softDeathIcon;
+
         // active status effects
         public static Dictionary<SkillType, int> skillStatusEffects = new Dictionary<SkillType, int>();
 
@@ -49,6 +52,24 @@ namespace DetailedLevels.Features
         public static int GetValueForHashCode(Skills.SkillType skillType)
         {
             return skillType.ToString().GetHashCode();
+        }
+        public static Sprite getSoftDeathSprite()
+        {
+            if (softDeathIcon == null)
+            {
+                Logger.Log("Finding softDeath sprite...");
+                var allSprites = Resources.FindObjectsOfTypeAll<Sprite>();
+                for (var i = 0; i < allSprites.Length; i++)
+                {
+                    var sprite = allSprites[i];
+                    if (sprite.name == "SoftDeath")
+                    {
+                        softDeathIcon = sprite;
+                        Logger.Log("softDeath sprite found.");
+                    }
+                }
+            }
+            return softDeathIcon;
         }
     }
 }

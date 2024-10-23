@@ -89,6 +89,7 @@
     <Reference Include="UnityEngine.InputModule">
       <HintPath>..\..\..\Libs\UnityEngine.InputModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\..\Libs\UnityEngine.UI.dll</HintPath>
     </Reference>
