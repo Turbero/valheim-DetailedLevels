@@ -11,7 +11,7 @@ namespace DetailedLevels
     {
         public const string GUID = "Turbero.DetailedLevels";
         public const string NAME = "Detailed Levels";
-        public const string VERSION = "1.2.0";
+        public const string VERSION = "1.2.1";
 
         private readonly Harmony harmony = new Harmony(GUID);
 
@@ -48,7 +48,7 @@ namespace DetailedLevels
                 else
                 {
                     InventoryGui.instance.Show(null);
-                    _ = WaitForSecondsAsync(0.1f); // Small delay to avoid coroutine issue in log to wait for showing skills dialog until it is active
+                    _ = WaitForSecondsAsync(0.15f); // Small delay to avoid coroutine issue in log to wait for showing skills dialog until it is active
                 }
             }
         }
