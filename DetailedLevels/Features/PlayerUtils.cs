@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 using static Skills;
 
 namespace DetailedLevels.Features
@@ -39,6 +40,13 @@ namespace DetailedLevels.Features
         {
             var getSkillMethod = skill.GetType().GetMethod("GetNextLevelRequirement", BindingFlags.NonPublic | BindingFlags.Instance);
             return getSkillMethod != null ? (float)getSkillMethod.Invoke(skill, new object[] {} ) : 0;
+        }
+        public static void setSkillRowBackgroundColor(GameObject skillRow, Color color)
+        {
+            //using temp variable to avoid CS1612
+            ColorBlock skillRowButtonColors = skillRow.GetComponentInChildren<Button>().colors;
+            skillRowButtonColors.normalColor = color;
+            skillRow.GetComponentInChildren<Button>().colors = skillRowButtonColors;
         }
 
         public static string GetValueForNameHash(Skills.Skill skill)

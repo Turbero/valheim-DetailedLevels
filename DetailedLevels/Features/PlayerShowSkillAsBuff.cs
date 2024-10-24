@@ -47,22 +47,14 @@ namespace DetailedLevels.Features
             if (!skillStatusEffectsContainsKey)
             {
                 Sprite skillIcon = GetSkillIcon(skillRow);
-                AddSkillBuff(player, skill, skillIcon, skillRow);
-                setSkillRowBackgroundColor(skillRow, Color.cyan);
+                PlayerBuffs.AddSkillBuff(player, skill, skillIcon, skillRow);
+                PlayerUtils.setSkillRowBackgroundColor(skillRow, ConfigurationFile.colorSkillBackground.Value);
             }
             else
             {
-                RemoveSkillBuff(player, skill);
-                setSkillRowBackgroundColor(skillRow, new Color(0f, 0f, 0f, 0f));
+                PlayerBuffs.RemoveSkillBuff(player, skill);
+                PlayerUtils.setSkillRowBackgroundColor(skillRow, new Color(0f, 0f, 0f, 0f));
             }
-        }
-
-        public static void setSkillRowBackgroundColor(GameObject skillRow, Color color)
-        {
-            //using temp variable to avoid CS1612
-            ColorBlock skillRowButtonColors = skillRow.GetComponentInChildren<Button>().colors;
-            skillRowButtonColors.normalColor = color;
-            skillRow.GetComponentInChildren<Button>().colors = skillRowButtonColors;
         }
 
         private static Sprite GetSkillIcon(GameObject skillRow)
@@ -77,47 +69,31 @@ namespace DetailedLevels.Features
             }
             return null;
         }
+    }
 
-        private static void AddSkillBuff(Player player, Skill skill, Sprite skillIcon, GameObject skillRow)
+    /*[HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
+    public class Spawn_Patch
+    {
+        static void Postfix(Player __instance, bool spawnValkyrie)
         {
-            SEMan seMan = player.GetSEMan();
-
-            string value = Utils.FindChild(skillRow.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text;
-            Logger.Log("Skill current value: " + value);
-
-            // Create new custom status effect
-            SE_Stats customBuff = ScriptableObject.CreateInstance<SE_Stats>();
-            customBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {value}";
-            customBuff.m_tooltip = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}_description";
-            customBuff.m_icon = skillIcon; // Use skill icon
-            customBuff.name = PlayerUtils.GetValueForNameHash(skill); // to produce distinct hash values
-
-            // Apply buff to player
-            int nameHash = customBuff.NameHash();
-            Logger.Log($"name: {customBuff.name}, m_name: {customBuff.m_name}, nameHash: {nameHash}");
-
-            seMan.AddStatusEffect(customBuff);
-            PlayerUtils.skillStatusEffects.Add(skill.m_info.m_skill, nameHash);
-
-            Logger.Log($"Added buff: {customBuff.m_name}");
-        }
-
-        private static void RemoveSkillBuff(Player player, Skill skill)
-        {
-            SEMan seMan = player.GetSEMan();
-
-            // Find and delete buff
-            string skillName = skill.m_info.m_skill.ToString();
-            int nameHash = PlayerUtils.skillStatusEffects.GetValueSafe(skill.m_info.m_skill);
-            StatusEffect existingBuff = seMan.GetStatusEffect(nameHash);
-            if (existingBuff != null)
+            if (!spawnValkyrie)
             {
-                seMan.RemoveStatusEffect(existingBuff);
-                PlayerUtils.skillStatusEffects.Remove(skill.m_info.m_skill);
-                Logger.Log($"Deleted buff: {existingBuff.m_name}");
+                //Load buffs according to keys
+                var skills = Player.m_localPlayer.GetSkills().GetSkillList();
+                foreach (var skill in skills)
+                {
+                    string keyToDelete = "skillbuff_" + skill.m_info.m_skill;
+                    if (PlayerPrefs.HasKey(keyToDelete))
+                    {
+                        //FIXME Add buff to SEMan
+                        Sprite sprite = PlayerBuffs.findSpriteByName(skill.m_info.m_skill.ToString());
+                        PlayerBuffs.AddSkillBuff(__instance, skill, sprite);
+                        //Background will be colored automatically when opening skills dialog next time
+                    }
+                }
             }
         }
-    }
+    }*/
 
     [HarmonyPatch(typeof(Player), "OnDeath")]
     public class Player_OnDeath_Patch
@@ -130,7 +106,7 @@ namespace DetailedLevels.Features
             List<GameObject> skillRows = (List<GameObject>) field.GetValue(InventoryGui.instance.m_skillsDialog);
             foreach (GameObject skillRow in skillRows)
             {
-                SkillsDialog_SkillStatusEffects_Patch.setSkillRowBackgroundColor(skillRow, new Color(0f, 0f, 0f, 0f));
+                PlayerUtils.setSkillRowBackgroundColor(skillRow, new Color(0f, 0f, 0f, 0f));
             }
 
             //Clear stored buffs

@@ -38,6 +38,7 @@
     <Compile Include="DetailedLevels.cs" />
     <Compile Include="Experiments\PlayerKillingBirds.cs" />
     <Compile Include="Experiments\PlayerRavenSkillsDialogTip.cs" />
+    <Compile Include="Features\PlayerBuffs.cs" />
     <Compile Include="Features\PlayerSkillupSort.cs" />
     <Compile Include="LanguageConfig.cs" />
     <Compile Include="Features\PlayerShowSkillAsBuff.cs" />

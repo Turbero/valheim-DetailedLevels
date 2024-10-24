@@ -36,11 +36,11 @@ namespace DetailedLevels.Features
                 StatusEffect existingBuff = player.GetSEMan().GetStatusEffect(nameHash);
                 if (existingBuff != null)
                 {
-                    SkillsDialog_SkillStatusEffects_Patch.setSkillRowBackgroundColor(obj, Color.cyan);
+                    PlayerUtils.setSkillRowBackgroundColor(obj, ConfigurationFile.colorSkillBackground.Value);
                 }
                 else
                 {
-                    SkillsDialog_SkillStatusEffects_Patch.setSkillRowBackgroundColor(obj, new Color(0f, 0f, 0f, 0f));
+                    PlayerUtils.setSkillRowBackgroundColor(obj, new Color(0f, 0f, 0f, 0f));
                 }
             }
 
