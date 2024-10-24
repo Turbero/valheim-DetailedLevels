@@ -71,30 +71,6 @@ namespace DetailedLevels.Features
         }
     }
 
-    /*[HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
-    public class Spawn_Patch
-    {
-        static void Postfix(Player __instance, bool spawnValkyrie)
-        {
-            if (!spawnValkyrie)
-            {
-                //Load buffs according to keys
-                var skills = Player.m_localPlayer.GetSkills().GetSkillList();
-                foreach (var skill in skills)
-                {
-                    string keyToDelete = "skillbuff_" + skill.m_info.m_skill;
-                    if (PlayerPrefs.HasKey(keyToDelete))
-                    {
-                        //FIXME Add buff to SEMan
-                        Sprite sprite = PlayerBuffs.findSpriteByName(skill.m_info.m_skill.ToString());
-                        PlayerBuffs.AddSkillBuff(__instance, skill, sprite);
-                        //Background will be colored automatically when opening skills dialog next time
-                    }
-                }
-            }
-        }
-    }*/
-
     [HarmonyPatch(typeof(Player), "OnDeath")]
     public class Player_OnDeath_Patch
     {

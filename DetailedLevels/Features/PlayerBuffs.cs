@@ -13,7 +13,6 @@ namespace DetailedLevels.Features
         public static void AddSkillBuff(Player player, Skill skill, Sprite skillIcon, GameObject skillRow = null)
         {
             SEMan seMan = player.GetSEMan();
-
             
             string value = skillRow != null
                 ? Utils.FindChild(skillRow.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text
@@ -34,31 +33,7 @@ namespace DetailedLevels.Features
             seMan.AddStatusEffect(customBuff);
             PlayerUtils.skillStatusEffects.Add(skill.m_info.m_skill, nameHash);
 
-            string keyToSave = "skillbuff_" + skill.m_info.m_skill;
-            PlayerPrefs.SetString(keyToSave, keyToSave);
-
             Logger.Log($"Added buff: {customBuff.m_name}");
-        }
-
-        public static Sprite findSpriteByName(string spriteName)
-        {
-            if (sprites.ContainsKey(spriteName))
-                return sprites.GetValueSafe(spriteName);
-
-            Logger.Log($"Finding {spriteName} sprite...");
-            var allSprites = Resources.FindObjectsOfTypeAll<Sprite>();
-            for (var i = 0; i < allSprites.Length; i++)
-            {
-                var sprite = allSprites[i];
-                if (sprite.name == spriteName)
-                {
-                    sprites.Add(spriteName, sprite);
-                    Logger.Log($"{spriteName} sprite found.");
-                    return sprite;
-                }
-            }
-            Logger.Log($"{spriteName} sprite NOT found.");
-            return null;
         }
 
         public static void RemoveSkillBuff(Player player, Skill skill)
@@ -74,9 +49,6 @@ namespace DetailedLevels.Features
                 seMan.RemoveStatusEffect(existingBuff);
                 PlayerUtils.skillStatusEffects.Remove(skill.m_info.m_skill);
 
-                string keyToDelete = "skillbuff_" + skill.m_info.m_skill;
-                if (PlayerPrefs.HasKey(keyToDelete))
-                    PlayerPrefs.DeleteKey(keyToDelete);
                 Logger.Log($"Deleted buff: {existingBuff.m_name}");
             }
         }
