@@ -3,6 +3,7 @@
 ## 1.2.1
 
 * Added small icon and text with exact value of the skills percetage lost when dying
+* Added option to change skill background color in skills dialog from configuration file
 
 ## 1.2.0
 
