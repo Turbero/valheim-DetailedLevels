@@ -9,7 +9,8 @@ namespace DetailedLevels.Features
 {
     public class PlayerBuffs
     {
-        private static Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
+        public static Dictionary<SkillType, Sprite> sprites = new Dictionary<SkillType, Sprite>();
+        public static Dictionary<SkillType, Skill> skills = new Dictionary<SkillType, Skill>();
         public static void AddSkillBuff(Player player, Skill skill, Sprite skillIcon, GameObject skillRow = null)
         {
             SEMan seMan = player.GetSEMan();
@@ -31,9 +32,24 @@ namespace DetailedLevels.Features
             Logger.Log($"name: {customBuff.name}, m_name: {customBuff.m_name}, nameHash: {nameHash}");
 
             seMan.AddStatusEffect(customBuff);
+            if (PlayerUtils.skillStatusEffects.ContainsKey(skill.m_info.m_skill))
+            {
+                PlayerUtils.skillStatusEffects.Remove(skill.m_info.m_skill);
+            }
             PlayerUtils.skillStatusEffects.Add(skill.m_info.m_skill, nameHash);
-
             Logger.Log($"Added buff: {customBuff.m_name}");
+
+            if (!sprites.ContainsKey(skill.m_info.m_skill))
+            {
+                sprites.Add(skill.m_info.m_skill, skillIcon);
+                Logger.Log($"Cached sprite for {customBuff.m_name} with sprite.name {skillIcon.name}");
+            }
+
+            if (!skills.ContainsKey(skill.m_info.m_skill))
+            {
+                skills.Add(skill.m_info.m_skill, skill);
+                Logger.Log($"Cached skill for {customBuff.m_name}");
+            }
         }
 
         public static void RemoveSkillBuff(Player player, Skill skill)
@@ -50,6 +66,9 @@ namespace DetailedLevels.Features
                 PlayerUtils.skillStatusEffects.Remove(skill.m_info.m_skill);
 
                 Logger.Log($"Deleted buff: {existingBuff.m_name}");
+
+                sprites.Remove(skill.m_info.m_skill);
+                skills.Remove(skill.m_info.m_skill);
             }
         }
     }

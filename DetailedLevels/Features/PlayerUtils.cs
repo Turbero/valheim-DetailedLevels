@@ -79,5 +79,23 @@ namespace DetailedLevels.Features
             }
             return softDeathIcon;
         }
+
+        public static Sprite getSprite(String name)
+        {
+            //TODO Create Dictionary cached found sprites
+            Logger.Log($"Finding {name} sprite...");
+            var allSprites = Resources.FindObjectsOfTypeAll<Sprite>();
+            for (var i = 0; i < allSprites.Length; i++)
+            {
+                var sprite = allSprites[i];
+                if (sprite.name == name)
+                {
+                    Logger.Log($"{name} sprite found.");
+                    return sprite;
+                }
+            }
+            Logger.Log($"{name} sprite NOT found.");
+            return null;
+        }
     }
 }

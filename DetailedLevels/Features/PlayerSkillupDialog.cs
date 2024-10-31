@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using DetailedLevels.Toggles;
+using HarmonyLib;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace DetailedLevels.Features
         public static int azSorted = 0;
         public static int levelSorted = 0;
         private static bool init = false;
+        public static bool saveSkillBuffs = false;
 
         static void Postfix(SkillsDialog __instance, ref Player player, ref List<GameObject> ___m_elements)
         {
@@ -50,6 +52,7 @@ namespace DetailedLevels.Features
                 Button closeButton = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("Closebutton").GetComponent<Button>();
                 azButton(closeButton);
                 levelButton(closeButton);
+                switchButton(__instance);
                 init = true;
             }
         }
@@ -81,6 +84,16 @@ namespace DetailedLevels.Features
             textRect.anchoredPosition = new Vector2(-75, -277);
         }
 
+        private static void switchButton(SkillsDialog skillsDialog)
+        {
+            ToggleSlider toggleSlider = new ToggleSlider("SkillsLevelSlider", "save_icon");
+            toggleSlider.sliderObject.transform.SetParent(skillsDialog.transform, false);
+            toggleSlider.OnValueChanged((value) =>
+             {
+                 saveSkillBuffs = value == 1;                 
+             });
+        }
+
         private static void azButton(Button closeButton)
         {
             GameObject azButtonObject = GameObject.Instantiate(closeButton.gameObject, closeButton.transform.parent);
@@ -88,14 +101,14 @@ namespace DetailedLevels.Features
 
             RectTransform closeButtonRect = closeButton.GetComponent<RectTransform>();
             RectTransform azButtonRect = azButtonObject.GetComponent<RectTransform>();
-
+            
             azButtonRect.anchoredPosition = new Vector2(-133, 633);
             azButtonRect.sizeDelta = new Vector2(50, 35);
 
             TMP_Text buttonText = azButtonObject.GetComponentInChildren<TMP_Text>();
             buttonText.text = azSorted != 1 ? "A-Z" : "Z-A";
 
-            Button azButton = azButtonObject.GetComponent<Button>();
+            Button azButton = azButtonObject.GetComponent<Button>(); 
             azButton.onClick = new Button.ButtonClickedEvent();
             azButton.onClick.AddListener(() =>
             {

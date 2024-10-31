@@ -46,6 +46,7 @@
     <Compile Include="Features\PlayerUtils.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Toggles\ToggleSlider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -62,9 +63,6 @@
     </Reference>
     <Reference Include="BepInEx">
       <HintPath>..\..\..\Libs\BepInEx.dll</HintPath>
-    </Reference>
-    <Reference Include="Jotunn">
-      <HintPath>..\..\..\Libs\Jotunn.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

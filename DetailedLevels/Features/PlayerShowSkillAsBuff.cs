@@ -1,12 +1,10 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 using System.Threading.Tasks;
 using System.Reflection;
-using static Utils;
 using static Skills;
 
 namespace DetailedLevels.Features
@@ -86,7 +84,32 @@ namespace DetailedLevels.Features
             }
 
             //Clear stored buffs
-            PlayerUtils.skillStatusEffects.Clear();
+            if (!SkillsDialogAdditions_Patch.saveSkillBuffs)
+                PlayerUtils.skillStatusEffects.Clear();
+        }
+    }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
+    public class Player_OnSpawned_Patch
+    {
+        static void Postfix(Player __instance, bool spawnValkyrie)
+        {
+            if (SkillsDialogAdditions_Patch.saveSkillBuffs)
+            {
+                //Workaround to manipulate dictionary while entries can be removed or added dinamically in AddSKillBuff
+                var list = new List<SkillType>();
+                foreach (SkillType skillType in PlayerUtils.skillStatusEffects.Keys)
+                {
+                    list.Add(skillType);
+                }
+                foreach (SkillType skillType in list) {
+                    PlayerBuffs.AddSkillBuff(
+                        Player.m_localPlayer,
+                        PlayerBuffs.skills.GetValueSafe(skillType),
+                        PlayerBuffs.sprites.GetValueSafe(skillType)
+                    );
+                }
+            }
         }
     }
 
