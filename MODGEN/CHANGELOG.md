@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.2.2
+
+* Added toggle in skills panel to save skill buffs when dying and setting them automatically when respawing
+
 ## 1.2.1
 
 * Added small icon and text with exact value of the skills percetage lost when dying (not hardcoded. If you change with other mods, it will be shown here)
