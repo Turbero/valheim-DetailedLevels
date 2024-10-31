@@ -62,7 +62,7 @@ namespace DetailedLevels.Features
             //Icon
             GameObject iconObject = new GameObject("NoSkillDrainIcon");
             Image iconImage = iconObject.AddComponent<Image>();
-            iconImage.sprite = PlayerUtils.getSoftDeathSprite();
+            iconImage.sprite = PlayerUtils.getSprite("SoftDeath");
 
             RectTransform iconRect = iconObject.GetComponent<RectTransform>();
             iconRect.SetParent(skillsDialog.transform, false);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace DetailedLevels.Features
 {
     public class PlayerUtils
     {
-        private static Sprite softDeathIcon;
+        private static Dictionary<string, Sprite> cachedSprites = new Dictionary<string, Sprite>();
 
         // active status effects
         public static Dictionary<SkillType, int> skillStatusEffects = new Dictionary<SkillType, int>();
@@ -61,41 +62,29 @@ namespace DetailedLevels.Features
         {
             return skillType.ToString().GetHashCode();
         }
-        public static Sprite getSoftDeathSprite()
+
+        public static Sprite getSprite(String name)
         {
-            if (softDeathIcon == null)
+            if (!cachedSprites.ContainsKey(name))
             {
-                Logger.Log("Finding softDeath sprite...");
+                Logger.Log($"Finding {name} sprite...");
                 var allSprites = Resources.FindObjectsOfTypeAll<Sprite>();
                 for (var i = 0; i < allSprites.Length; i++)
                 {
                     var sprite = allSprites[i];
-                    if (sprite.name == "SoftDeath")
+                    if (sprite.name == name)
                     {
-                        softDeathIcon = sprite;
-                        Logger.Log("softDeath sprite found.");
+                        Logger.Log($"{name} sprite found.");
+                        cachedSprites.Add(name, sprite);
+                        return sprite;
                     }
                 }
-            }
-            return softDeathIcon;
-        }
-
-        public static Sprite getSprite(String name)
-        {
-            //TODO Create Dictionary cached found sprites
-            Logger.Log($"Finding {name} sprite...");
-            var allSprites = Resources.FindObjectsOfTypeAll<Sprite>();
-            for (var i = 0; i < allSprites.Length; i++)
+                Logger.Log($"{name} sprite NOT found.");
+                return null;
+            } else
             {
-                var sprite = allSprites[i];
-                if (sprite.name == name)
-                {
-                    Logger.Log($"{name} sprite found.");
-                    return sprite;
-                }
+                return cachedSprites.GetValueSafe(name);
             }
-            Logger.Log($"{name} sprite NOT found.");
-            return null;
         }
     }
 }
