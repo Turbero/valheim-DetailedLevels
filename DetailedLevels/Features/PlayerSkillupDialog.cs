@@ -86,7 +86,7 @@ namespace DetailedLevels.Features
 
         private static void switchButton(SkillsDialog skillsDialog)
         {
-            ToggleSlider toggleSlider = new ToggleSlider("SkillsLevelSlider", "save_icon");
+            ToggleSlider toggleSlider = new ToggleSlider("SkillsLevelSlider", new Vector2(-158, -285), -33, "save_icon");
             toggleSlider.sliderObject.transform.SetParent(skillsDialog.transform, false);
             toggleSlider.OnValueChanged((value) =>
              {

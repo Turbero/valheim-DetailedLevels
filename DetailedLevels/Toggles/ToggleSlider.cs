@@ -12,15 +12,15 @@ namespace DetailedLevels.Toggles
         public GameObject sliderObject;
         private Slider slider;
 
-        public ToggleSlider(string name, string spriteName = null, string description = null)
+        public ToggleSlider(string name, Vector2 position, int posXIcon, string spriteName = null, string description = null)
         {
             // Main container
             sliderObject = new GameObject(name, typeof(RectTransform));
 
             // RectTransform
             RectTransform sliderRect = sliderObject.GetComponent<RectTransform>();
-            sliderRect.sizeDelta = new Vector2(25, 10);  // Ajusta el tamaño según tus necesidades
-            sliderRect.anchoredPosition = new Vector2(-160, -285); // Ajusta la posición
+            sliderRect.sizeDelta = new Vector2(25, 10); //Global Size
+            sliderRect.anchoredPosition = position; // Position
 
             // Slider
             slider = sliderObject.AddComponent<Slider>();
@@ -82,7 +82,7 @@ namespace DetailedLevels.Toggles
                 RectTransform iconRect = iconObject.GetComponent<RectTransform>();
                 iconRect.SetParent(sliderObject.transform, false);
                 iconRect.sizeDelta = new Vector2(25, 25);
-                iconRect.anchoredPosition = new Vector2(-31, 0);
+                iconRect.anchoredPosition = new Vector2(posXIcon, 0);
             }
 
             //Text
