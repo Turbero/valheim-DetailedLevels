@@ -8,8 +8,6 @@ namespace DetailedLevels.Features
     {
         static void Postfix(ref Skills.SkillType skill, ref float level)
         {
-            if (!ConfigurationFile.modEnabled.Value) return;
-
             //Check big message first
             int multipleBigValue = Math.Max(1, Math.Min(100, ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value));
             if ((int)level % multipleBigValue == 0 || (int)level == 100)

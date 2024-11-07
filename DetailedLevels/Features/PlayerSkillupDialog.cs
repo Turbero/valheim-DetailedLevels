@@ -1,5 +1,4 @@
-﻿using DetailedLevels.Toggles;
-using HarmonyLib;
+﻿using HarmonyLib;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,12 +15,9 @@ namespace DetailedLevels.Features
         public static int azSorted = 0;
         public static int levelSorted = 0;
         private static bool init = false;
-        public static bool saveSkillBuffs = false;
 
         static void Postfix(SkillsDialog __instance, ref Player player, ref List<GameObject> ___m_elements)
         {
-            if (!ConfigurationFile.modEnabled.Value) return;
-
             List<Skills.Skill> skillList = player.GetSkills().GetSkillList();
             for (int j = 0; j < skillList.Count; j++)
             {
@@ -48,50 +44,13 @@ namespace DetailedLevels.Features
 
             if (!init)
             {
-                addSoftDeathInfo(__instance);
-                Button closeButton = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("Closebutton").GetComponent<Button>();
+                Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("Closebutton");
+                (closeButtonTransform as RectTransform).anchoredPosition = new Vector2(101, 45);
+                Button closeButton = closeButtonTransform.GetComponent<Button>();
                 azButton(closeButton);
                 levelButton(closeButton);
-                switchButton(__instance);
                 init = true;
             }
-        }
-
-        private static void addSoftDeathInfo(SkillsDialog skillsDialog)
-        {
-            //Icon
-            GameObject iconObject = new GameObject("NoSkillDrainIcon");
-            Image iconImage = iconObject.AddComponent<Image>();
-            iconImage.sprite = PlayerUtils.getSprite("SoftDeath");
-
-            RectTransform iconRect = iconObject.GetComponent<RectTransform>();
-            iconRect.SetParent(skillsDialog.transform, false);
-            iconRect.sizeDelta = new Vector2(25, 25);
-            iconRect.anchoredPosition = new Vector2(-190, -260);
-
-            //Additional text
-            float lossPercentage = Player.m_localPlayer.GetSkills().m_DeathLowerFactor * 100f;
-            GameObject textObject = new GameObject("NoSkillDrainText");
-            Text textComponent = textObject.AddComponent<Text>();
-            textComponent.text = $"= -{lossPercentage}%";
-            textComponent.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            textComponent.fontStyle = FontStyle.Bold;
-            textComponent.color = Color.white;
-
-            RectTransform textRect = textObject.GetComponent<RectTransform>();
-            textRect.SetParent(skillsDialog.transform, false);
-            textRect.sizeDelta = new Vector2(200, 50);
-            textRect.anchoredPosition = new Vector2(-75, -277);
-        }
-
-        private static void switchButton(SkillsDialog skillsDialog)
-        {
-            ToggleSlider toggleSlider = new ToggleSlider("SkillsLevelSlider", new Vector2(-158, -285), -33, "save_icon");
-            toggleSlider.sliderObject.transform.SetParent(skillsDialog.transform, false);
-            toggleSlider.OnValueChanged((value) =>
-             {
-                 saveSkillBuffs = value == 1;                 
-             });
         }
 
         private static void azButton(Button closeButton)
@@ -99,7 +58,6 @@ namespace DetailedLevels.Features
             GameObject azButtonObject = GameObject.Instantiate(closeButton.gameObject, closeButton.transform.parent);
             azButtonObject.name = "AZButton";
 
-            RectTransform closeButtonRect = closeButton.GetComponent<RectTransform>();
             RectTransform azButtonRect = azButtonObject.GetComponent<RectTransform>();
             
             azButtonRect.anchoredPosition = new Vector2(-133, 633);
@@ -133,7 +91,6 @@ namespace DetailedLevels.Features
             GameObject levelButtonObject = GameObject.Instantiate(closeButton.gameObject, closeButton.transform.parent);
             levelButtonObject.name = "LevelButton";
 
-            RectTransform closeButtonRect = closeButton.GetComponent<RectTransform>();
             RectTransform levelButtonRect = levelButtonObject.GetComponent<RectTransform>();
 
             levelButtonRect.anchoredPosition = new Vector2(133, 633);
@@ -168,8 +125,6 @@ namespace DetailedLevels.Features
     {
         static void Postfix(InventoryGui __instance)
         {
-            if (!ConfigurationFile.modEnabled.Value) return;
-
             if (__instance.m_player != null)
             {
                 var transform = __instance

@@ -5,28 +5,35 @@ using UnityEngine.Events;
 using System.Reflection;
 using DetailedLevels.Features;
 
-namespace DetailedLevels.Toggles
+namespace DetailedLevels.Tools
 {
-    public class ToggleSlider
+    public class CustomSlider
     {
-        public GameObject sliderObject;
-        private Slider slider;
+        private readonly GameObject sliderObject;
+        private readonly Slider slider;
+        private readonly TextMeshProUGUI sliderValue;
 
-        public ToggleSlider(string name, Vector2 position, int posXIcon, string spriteName = null, string description = null)
+        public CustomSlider(string name, int maxValue,
+                            Vector2 sizeDelta, Vector2 position,
+                            int posXIcon, string spriteName,
+                            int posXDescription, string description,
+                            int posXValue, int initValue, string valueDesc
+                            )
         {
             // Main container
             sliderObject = new GameObject(name, typeof(RectTransform));
 
             // RectTransform
             RectTransform sliderRect = sliderObject.GetComponent<RectTransform>();
-            sliderRect.sizeDelta = new Vector2(25, 10); //Global Size
-            sliderRect.anchoredPosition = position; // Position
+            sliderRect.sizeDelta = sizeDelta;
+            sliderRect.anchoredPosition = position;
 
             // Slider
             slider = sliderObject.AddComponent<Slider>();
             slider.name = name;
             slider.minValue = 0;
-            slider.maxValue = 1;
+            slider.maxValue = maxValue;
+            slider.value = initValue;
             //m_WholeNumbers = 1 makes automatically stepSize=1
             typeof(Slider).GetField("m_WholeNumbers", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(slider, true);
 
@@ -66,19 +73,12 @@ namespace DetailedLevels.Toggles
             slider.targetGraphic = handle.GetComponent<Image>();
             slider.handleRect = handleRect;
 
-            //Default action
-            slider.onValueChanged.AddListener((value) =>
-            {
-                Debug.Log($"Valor del slider: {value}");
-            });
-
             //Icon
             if (spriteName != null)
             {
                 GameObject iconObject = new GameObject("Icon");
                 Image iconImage = iconObject.AddComponent<Image>();
                 iconImage.sprite = PlayerUtils.getSprite(spriteName);
-
                 RectTransform iconRect = iconObject.GetComponent<RectTransform>();
                 iconRect.SetParent(sliderObject.transform, false);
                 iconRect.sizeDelta = new Vector2(25, 25);
@@ -91,17 +91,40 @@ namespace DetailedLevels.Toggles
                 GameObject textObject = new GameObject("SliderLabel", typeof(RectTransform), typeof(TextMeshProUGUI));
                 textObject.transform.SetParent(sliderObject.transform, false);
                 RectTransform textRect = textObject.GetComponent<RectTransform>();
-                textRect.anchoredPosition = new Vector2(-31, 0); // Ajusta la posición del texto
+                textRect.anchoredPosition = new Vector2(posXDescription, 0);
                 TextMeshProUGUI sliderLabel = textObject.GetComponent<TextMeshProUGUI>();
                 sliderLabel.text = description;
                 sliderLabel.fontSize = 18;
-                sliderLabel.alignment = TextAlignmentOptions.Center;
+                sliderLabel.alignment = TextAlignmentOptions.Right;
             }
+
+            //Value
+            if (initValue >= 0)
+            {
+                GameObject textObject = new GameObject("SliderValue", typeof(RectTransform), typeof(TextMeshProUGUI));
+                textObject.transform.SetParent(sliderObject.transform, false);
+                RectTransform textRect = textObject.GetComponent<RectTransform>();
+                textRect.anchoredPosition = new Vector2(posXValue, 0);
+                sliderValue = textObject.GetComponent<TextMeshProUGUI>();
+                sliderValue.fontSize = 18;
+                sliderValue.alignment = TextAlignmentOptions.Left;
+                sliderValue.text = valueDesc;
+            }
+        }
+
+        public GameObject getGameObject()
+        {
+            return sliderObject;
         }
         public void OnValueChanged(UnityAction<float> call)
         {
             slider.onValueChanged = new Slider.SliderEvent();
             slider.onValueChanged.AddListener(call);
+        }
+
+        public void updateValue(string value)
+        {
+            sliderValue.text = value;
         }
     }
 }

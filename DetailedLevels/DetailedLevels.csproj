@@ -35,10 +35,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
+    <Compile Include="Tools\CustomSkillOptionsPanel.cs" />
     <Compile Include="DetailedLevels.cs" />
     <Compile Include="Experiments\PlayerKillingBirds.cs" />
     <Compile Include="Experiments\PlayerRavenSkillsDialogTip.cs" />
     <Compile Include="Features\PlayerBuffs.cs" />
+    <Compile Include="Features\PlayerSkillupOptions.cs" />
     <Compile Include="LanguageConfig.cs" />
     <Compile Include="Features\PlayerShowSkillAsBuff.cs" />
     <Compile Include="Features\PlayerSkillupDialog.cs" />
@@ -46,7 +48,7 @@
     <Compile Include="Features\PlayerUtils.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Toggles\ToggleSlider.cs" />
+    <Compile Include="Tools\CustomSlider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -88,7 +90,9 @@
     <Reference Include="UnityEngine.InputModule">
       <HintPath>..\..\..\Libs\UnityEngine.InputModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\..\Libs\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\..\Libs\UnityEngine.UI.dll</HintPath>
     </Reference>

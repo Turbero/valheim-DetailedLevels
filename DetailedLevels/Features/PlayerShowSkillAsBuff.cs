@@ -16,7 +16,7 @@ namespace DetailedLevels.Features
         static void Postfix(SkillsDialog __instance, ref Player player, ref List<GameObject> ___m_elements)
         {
             Logger.Log("** SkillsDialog_SkillStatusEffects_Patch.Postfix");
-            if (!ConfigurationFile.modEnabled.Value || InventoryGui.instance == null) return;
+            if (InventoryGui.instance == null) return;
 
             // Add listeners to skill rows
             for (int i = 0; i < ___m_elements.Count; i++)
@@ -69,56 +69,11 @@ namespace DetailedLevels.Features
         }
     }
 
-    [HarmonyPatch(typeof(Player), "OnDeath")]
-    public class Player_OnDeath_Patch
-    {
-        static void Postfix(Player __instance)
-        {
-            //Reset skills background in skillDialog
-            Player player = __instance.GetComponent<Player>();
-            var field = typeof(SkillsDialog).GetField("m_elements", BindingFlags.NonPublic | BindingFlags.Instance);
-            List<GameObject> skillRows = (List<GameObject>) field.GetValue(InventoryGui.instance.m_skillsDialog);
-            foreach (GameObject skillRow in skillRows)
-            {
-                PlayerUtils.setSkillRowBackgroundColor(skillRow, new Color(0f, 0f, 0f, 0f));
-            }
-
-            //Clear stored buffs
-            if (!SkillsDialogAdditions_Patch.saveSkillBuffs)
-                PlayerUtils.skillStatusEffects.Clear();
-        }
-    }
-
-    [HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
-    public class Player_OnSpawned_Patch
-    {
-        static void Postfix(Player __instance, bool spawnValkyrie)
-        {
-            if (SkillsDialogAdditions_Patch.saveSkillBuffs)
-            {
-                //Workaround to manipulate dictionary while entries can be removed or added dinamically in AddSKillBuff
-                var list = new List<SkillType>();
-                foreach (SkillType skillType in PlayerUtils.skillStatusEffects.Keys)
-                {
-                    list.Add(skillType);
-                }
-                foreach (SkillType skillType in list) {
-                    PlayerBuffs.AddSkillBuff(
-                        Player.m_localPlayer,
-                        PlayerBuffs.skills.GetValueSafe(skillType),
-                        PlayerBuffs.sprites.GetValueSafe(skillType)
-                    );
-                }
-            }
-        }
-    }
-
     [HarmonyPatch(typeof(Player), nameof(Player.RaiseSkill))]
     public class Player_RaiseSkill_Patch
     {
         static void Postfix(Player __instance, Skills.SkillType skill, float value)
         {
-            if (!ConfigurationFile.modEnabled.Value) return;
             bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(skill, out int nameHash);
             if (existBuff)
                 updateSkillTypeBuff(__instance, skill, nameHash);
@@ -171,8 +126,6 @@ namespace DetailedLevels.Features
     {
         static void Postfix(Character __instance, HitData hit)
         {
-            if (!ConfigurationFile.modEnabled.Value) return;
-            
             if (__instance != null && __instance.IsMonsterFaction(0f))
             {
                 Character attacker = hit.GetAttacker();

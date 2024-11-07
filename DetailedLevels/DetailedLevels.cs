@@ -11,7 +11,7 @@ namespace DetailedLevels
     {
         public const string GUID = "Turbero.DetailedLevels";
         public const string NAME = "Detailed Levels";
-        public const string VERSION = "1.2.2";
+        public const string VERSION = "1.3.0";
 
         private readonly Harmony harmony = new Harmony(GUID);
 
@@ -34,6 +34,7 @@ namespace DetailedLevels
             // Check if certain keys are hit to close Almanac GUI
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab) || Player.m_localPlayer.IsDead())
             {
+                InventoryGui.instance.transform.Find("CustomSkillOptionsPanel").gameObject.SetActive(false);
                 InventoryGui.instance.m_skillsDialog.gameObject.SetActive(false);
             }
 
@@ -42,6 +43,7 @@ namespace DetailedLevels
             {
                 if (InventoryGui.instance.m_skillsDialog.gameObject.activeSelf)
                 {
+                    InventoryGui.instance.transform.Find("CustomSkillOptionsPanel").gameObject.SetActive(false);
                     InventoryGui.instance.m_skillsDialog.gameObject.SetActive(false);
                     InventoryGui.instance.Hide();
                 }

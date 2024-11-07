@@ -1,5 +1,13 @@
 ### CHANGELOG
 
+## 1.3.0
+
+* Created wood panel with options for the mod at the bottom of the skills dialog panel:
+	1) Added existing options of current skill loss and reload tracked skills after dying
+	2) Added new controls to configure level up messages
+* Now the toggle value to reload skill buffs after dying remains when exiting the game
+* Removed option to disable the mod by config (who does after installing a mod anyway lol)
+
 ## 1.2.2
 
 * Added toggle in skills panel to save skill buffs when dying and setting them automatically when respawing
