@@ -34,8 +34,7 @@ namespace DetailedLevels
             // Check if certain keys are hit to close Almanac GUI
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab) || Player.m_localPlayer.IsDead())
             {
-                InventoryGui.instance.transform.Find("CustomSkillOptionsPanel").gameObject.SetActive(false);
-                InventoryGui.instance.m_skillsDialog.gameObject.SetActive(false);
+                hideCustomPanelAndSkillsDialog();
             }
 
             // Hotkey to open/close skills dialog (if game is not paused)
@@ -43,8 +42,7 @@ namespace DetailedLevels
             {
                 if (InventoryGui.instance.m_skillsDialog.gameObject.activeSelf)
                 {
-                    InventoryGui.instance.transform.Find("CustomSkillOptionsPanel").gameObject.SetActive(false);
-                    InventoryGui.instance.m_skillsDialog.gameObject.SetActive(false);
+                    hideCustomPanelAndSkillsDialog();
                     InventoryGui.instance.Hide();
                 }
                 else
@@ -53,6 +51,12 @@ namespace DetailedLevels
                     _ = WaitForSecondsAsync(0.15f); // Small delay to avoid coroutine issue in log to wait for showing skills dialog until it is active
                 }
             }
+        }
+
+        private static void hideCustomPanelAndSkillsDialog()
+        {
+            InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("CustomSkillOptionsPanel").gameObject.SetActive(false);
+            InventoryGui.instance.m_skillsDialog.gameObject.SetActive(false);
         }
         private static async Task WaitForSecondsAsync(float seconds)
         {

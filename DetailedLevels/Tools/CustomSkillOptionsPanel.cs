@@ -11,23 +11,23 @@ namespace DetailedLevels.Config
         private TextMeshProUGUI titleText;
         private TMP_Text buttonText;
 
-        public CustomSkillOptionsPanel(Transform parent)
+        public CustomSkillOptionsPanel(Transform copyForCloseButton)
         {
-            // Crear un panel y configurarlo
+            // Panel
             panel = new GameObject("CustomSkillOptionsPanel", typeof(RectTransform));
             panel.SetActive(false);
-            panel.transform.SetParent(InventoryGui.instance.transform, false); // Asegúrate de ponerlo en un canvas adecuado
+            panel.transform.SetParent(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform, false);
 
             RectTransform panelRect = panel.GetComponent<RectTransform>();
-            panelRect.sizeDelta = new Vector2(512, 512); // Tamaño del panel, ajusta según lo necesario
-            panelRect.anchoredPosition = new Vector2(0, 0); // Posición en pantalla (centrado aquí)
+            panelRect.sizeDelta = new Vector2(512, 512);
+            panelRect.anchoredPosition = new Vector2(0, 0); // (0,0) = centered
 
-            // Añadir fondo con apariencia del juego
+            // Background
             Image panelImage = panel.AddComponent<Image>();
-            panelImage.sprite = PlayerUtils.getSprite("woodpanel_512x512"); // Carga el sprite de fondo
-            panelImage.type = Image.Type.Sliced; // Permite que el borde no se deforme
+            panelImage.sprite = PlayerUtils.getSprite("woodpanel_512x512"); // Background sprite
+            panelImage.type = Image.Type.Sliced;
 
-            // Crear título del panel
+            // Title
             GameObject titleObject = new GameObject("Title", typeof(TextMeshProUGUI));
             titleObject.transform.SetParent(panel.transform, false);
 
@@ -41,7 +41,7 @@ namespace DetailedLevels.Config
 
             // Close button
             Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("Closebutton");
-            GameObject buttonTextObject = GameObject.Instantiate(closeButtonTransform.gameObject, parent);
+            GameObject buttonTextObject = GameObject.Instantiate(closeButtonTransform.gameObject, copyForCloseButton);
             buttonTextObject.name = "DLOptionsCloseButton";
             buttonTextObject.transform.SetParent(panel.transform, false);
 

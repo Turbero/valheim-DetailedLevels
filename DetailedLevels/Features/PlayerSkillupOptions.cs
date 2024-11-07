@@ -14,7 +14,7 @@ namespace DetailedLevels.Features
     public class PlayerSkillupOptionsPatch
     {
         public static CustomSkillOptionsPanel panel;
-        private static readonly Color TITLE_COLOR = new Color(1f, 0.7176f, 0.3603f, 1f);
+        private static readonly Color TITLE_COLOR = new Color(1f, 0.7176f, 0.3603f);
         private static TextMeshProUGUI buttonText;
 
         static void Postfix(SkillsDialog __instance)
@@ -63,30 +63,19 @@ namespace DetailedLevels.Features
 
         private static void addSoftDeathInfo(Transform parent)
         {
-            //Icon
-            GameObject iconObject = new GameObject("NoSkillDrainIcon");
-            Image iconImage = iconObject.AddComponent<Image>();
-            iconImage.sprite = PlayerUtils.getSprite("SoftDeath");
-
-            RectTransform iconRect = iconObject.GetComponent<RectTransform>();
-            iconRect.SetParent(parent, false);
-            iconRect.sizeDelta = new Vector2(25, 25);
-            iconRect.anchoredPosition = new Vector2(-77, 190);
-
-            //Additional text
             float lossPercentage = Player.m_localPlayer.GetSkills().m_DeathLowerFactor * 100f;
             GameObject textObject = new GameObject("NoSkillDrainText");
             TextMeshProUGUI textComponent = textObject.AddComponent<TextMeshProUGUI>();
-            textComponent.text = $"Death penalty         = -{lossPercentage}%";
+            textComponent.text = $"Death penalty = -{lossPercentage}%";
             //textComponent.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
             textComponent.fontStyle = FontStyles.Normal;
-            textComponent.color = Color.white;
+            textComponent.color = new Color(1, 1, 0);
             textComponent.fontSize = 18;
 
             RectTransform textRect = textObject.GetComponent<RectTransform>();
             textRect.SetParent(parent, false);
             textRect.sizeDelta = new Vector2(200, 50);
-            textRect.anchoredPosition = new Vector2(-107, 173);
+            textRect.anchoredPosition = new Vector2(-75, 173);
         }
 
         private static void addSaveSwitchButton(Transform parent)
@@ -96,9 +85,9 @@ namespace DetailedLevels.Features
                 maxValue: 1,
                 sizeDelta: new Vector2(25, 10),
                 position: new Vector2(-42, 163),
-                posXIcon: -35,
-                spriteName: "save_icon",
-                posXDescription: -150,
+                posXIcon: -1,
+                spriteName: null,
+                posXDescription: -124,
                 description: "Reload after dying",
                 posXValue: 123,
                 initValue: ConfigurationFile.saveSkillBuffs.Value ? 1 : 0,

@@ -147,6 +147,8 @@ namespace DetailedLevels.Features
                     if (PlayerSkillupOptionsPatch.panel != null)
                     {
                         PlayerSkillupOptionsPatch.reloadTexts();
+                        //Hide skill options if open
+                        PlayerSkillupOptionsPatch.panel.getPanel().gameObject.SetActive(false);
                     }
                 }
             }
