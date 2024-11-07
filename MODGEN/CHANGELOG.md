@@ -2,7 +2,7 @@
 
 ## 1.3.0
 
-* Created wood panel with options for the mod at the bottom of the skills dialog panel:
+* Created wood panel with options for the mod at the bottom of the skills dialog panel (only in English for now):
 	1) Added existing options of current skill loss and reload tracked skills after dying
 	2) Added new controls to configure level up messages
 * Now the toggle value to reload skill buffs after dying remains when exiting the game
