@@ -3,24 +3,21 @@
 Showcase link: https://www.youtube.com/watch?v=dhLkLpgBZ7I
 
 [ENG]
-
 The Detailed Levels plugin shows skills tracking with more details, including float level numbers and buffs to see their progress dynamically without checking the skills dialog all the time.
 
 [ESP]
-
-El plugin Detailed Levels permite hacer un seguimiento de las skills del jugador con más precisión en la interfaz a medida que pelea en la sección de buffs y dinámicamente seguir su progreso sin abrir el diálogo de skills.
+El mod Detailed Levels permite hacer un seguimiento de las skills del jugador con más precisión en la interfaz a medida que pelea en la sección de buffs y dinámicamente seguir su progreso sin abrir el diálogo de skills.
 
 ## Main features
 
 [ENG]
-
-Use the configuration file "Turbero.DetailedLevels.cfg" that will be created once the mod is executed for first time in order to use the next features:
+Use the configuration file "Turbero.DetailedLevels.cfg" that will be created once the mod is executed for first time in order or a new in-game options panel to use the next features:
 * Select any skill and see its progress dynamically as a buff on your screen
 * Sort skills by name or level
 * Choose how many decimals you want to see from 0 to 15 (default = 2)
 * Choose how often you want to see the skillup messages in the center of your screen when you skill up (default = each 5 levels)
-* Enable/disable the mod and the debug logs entirely (logs disabled by default)
-* Translated to ALL LANGUAGES
+* Enable/disable the debug logs entirely (disabled by default)
+* Translated to ALL LANGUAGES (except the panel options)
 
 # About myself
 
@@ -46,12 +43,13 @@ I'll be doing my best! =)
 
 [ESP]
 
-Usa el fichero de configuración "Turbero.DetailedLevels.cfg" tras ejecutarlo por primera vez. Principales novedades:
+Usa el fichero de configuración "Turbero.DetailedLevels.cfg" tras ejecutarlo por primera vez o el nuevo panel de opciones incluido. Principales novedades:
 - Elige cualquier skill para hacer seguimiento y que aparezca en la parte de los buffs del jugador
 - Ordena tus skills por nombre o nivel
 - Elige cuantos decimales quieres ver de 0 a 15 (2 por defecto)
 - Elige cada cuantos niveles quieres ver un mensaje cuando subes de nivel en el centro de la pantalla, igual que cuando subes el primer nivel de cada skill (cada 5 niveles por defecto)
-- Traducido a TODOS LOS IDIOMAS
+- Activa/desactiva los logs (desactivado por defecto)
+- Traducido a TODOS LOS IDIOMAS (excepto el panel de opciones)
 
 Si quieres disfrutar de este mod y muchos más, únete a la comunidad de Hijos de Freyja =) : https://discord.gg/hijos-de-freyja-818547021777993748
 
