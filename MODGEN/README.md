@@ -6,7 +6,7 @@ Showcase link: https://www.youtube.com/watch?v=dhLkLpgBZ7I
 The Detailed Levels plugin shows skills tracking with more details, including float level numbers and buffs to see their progress dynamically without checking the skills dialog all the time.
 
 [ESP]
-El plugin Detailed Levels permite hacer un seguimiento de las skills del jugador con más precisión en la interfaz a medida que pelea en la sección de buffs y dinámicamente seguir su progreso sin abrir el diálogo de skills.
+El mod Detailed Levels permite hacer un seguimiento de las skills del jugador con más precisión en la interfaz a medida que pelea en la sección de buffs y dinámicamente seguir su progreso sin abrir el diálogo de skills.
 
 ## Main features
 
