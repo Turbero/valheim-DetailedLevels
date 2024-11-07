@@ -35,6 +35,7 @@ namespace DetailedLevels.Features
                 if (existingBuff != null)
                 {
                     PlayerUtils.setSkillRowBackgroundColor(obj, ConfigurationFile.colorSkillBackground.Value);
+                    existingBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {levelText}"; //Refresh value in buff section
                 }
                 else
                 {
@@ -45,7 +46,6 @@ namespace DetailedLevels.Features
             if (!init)
             {
                 Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("Closebutton");
-                (closeButtonTransform as RectTransform).anchoredPosition = new Vector2(101, 45);
                 Button closeButton = closeButtonTransform.GetComponent<Button>();
                 azButton(closeButton);
                 levelButton(closeButton);
@@ -53,9 +53,9 @@ namespace DetailedLevels.Features
             }
         }
 
-        private static void azButton(Button closeButton)
+        private static void azButton(Button baseButton)
         {
-            GameObject azButtonObject = GameObject.Instantiate(closeButton.gameObject, closeButton.transform.parent);
+            GameObject azButtonObject = GameObject.Instantiate(baseButton.gameObject, baseButton.transform.parent);
             azButtonObject.name = "AZButton";
 
             RectTransform azButtonRect = azButtonObject.GetComponent<RectTransform>();
@@ -86,9 +86,9 @@ namespace DetailedLevels.Features
             });
         }
 
-        private static void levelButton(Button closeButton)
+        private static void levelButton(Button baseButton)
         {
-            GameObject levelButtonObject = GameObject.Instantiate(closeButton.gameObject, closeButton.transform.parent);
+            GameObject levelButtonObject = GameObject.Instantiate(baseButton.gameObject, baseButton.transform.parent);
             levelButtonObject.name = "LevelButton";
 
             RectTransform levelButtonRect = levelButtonObject.GetComponent<RectTransform>();
@@ -133,14 +133,20 @@ namespace DetailedLevels.Features
                     .transform.Find("Skills");
                 if (transform != null)
                 {
+                    //Add hotKey to tooptip
                     UITooltip buttonTooltip = transform.GetComponent<UITooltip>();
-
                     if (buttonTooltip != null)
                     {
                         string originalTooltip = "$inventory_skills";
                         string customText = $" ({ConfigurationFile.hotKey.Value})";
 
                         buttonTooltip.m_text = originalTooltip + customText;
+                    }
+
+                    //Reload texts in skill options
+                    if (PlayerSkillupOptionsPatch.panel != null)
+                    {
+                        PlayerSkillupOptionsPatch.reloadTexts();
                     }
                 }
             }

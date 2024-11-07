@@ -13,8 +13,9 @@ namespace DetailedLevels.Features
     [HarmonyPatch(typeof(SkillsDialog), "Awake")]
     public class PlayerSkillupOptionsPatch
     {
-        private static CustomSkillOptionsPanel panel;
+        public static CustomSkillOptionsPanel panel;
         private static readonly Color TITLE_COLOR = new Color(1f, 0.7176f, 0.3603f, 1f);
+        private static TextMeshProUGUI buttonText;
 
         static void Postfix(SkillsDialog __instance)
         {
@@ -28,8 +29,7 @@ namespace DetailedLevels.Features
             RectTransform dlOptionsButtonRect = dlOptionsButtonObject.GetComponent<RectTransform>();
             dlOptionsButtonRect.anchoredPosition = new Vector2(-100, 45);
 
-            TextMeshProUGUI buttonText = dlOptionsButtonObject.GetComponentInChildren<TextMeshProUGUI>();
-            buttonText.text = $"{"$button_ps_start"}";
+            buttonText = dlOptionsButtonObject.GetComponentInChildren<TextMeshProUGUI>();
             buttonText.fontStyle = FontStyles.Normal;
             buttonText.color = TITLE_COLOR;
             buttonText.alignment = TextAlignmentOptions.Center;
@@ -48,17 +48,17 @@ namespace DetailedLevels.Features
 
             addSoftDeathInfo(panel.getPanel().transform);
             addSaveSwitchButton(panel.getPanel().transform);
-
-            /*// Separador ────────────────────── 
-            TextMeshProUGUI separatorText = panel.getPanel().AddComponent<TextMeshProUGUI>();
-            separatorText.text = $" ────────────────────── {"$button_ps_start"} ────────────────────── ";
-            separatorText.fontStyle = FontStyles.Normal;
-            separatorText.color = TITLE_COLOR;
-            separatorText.alignment = TextAlignmentOptions.Center;*/
-
             addNumberOfDecimalsSlider(panel.getPanel().transform);
             addSkillUpMessage(panel.getPanel().transform);
             addSkillUpBigMessage(panel.getPanel().transform);
+
+            reloadTexts();
+        }
+
+        public static void reloadTexts()
+        {
+            buttonText.text = Localization.instance.Localize("$button_ps_start");
+            panel.reloadTexts();
         }
 
         private static void addSoftDeathInfo(Transform parent)

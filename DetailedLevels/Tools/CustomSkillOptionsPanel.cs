@@ -8,6 +8,8 @@ namespace DetailedLevels.Config
     public class CustomSkillOptionsPanel
     {
         private GameObject panel;
+        private TextMeshProUGUI titleText;
+        private TMP_Text buttonText;
 
         public CustomSkillOptionsPanel(Transform parent)
         {
@@ -29,9 +31,7 @@ namespace DetailedLevels.Config
             GameObject titleObject = new GameObject("Title", typeof(TextMeshProUGUI));
             titleObject.transform.SetParent(panel.transform, false);
 
-            TextMeshProUGUI titleText = titleObject.GetComponent<TextMeshProUGUI>();
-            var translatedText = $"{"$button_ps_start"}";
-            titleText.text = translatedText;
+            titleText = titleObject.GetComponent<TextMeshProUGUI>();            
             titleText.fontSize = 24;
             titleText.color = Color.white;
             titleText.alignment = TextAlignmentOptions.Center;
@@ -48,23 +48,27 @@ namespace DetailedLevels.Config
             RectTransform buttonTextRect = buttonTextObject.GetComponent<RectTransform>();
             buttonTextRect.anchoredPosition = new Vector2(0, 40);
 
-            TMP_Text buttonText = buttonTextObject.GetComponentInChildren<TMP_Text>();
-            var translatedText2 = $"{"$menu_close"}";
-            buttonText.text = translatedText2;
+            buttonText = buttonTextObject.GetComponentInChildren<TMP_Text>();            
 
             Button dlOptionsButton = buttonTextObject.GetComponent<Button>();
             dlOptionsButton.onClick = new Button.ButtonClickedEvent();
             dlOptionsButton.onClick.AddListener(() =>
             {
-                panel.SetActive(false); 
+                panel.SetActive(false);
+                //Reload levels in case of change
+                InventoryGui.instance.m_skillsDialog.Setup(Player.m_localPlayer);
+                    
             });
+
+            reloadTexts();
         }
 
         public GameObject getPanel() { return panel; }
 
-        public void addElement(GameObject element, Vector2 position)
+        public void reloadTexts()
         {
-
+            titleText.text = Localization.instance.Localize("$button_ps_start");
+            buttonText.text = Localization.instance.Localize("$menu_close");
         }
     }
 
