@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.3.1
+
+* Small fix for exception when pressing Esc or tab for first time in the game
+
 ## 1.3.0
 
 * Created wood panel with options for the mod at the bottom of the skills dialog panel (only in English for now):
