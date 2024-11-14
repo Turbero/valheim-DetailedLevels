@@ -128,8 +128,8 @@ namespace DetailedLevels.Features
             if (__instance.m_player != null)
             {
                 var transform = __instance
-                    .transform.Find("root")
-                    .transform.Find("Info")
+                    .transform.Find("root")?
+                    .transform.Find("Info")?
                     .transform.Find("Skills");
                 if (transform != null)
                 {
@@ -148,7 +148,7 @@ namespace DetailedLevels.Features
                     {
                         PlayerSkillupOptionsPatch.reloadTexts();
                         //Hide skill options if open
-                        PlayerSkillupOptionsPatch.panel.getPanel().gameObject.SetActive(false);
+                        PlayerSkillupOptionsPatch.panel.getPanel()?.gameObject?.SetActive(false);
                     }
                 }
             }
