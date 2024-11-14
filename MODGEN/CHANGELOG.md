@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.3.2
+
+* Small fix to prevent random NREs when opening inventory
+* Default hotkey changed to F4
+
 ## 1.3.1
 
 * Small fix for exception when pressing Esc or tab for first time in the game
