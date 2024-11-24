@@ -11,7 +11,7 @@ namespace DetailedLevels
     {
         public const string GUID = "Turbero.DetailedLevels";
         public const string NAME = "Detailed Levels";
-        public const string VERSION = "1.3.2";
+        public const string VERSION = "1.3.3";
 
         private readonly Harmony harmony = new Harmony(GUID);
 
@@ -53,6 +53,7 @@ namespace DetailedLevels
             }
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private static void hideCustomPanelAndSkillsDialog()
         {
             if (InventoryGui.instance.m_skillsDialog == null) return;

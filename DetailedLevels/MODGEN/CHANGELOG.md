@@ -2,7 +2,8 @@
 
 ## 1.3.3
 
-* 
+* ServerSync integration
+* Added option to configure the skill loss percentage in the world (server-synced)
 
 ## 1.3.2
 
