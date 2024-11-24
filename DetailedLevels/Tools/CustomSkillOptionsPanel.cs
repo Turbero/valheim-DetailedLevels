@@ -31,9 +31,10 @@ namespace DetailedLevels.Config
             GameObject titleObject = new GameObject("Title", typeof(TextMeshProUGUI));
             titleObject.transform.SetParent(panel.transform, false);
 
-            titleText = titleObject.GetComponent<TextMeshProUGUI>();            
-            titleText.fontSize = 24;
-            titleText.color = Color.white;
+            titleText = titleObject.GetComponent<TextMeshProUGUI>();
+            titleText.font = PlayerUtils.getFontAsset("Valheim-Norsebold");
+            titleText.fontSize = 36;
+            titleText.color = Color.yellow;
             titleText.alignment = TextAlignmentOptions.Center;
 
             RectTransform titleRect = titleObject.GetComponent<RectTransform>();
