@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.3.3
+
+* 
+
 ## 1.3.2
 
 * Small fix to prevent random NREs when opening inventory
