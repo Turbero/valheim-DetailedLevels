@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static Skills;
@@ -11,6 +12,7 @@ namespace DetailedLevels.Features
     public class PlayerUtils
     {
         private static Dictionary<string, Sprite> cachedSprites = new Dictionary<string, Sprite>();
+        private static Dictionary<string, TMP_FontAsset> cachedFonts = new Dictionary<string, TMP_FontAsset>();
 
         // active status effects
         public static Dictionary<SkillType, int> skillStatusEffects = new Dictionary<SkillType, int>();
@@ -84,6 +86,31 @@ namespace DetailedLevels.Features
             } else
             {
                 return cachedSprites.GetValueSafe(name);
+            }
+        }
+
+        public static TMP_FontAsset getFontAsset(String name)
+        {
+            if (!cachedFonts.ContainsKey(name))
+            {
+                Logger.Log($"Finding {name} font...");
+                var allFonts = Resources.FindObjectsOfTypeAll<TMP_FontAsset>();
+                for (var i = 0; i < allFonts.Length; i++)
+                {
+                    var font = allFonts[i];
+                    if (font.name == name)
+                    {
+                        Logger.Log($"{name} font found.");
+                        cachedFonts.Add(name, font);
+                        return font;
+                    }
+                }
+                Logger.Log($"{name} font NOT found.");
+                return null;
+            }
+            else
+            {
+                return cachedFonts.GetValueSafe(name);
             }
         }
     }

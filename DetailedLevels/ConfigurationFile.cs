@@ -1,5 +1,7 @@
-﻿using BepInEx.Configuration;
+﻿using System;
+using BepInEx.Configuration;
 using BepInEx;
+using DetailedLevels.Features;
 using UnityEngine;
 using ServerSync;
 
@@ -43,7 +45,20 @@ namespace DetailedLevels
                 skillUpBigMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpBigMessageAfterMultipleLevel", 20, "Shows skill up big message after the new level is multiple of the indicated level (0 = disabled, default = 20)", false);
                 colorSkillBackground = config("2 - Levels Data", "ColorSkillBackground", Color.cyan, "Choose the color background for selected skills in the skills dialog: red, green, blue, white, black, yellow, cyan, magenta, gray or grey (default = cyan)", false);
                 saveSkillBuffs = config("2 - Levels Data", "SaveSkillBuffs", false, "Enable/disable the option to reload tracked skills after dying (default = false)", false);
-                deathSkillLoss = config("3 - Config", "DeathSkillLoss", 5f, "Allows skilling up when killing birds and getting their feathers with the used weapon (default = true)");
+                deathSkillLoss = config("3 - Config", "DeathSkillLoss", 5f, "Amount of skill loss when dying (value between 0 and 100, default = 5 as vanilla)");
+
+                deathSkillLoss.SettingChanged += UpdateDeathLoss;
+            }
+        }
+
+        private static void UpdateDeathLoss(object sender, EventArgs e)
+        {
+            if (0 <= deathSkillLoss.Value && deathSkillLoss.Value <= 100)
+            {
+                Player.m_localPlayer.GetSkills().m_DeathLowerFactor = deathSkillLoss.Value / 100f;
+                Logger.Log("m_DeathLowerFactor: " + Player.m_localPlayer.GetSkills().m_DeathLowerFactor);
+
+                PlayerSkillupOptionsPatch.updateSkillLossPercentage();
             }
         }
 

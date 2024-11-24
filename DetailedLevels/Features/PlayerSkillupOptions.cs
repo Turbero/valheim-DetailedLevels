@@ -16,6 +16,7 @@ namespace DetailedLevels.Features
         public static CustomSkillOptionsPanel panel;
         private static readonly Color TITLE_COLOR = new Color(1f, 0.7176f, 0.3603f);
         private static TextMeshProUGUI buttonText;
+        public static TextMeshProUGUI lossPercentageTextComponent;
 
         static void Postfix(SkillsDialog __instance)
         {
@@ -63,19 +64,24 @@ namespace DetailedLevels.Features
 
         private static void addSoftDeathInfo(Transform parent)
         {
-            float lossPercentage = Player.m_localPlayer.GetSkills().m_DeathLowerFactor * 100f;
             GameObject textObject = new GameObject("NoSkillDrainText");
-            TextMeshProUGUI textComponent = textObject.AddComponent<TextMeshProUGUI>();
-            textComponent.text = $"Death penalty = -{lossPercentage}%";
+            lossPercentageTextComponent = textObject.AddComponent<TextMeshProUGUI>();
+            updateSkillLossPercentage();
             //textComponent.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            textComponent.fontStyle = FontStyles.Normal;
-            textComponent.color = new Color(1, 1, 0);
-            textComponent.fontSize = 18;
+            lossPercentageTextComponent.fontStyle = FontStyles.Normal;
+            lossPercentageTextComponent.color = new Color(1, 1, 0);
+            lossPercentageTextComponent.fontSize = 18;
 
             RectTransform textRect = textObject.GetComponent<RectTransform>();
             textRect.SetParent(parent, false);
             textRect.sizeDelta = new Vector2(200, 50);
             textRect.anchoredPosition = new Vector2(-75, 173);
+        }
+
+        public static void updateSkillLossPercentage()
+        {
+            float lossPercentage = Player.m_localPlayer.GetSkills().m_DeathLowerFactor * 100f;
+            lossPercentageTextComponent.text = $"Death penalty = {(lossPercentage > 0 ? "-" : "")}{lossPercentage}%";
         }
 
         private static void addSaveSwitchButton(Transform parent)
@@ -199,6 +205,10 @@ namespace DetailedLevels.Features
     {
         static void Postfix(Player __instance, bool spawnValkyrie)
         {
+            //1 - Update skill loss from config at loading
+            Player.m_localPlayer.GetSkills().m_DeathLowerFactor = ConfigurationFile.deathSkillLoss.Value / 100f;
+            
+            //2 - Add selected buffs before dying
             if (ConfigurationFile.saveSkillBuffs.Value)
             {
                 //Workaround to manipulate dictionary while entries can be removed or added dinamically in AddSKillBuff
