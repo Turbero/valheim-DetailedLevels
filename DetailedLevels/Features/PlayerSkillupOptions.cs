@@ -1,5 +1,4 @@
-﻿using DetailedLevels.Config;
-using DetailedLevels.Tools;
+﻿using DetailedLevels.Tools;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection;
@@ -67,7 +66,7 @@ namespace DetailedLevels.Features
             GameObject textObject = new GameObject("NoSkillDrainText");
             lossPercentageTextComponent = textObject.AddComponent<TextMeshProUGUI>();
             updateSkillLossPercentage();
-            //textComponent.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            lossPercentageTextComponent.font = PlayerUtils.getFontAsset("Valheim-AveriaSansLibre");
             lossPercentageTextComponent.fontStyle = FontStyles.Normal;
             lossPercentageTextComponent.color = new Color(1, 1, 0);
             lossPercentageTextComponent.fontSize = 18;

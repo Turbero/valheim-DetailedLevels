@@ -96,6 +96,7 @@ namespace DetailedLevels.Tools
                 sliderLabel.text = description;
                 sliderLabel.fontSize = 18;
                 sliderLabel.alignment = TextAlignmentOptions.Right;
+                sliderLabel.font = PlayerUtils.getFontAsset("Valheim-AveriaSansLibre");
             }
 
             //Value
@@ -107,6 +108,7 @@ namespace DetailedLevels.Tools
                 textRect.anchoredPosition = new Vector2(posXValue, 0);
                 sliderValue = textObject.GetComponent<TextMeshProUGUI>();
                 sliderValue.fontSize = 18;
+                sliderValue.font = PlayerUtils.getFontAsset("Valheim-AveriaSansLibre");
                 sliderValue.alignment = TextAlignmentOptions.Left;
                 sliderValue.text = valueDesc;
             }

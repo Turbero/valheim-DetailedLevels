@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using DetailedLevels.Features;
 
-namespace DetailedLevels.Config
+namespace DetailedLevels.Tools
 {
     public class CustomSkillOptionsPanel
     {
