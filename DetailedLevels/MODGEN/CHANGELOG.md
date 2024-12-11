@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.3.4
+
+* Using inventory font style for detailed levels menu
+
 ## 1.3.3
 
 * ServerSync integration
