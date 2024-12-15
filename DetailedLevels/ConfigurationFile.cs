@@ -23,8 +23,9 @@ namespace DetailedLevels
         public static ConfigEntry<string> deathPenaltyText;
         public static ConfigEntry<string> reloadAfterDyingText;
         public static ConfigEntry<string> numberOfDecimalsText;
-        public static ConfigEntry<string> SkillUpMessageText;
-        public static ConfigEntry<string> SkillUpBigMessageText;
+        public static ConfigEntry<string> skillUpMessageText;
+        public static ConfigEntry<string> skillUpBigMessageText;
+        public static ConfigEntry<string> skillUpValueText;
 
         private static ConfigFile configFile;
         private static string ConfigFileName = DetailedLevels.GUID + ".cfg";
@@ -58,9 +59,9 @@ namespace DetailedLevels
                 deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");
                 reloadAfterDyingText = config("4 - Language", "ReloadAfterDyingText", "Reload after dying", "Translation for <Reload after dying> text");
                 numberOfDecimalsText  = config("4 - Language", "NumberOfDecimalsText", "Number of decimals", "Translation for <Number of decimals> text");
-                SkillUpMessageText = config("4 - Language", "SkillUpMessageText", "Skill up message", "Translation for <Skill up message> text");
-                SkillUpBigMessageText = config("4 - Language", "SkillUpBigMessageText", "Skill up big message", "Translation for <Skill up big message> text");
-
+                skillUpMessageText = config("4 - Language", "SkillUpMessageText", "Skill up message", "Translation for <Skill up message> text");
+                skillUpBigMessageText = config("4 - Language", "SkillUpBigMessageText", "Skill up big message", "Translation for <Skill up big message> text");
+                skillUpValueText = config("4 - Language", "SkillUpValueText", "Each {0} levels", "Translation for <Each X levels> text");
                     
                 deathSkillLoss.SettingChanged += SettingsChanged;
                 

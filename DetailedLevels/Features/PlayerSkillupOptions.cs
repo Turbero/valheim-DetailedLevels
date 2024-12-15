@@ -108,8 +108,10 @@ namespace DetailedLevels.Features
         {
             customSliderSaveSwitch.sliderLabelDescription.text = ConfigurationFile.reloadAfterDyingText.Value;
             customSliderNumberOfDecimals.sliderLabelDescription.text = ConfigurationFile.numberOfDecimalsText.Value;
-            customSliderSkillUpMessage.sliderLabelDescription.text = ConfigurationFile.SkillUpMessageText.Value;
-            customSliderSkillUpBigMessage.sliderLabelDescription.text = ConfigurationFile.SkillUpBigMessageText.Value;
+            customSliderSkillUpMessage.sliderLabelDescription.text = ConfigurationFile.skillUpMessageText.Value;
+            customSliderSkillUpMessage.updateValue(ConfigurationFile.skillUpValueText.Value.Replace("{0}", customSliderSkillUpMessage.getValue().ToString()));
+            customSliderSkillUpBigMessage.sliderLabelDescription.text = ConfigurationFile.skillUpBigMessageText.Value;
+            customSliderSkillUpBigMessage.updateValue(ConfigurationFile.skillUpValueText.Value.Replace("{0}", customSliderSkillUpBigMessage.getValue().ToString()));
         }
 
         private static void addSaveSwitchButton(Transform parent)
@@ -169,16 +171,16 @@ namespace DetailedLevels.Features
                 posXIcon: 0,
                 spriteName: null,
                 posXDescription: -186,
-                description: ConfigurationFile.SkillUpMessageText.Value,
+                description: ConfigurationFile.skillUpMessageText.Value,
                 posXValue: 185,
                 initValue: ConfigurationFile.skillUpMessageAfterMultipleLevel.Value,
-                valueDesc: $"Each {ConfigurationFile.skillUpMessageAfterMultipleLevel.Value} levels"
+                valueDesc: ConfigurationFile.skillUpValueText.Value.Replace("{0}", ConfigurationFile.skillUpMessageAfterMultipleLevel.Value.ToString())
             );
             customSliderSkillUpMessage.getGameObject().transform.SetParent(parent, false);
             customSliderSkillUpMessage.OnValueChanged((value) =>
             {
                 Logger.Log("slider changed to " + value);
-                customSliderSkillUpMessage.updateValue($"Each {value} levels");
+                customSliderSkillUpMessage.updateValue(ConfigurationFile.skillUpValueText.Value.Replace("{0}", value.ToString()));
                 ConfigurationFile.skillUpMessageAfterMultipleLevel.Value = (int)value;
             });
         }
@@ -193,16 +195,16 @@ namespace DetailedLevels.Features
                 posXIcon: 0,
                 spriteName: null,
                 posXDescription: -186,
-                description: ConfigurationFile.SkillUpBigMessageText.Value,
+                description: ConfigurationFile.skillUpBigMessageText.Value,
                 posXValue: 185,
                 initValue: ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value,
-                valueDesc: $"Each {ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value} levels"
+                valueDesc: ConfigurationFile.skillUpValueText.Value.Replace("{0}", ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value.ToString())
             );
             customSliderSkillUpBigMessage.getGameObject().transform.SetParent(parent, false);
             customSliderSkillUpBigMessage.OnValueChanged((value) =>
             {
                 Logger.Log("slider changed to " + value);
-                customSliderSkillUpBigMessage.updateValue($"Each {value} levels");
+                customSliderSkillUpBigMessage.updateValue(ConfigurationFile.skillUpValueText.Value.Replace("{0}", value.ToString()));
                 ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value = (int)value;
             });
         }

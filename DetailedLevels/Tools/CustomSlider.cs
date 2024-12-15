@@ -129,5 +129,10 @@ namespace DetailedLevels.Tools
         {
             sliderValue.text = value;
         }
+
+        public float getValue()
+        {
+            return slider.value;
+        }
     }
 }
