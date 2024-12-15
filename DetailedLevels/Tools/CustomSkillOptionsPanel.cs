@@ -41,7 +41,7 @@ namespace DetailedLevels.Tools
             titleRect.anchoredPosition = new Vector2(0, 220); 
 
             // Close button
-            Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("Closebutton");
+            Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton");
             GameObject buttonTextObject = GameObject.Instantiate(closeButtonTransform.gameObject, copyForCloseButton);
             buttonTextObject.name = "DLOptionsCloseButton";
             buttonTextObject.transform.SetParent(panel.transform, false);

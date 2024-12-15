@@ -45,7 +45,7 @@ namespace DetailedLevels.Features
 
             if (!init)
             {
-                Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("Closebutton");
+                Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton");
                 Button closeButton = closeButtonTransform.GetComponent<Button>();
                 azButton(closeButton);
                 levelButton(closeButton);
@@ -127,10 +127,7 @@ namespace DetailedLevels.Features
         {
             if (__instance.m_player != null)
             {
-                var transform = __instance
-                    .transform.Find("root")?
-                    .transform.Find("Info")?
-                    .transform.Find("Skills");
+                var transform = __instance.transform.Find("root/Info/Skills");
                 if (transform != null)
                 {
                     //Add hotKey to tooptip

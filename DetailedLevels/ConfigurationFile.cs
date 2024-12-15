@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using BepInEx.Configuration;
 using BepInEx;
 using DetailedLevels.Features;
@@ -19,8 +20,15 @@ namespace DetailedLevels
         public static ConfigEntry<Color> colorSkillBackground;
         public static ConfigEntry<bool> saveSkillBuffs;
         public static ConfigEntry<float> deathSkillLoss;
+        public static ConfigEntry<string> deathPenaltyText;
+        public static ConfigEntry<string> reloadAfterDyingText;
+        public static ConfigEntry<string> numberOfDecimalsText;
+        public static ConfigEntry<string> SkillUpMessageText;
+        public static ConfigEntry<string> SkillUpBigMessageText;
 
         private static ConfigFile configFile;
+        private static string ConfigFileName = DetailedLevels.GUID + ".cfg";
+        private static string ConfigFileFullPath = Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
 
         private static readonly ConfigSync ConfigSync = new ConfigSync(DetailedLevels.GUID)
         {
@@ -47,11 +55,46 @@ namespace DetailedLevels
                 saveSkillBuffs = config("2 - Levels Data", "SaveSkillBuffs", false, "Enable/disable the option to reload tracked skills after dying (default = false)", false);
                 deathSkillLoss = config("3 - Config", "DeathSkillLoss", 5f, "Amount of skill loss when dying (value between 0 and 100, default = 5 as vanilla)");
 
-                deathSkillLoss.SettingChanged += UpdateDeathLoss;
+                deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");
+                reloadAfterDyingText = config("4 - Language", "ReloadAfterDyingText", "Reload after dying", "Translation for <Reload after dying> text");
+                numberOfDecimalsText  = config("4 - Language", "NumberOfDecimalsText", "Number of decimals", "Translation for <Number of decimals> text");
+                SkillUpMessageText = config("4 - Language", "SkillUpMessageText", "Skill up message", "Translation for <Skill up message> text");
+                SkillUpBigMessageText = config("4 - Language", "SkillUpBigMessageText", "Skill up big message", "Translation for <Skill up big message> text");
+
+                    
+                deathSkillLoss.SettingChanged += SettingsChanged;
+                
+                SetupWatcher();
+            }
+        }
+        
+        private static void SetupWatcher()
+        {
+            FileSystemWatcher watcher = new FileSystemWatcher(Paths.ConfigPath, ConfigFileName);
+            watcher.Changed += ReadConfigValues;
+            watcher.Created += ReadConfigValues;
+            watcher.Renamed += ReadConfigValues;
+            watcher.IncludeSubdirectories = true;
+            watcher.SynchronizingObject = ThreadingHelper.SynchronizingObject;
+            watcher.EnableRaisingEvents = true;
+        }
+        
+        private static void ReadConfigValues(object sender, FileSystemEventArgs e)
+        {
+            if (!File.Exists(ConfigFileFullPath)) return;
+            try
+            {
+                Logger.Log("Attempting to reload configuration...");
+                configFile.Reload();
+                SettingsChanged(null, null);
+            }
+            catch
+            {
+                Logger.LogError($"There was an issue loading {ConfigFileName}");
             }
         }
 
-        private static void UpdateDeathLoss(object sender, EventArgs e)
+        private static void SettingsChanged(object sender, EventArgs e)
         {
             if (0 <= deathSkillLoss.Value && deathSkillLoss.Value <= 100)
             {
@@ -59,6 +102,7 @@ namespace DetailedLevels
                 Logger.Log("m_DeathLowerFactor: " + Player.m_localPlayer.GetSkills().m_DeathLowerFactor);
 
                 PlayerSkillupOptionsPatch.updateSkillLossPercentage();
+                PlayerSkillupOptionsPatch.updateOptionsTexts();
             }
         }
 

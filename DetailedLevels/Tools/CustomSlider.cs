@@ -12,6 +12,7 @@ namespace DetailedLevels.Tools
         private readonly GameObject sliderObject;
         private readonly Slider slider;
         private readonly TextMeshProUGUI sliderValue;
+        public TextMeshProUGUI sliderLabelDescription;
 
         public CustomSlider(string name, int maxValue,
                             Vector2 sizeDelta, Vector2 position,
@@ -92,11 +93,11 @@ namespace DetailedLevels.Tools
                 textObject.transform.SetParent(sliderObject.transform, false);
                 RectTransform textRect = textObject.GetComponent<RectTransform>();
                 textRect.anchoredPosition = new Vector2(posXDescription, 0);
-                TextMeshProUGUI sliderLabel = textObject.GetComponent<TextMeshProUGUI>();
-                sliderLabel.text = description;
-                sliderLabel.fontSize = 18;
-                sliderLabel.alignment = TextAlignmentOptions.Right;
-                sliderLabel.font = PlayerUtils.getFontAsset("Valheim-AveriaSansLibre");
+                sliderLabelDescription = textObject.GetComponent<TextMeshProUGUI>();
+                sliderLabelDescription.text = description;
+                sliderLabelDescription.fontSize = 18;
+                sliderLabelDescription.alignment = TextAlignmentOptions.Right;
+                sliderLabelDescription.font = PlayerUtils.getFontAsset("Valheim-AveriaSansLibre");
             }
 
             //Value
