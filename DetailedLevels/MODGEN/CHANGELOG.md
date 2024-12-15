@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.3.5
+
+* Translating options panel in .cfg file
+* Small adjust to panel options
+
 ## 1.3.4
 
 * Using inventory font style for detailed levels menu

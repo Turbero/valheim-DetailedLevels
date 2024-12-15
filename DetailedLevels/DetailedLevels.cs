@@ -11,7 +11,7 @@ namespace DetailedLevels
     {
         public const string GUID = "Turbero.DetailedLevels";
         public const string NAME = "Detailed Levels";
-        public const string VERSION = "1.3.4";
+        public const string VERSION = "1.3.5";
 
         private readonly Harmony harmony = new Harmony(GUID);
 
@@ -60,11 +60,10 @@ namespace DetailedLevels
             
             InventoryGui.instance.m_skillsDialog.gameObject.SetActive(false);
 
-            if (InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame") == null || 
-                InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("CustomSkillOptionsPanel") == null)
+            if (InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/CustomSkillOptionsPanel") == null)
                 return;
 
-            InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("CustomSkillOptionsPanel").gameObject.SetActive(false);
+            InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/CustomSkillOptionsPanel").gameObject.SetActive(false);
             
         }
         private static async Task WaitForSecondsAsync(float seconds)
