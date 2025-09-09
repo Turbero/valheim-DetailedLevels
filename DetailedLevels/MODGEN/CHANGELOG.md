@@ -1,5 +1,15 @@
 ### CHANGELOG
 
+## 1.3.7
+
+* Fixed new skill "dodge" to update on buffs section at the same time a dodge is done successfully
+* Recompiled with latest game libraries. Everything else didn't break with the update.
+
+## 1.3.6
+
+* Update libraries for latest game version
+* Fixed issue with level up messages
+
 ## 1.3.5
 
 * Translating options panel in .cfg file
@@ -33,11 +43,11 @@
 
 ## 1.2.2
 
-* Added toggle in skills panel to save skill buffs when dying and setting them automatically when respawing
+* Added toggle in skills panel to save skill buffs when dying and setting them automatically when respawning
 
 ## 1.2.1
 
-* Added small icon and text with exact value of the skills percetage lost when dying (not hardcoded. If you change with other mods, it will be shown here)
+* Added small icon and text with exact value of the skills percentage lost when dying (not hardcoded. If you change with other mods, it will be shown here)
 * Added option to change skill background color in skills dialog from configuration file
 
 ## 1.2.0
