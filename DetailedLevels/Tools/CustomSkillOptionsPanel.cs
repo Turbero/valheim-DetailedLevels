@@ -23,22 +23,20 @@ namespace DetailedLevels.Tools
             panelRect.anchoredPosition = new Vector2(0, 0); // (0,0) = centered
 
             // Background
-            Image panelImage = panel.AddComponent<Image>();
-            panelImage.sprite = PlayerUtils.getSprite("woodpanel_512x512"); // Background sprite
-            panelImage.type = Image.Type.Sliced;
+            Image original = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("bkg").GetComponent<Image>();
+            Image clone = GameObject.Instantiate(original, panel.transform);
+            clone.name = "bkg_customskills";
 
             // Title
-            GameObject titleObject = new GameObject("Title", typeof(TextMeshProUGUI));
-            titleObject.transform.SetParent(panel.transform, false);
-
-            titleText = titleObject.GetComponent<TextMeshProUGUI>();
-            titleText.font = PlayerUtils.getFontAsset("Valheim-Norsebold");
-            titleText.fontSize = 36;
-            titleText.color = Color.yellow;
-            titleText.alignment = TextAlignmentOptions.Center;
-
-            RectTransform titleRect = titleObject.GetComponent<RectTransform>();
-            titleRect.anchoredPosition = new Vector2(0, 220); 
+            GameObject originalTitle = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("topic").gameObject;
+            GameObject titleClone = GameObject.Instantiate(originalTitle, panel.transform);
+            titleClone.name = "Title";
+            
+            titleText = titleClone.GetComponent<TextMeshProUGUI>();
+            titleText.text = Localization.instance.Localize("$button_ps_start");
+            
+            RectTransform titleRect = titleClone.GetComponent<RectTransform>();
+            titleRect.anchoredPosition = new Vector2(0, -30); 
 
             // Close button
             Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton");
