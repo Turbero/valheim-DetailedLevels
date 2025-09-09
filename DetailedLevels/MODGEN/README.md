@@ -31,6 +31,8 @@ For any concerns or doubts, please dm me or open tickets in my github repos.
 
 ![](https://i.imgur.com/e1vTjP5.jpeg)
 
+![](https://i.imgur.com/7WlUZTQ.jpeg)
+
 This is my first Valheim mod ever after learning the basics. It's difficult to come up with something not created yet by the whole modding community, which is amazing on the other hand.
 
 I'll be doing my best! =)

@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.4.0
+
+* Updated custom options panel with same background as rest of game window backgrounds
+* Little tweak to skillup message sliders when the value is 0 (messages are not shown)
+
 ## 1.3.7
 
 * Fixed new skill "dodge" to update on buffs section at the same time a dodge is done successfully
