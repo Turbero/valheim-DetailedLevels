@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine.UI;
 using UnityEngine;
 using System.Threading.Tasks;
@@ -37,8 +38,6 @@ namespace DetailedLevels.Features
         {
             SkillType skillType = skill.m_info.m_skill;
 
-            string skillName = skill.m_info.m_skill.ToString();
-
             bool skillStatusEffectsContainsKey = PlayerUtils.skillStatusEffects.ContainsKey(skillType);
             Logger.Log($"skillStatusEffects.ContainsKey: {skillStatusEffectsContainsKey}");
             if (!skillStatusEffectsContainsKey)
@@ -73,6 +72,7 @@ namespace DetailedLevels.Features
     {
         static void Postfix(Player __instance, Skills.SkillType skill, float value)
         {
+            Logger.Log($"Entering RaiseSkill.Postfix with skill {skill.ToString()} and value {value}");
             bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(skill, out int nameHash);
             if (existBuff)
                 updateSkillTypeBuff(__instance, skill, nameHash);
@@ -125,6 +125,7 @@ namespace DetailedLevels.Features
     {
         static void Postfix(Character __instance, HitData hit)
         {
+            Logger.Log("Checking blood magic skill up...");
             if (__instance != null && __instance.IsMonsterFaction(0f))
             {
                 Character attacker = hit.GetAttacker();
@@ -141,6 +142,28 @@ namespace DetailedLevels.Features
             bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.BloodMagic, out int nameHash);
             if (existBuff)
                 Player_RaiseSkill_Patch.updateSkillTypeBuff(Player.m_localPlayer, SkillType.BloodMagic, nameHash);
+        }
+    }
+
+    [HarmonyPatch]
+    public class Dodge_BuffUpdate_Patch
+    {
+        static MethodBase TargetMethod()
+        {
+            return AccessTools.Method(typeof(Player), "Dodge");
+        }
+
+        static void Postfix(ref Player __instance, Vector3 dodgeDir)
+        {
+            Logger.Log("Checking dodge skill up...");
+            _ = WaitForSecondsAsync(0.1f); // Small delay in async method to wait for updating dodge skill
+        }
+        private static async Task WaitForSecondsAsync(float seconds)
+        {
+            await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milisegundos
+            bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.Dodge, out int nameHash);
+            if (existBuff)
+                Player_RaiseSkill_Patch.updateSkillTypeBuff(Player.m_localPlayer, SkillType.Dodge, nameHash);
         }
     }
 }
