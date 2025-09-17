@@ -1,9 +1,17 @@
 ### CHANGELOG
 
+## 1.4.1
+
+* Added remaining absorb damage to the magic shield buff icon, dynamically updated when being hit
+* Fixed several text updates during the blood magic skill events. For the record, the game skills up Blood Magic when:
+  * your tamed skeletons hit an enemy (summoned troll is NOT an enemy)
+  * your magic shield is destroyed or the tamed skeletons magic shields are destroyed
+
 ## 1.4.0
 
 * Updated custom options panel with same background as rest of game window backgrounds
 * Little tweak to skillup message sliders when the value is 0 (messages are not shown)
+* Fixed skillup messages when slider values are 0 (they must not pop up)
 
 ## 1.3.7
 
