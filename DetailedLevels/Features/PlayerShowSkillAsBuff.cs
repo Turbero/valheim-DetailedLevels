@@ -125,36 +125,79 @@ namespace DetailedLevels.Features
     {
         static void Postfix(Character __instance, HitData hit)
         {
-            Logger.Log("Checking blood magic skill up...");
             if (__instance  != null)
             {
                 Character attacker = hit.GetAttacker();
                 if (attacker != null)
                 {
-                    // Small delay in async method to wait for updating blood magic skill
+                    //Staff shield
+                    Logger.Log("Checking staff shield...");
+                    if (__instance.GetType() == typeof(Player))
+                    {
+                        _ = WaitForSecondsAsyncStaffShield(__instance as Player, 0.1f);
+                    }
                     
+                    //Blood magic
+                    Logger.Log("Checking blood magic skill up...");
                     // if attacker is a pet/invocation and attacked is a monster there is a bloodmagic skillup!
                     if (attacker.IsTamed() && __instance.IsMonsterFaction(0f))
-                        _ = WaitForSecondsAsync(null, 0.1f);
+                        _ = WaitForSecondsAsyncBloodMagic(null, 0.1f);
                     // attacker is a monster and attacked is a player. If the magic barriers breaks, there is a bloodmagic skillup!
                     else if  (attacker.IsMonsterFaction(0f) && __instance.GetType() == typeof(Player))
-                        _ = WaitForSecondsAsync(__instance as Player, 0.1f);
+                        _ = WaitForSecondsAsyncBloodMagic(__instance as Player, 0.1f);
                     // attacker is a Troll_Summoned and attacked is Player or Tamed
                     else if (attacker.name.Contains("Troll_Summoned"))
                         if (__instance.GetType() == typeof(Player))
-                            _ = WaitForSecondsAsync(__instance as Player, 0.1f);
+                            _ = WaitForSecondsAsyncBloodMagic(__instance as Player, 0.1f);
                         else if (__instance.IsTamed())
-                            _ = WaitForSecondsAsync(null, 0.1f);
+                            _ = WaitForSecondsAsyncBloodMagic(null, 0.1f);
                 }
             }
         }
 
-        private static async Task WaitForSecondsAsync(Player player, float seconds)
+        private static async Task WaitForSecondsAsyncStaffShield(Player player, float seconds)
         {
+            // Small delay in async method to wait for updating blood magic skill
+            await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milliseconds
+            //Search SE_Shield and update
+            Logger.Log("BloodMagic_BuffUpdate_Patch - Initialize staff shield value");
+            SE_Shield_Setup_Patch.updateShieldBuffText(player);
+        }
+
+        private static async Task WaitForSecondsAsyncBloodMagic(Player player, float seconds)
+        {
+            // Small delay in async method to wait for updating blood magic skill
             await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milliseconds
             bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.BloodMagic, out int nameHash);
             if (existBuff)
                 Player_RaiseSkill_Patch.updateSkillTypeBuff(player == null ? Player.m_localPlayer : player, SkillType.BloodMagic, nameHash);
+        }
+    }
+
+    [HarmonyPatch(typeof(SE_Shield), "Setup")]
+    public class SE_Shield_Setup_Patch
+    {
+        static void Postfix(Character __instance)
+        {
+            if (__instance != null && __instance.GetType() == typeof(Player))
+            {
+                Logger.Log("SE_Shield_Setup_Patch - Initialize staff shield value");
+                updateShieldBuffText(__instance as Player);
+            }
+        }
+
+        public static void updateShieldBuffText(Player player)
+        {
+            StatusEffect statusEffect = player.GetSEMan().GetStatusEffects().Find(se => se.m_name.Contains("$se_shield"));
+            if (statusEffect != null && statusEffect.GetType() == typeof(SE_Shield))
+            {
+                //Show remaining damage absorb
+                SE_Shield staffShield = (statusEffect as SE_Shield);
+                float m_totalAbsorbDamage = (float) typeof(SE_Shield).GetField("m_totalAbsorbDamage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(staffShield);
+                float m_damage = (float) typeof(SE_Shield).GetField("m_damage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(staffShield);
+                float remainingAbsorbDamage = (float)Math.Round(m_totalAbsorbDamage - m_damage, Math.Min(15, Math.Max(0, ConfigurationFile.numberOfDecimals.Value)));
+                staffShield.m_name = $"$se_shield: {remainingAbsorbDamage}";
+            }
         }
     }
 
