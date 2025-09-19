@@ -131,10 +131,12 @@ namespace DetailedLevels.Features
                 if (attacker != null)
                 {
                     //Staff shield
-                    Logger.Log("Checking staff shield...");
+                    
                     if (__instance.GetType() == typeof(Player))
                     {
-                        _ = WaitForSecondsAsyncStaffShield(__instance as Player, 0.1f);
+                        bool autoDamageWithShield = attacker.GetType() == typeof(Player) && (__instance as Player)?.GetPlayerName() == (attacker as Player)?.GetPlayerName();
+                        Logger.Log($"Checking staff shield autoDamage {autoDamageWithShield}...");
+                        _ = WaitForSecondsAsyncStaffShield(__instance as Player, 0.1f, autoDamageWithShield);
                     }
                     
                     //Blood magic
@@ -155,13 +157,13 @@ namespace DetailedLevels.Features
             }
         }
 
-        private static async Task WaitForSecondsAsyncStaffShield(Player player, float seconds)
+        private static async Task WaitForSecondsAsyncStaffShield(Player player, float seconds, bool newShield)
         {
             // Small delay in async method to wait for updating blood magic skill
             await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milliseconds
             //Search SE_Shield and update
             Logger.Log("BloodMagic_BuffUpdate_Patch - Initialize staff shield value");
-            SE_Shield_Setup_Patch.updateShieldBuffText(player);
+            SE_Shield_Setup_Patch.updateShieldBuffText(player, newShield);
         }
 
         private static async Task WaitForSecondsAsyncBloodMagic(Player player, float seconds)
@@ -182,21 +184,30 @@ namespace DetailedLevels.Features
             if (__instance != null && __instance.GetType() == typeof(Player))
             {
                 Logger.Log("SE_Shield_Setup_Patch - Initialize staff shield value");
-                updateShieldBuffText(__instance as Player);
+                updateShieldBuffText(__instance as Player, true);
             }
         }
 
-        public static void updateShieldBuffText(Player player)
+        public static void updateShieldBuffText(Player player, bool newShield)
         {
             StatusEffect statusEffect = player.GetSEMan().GetStatusEffects().Find(se => se.m_name.Contains("$se_shield"));
             if (statusEffect != null && statusEffect.GetType() == typeof(SE_Shield))
             {
-                //Show remaining damage absorb
-                SE_Shield staffShield = (statusEffect as SE_Shield);
+                SE_Shield staffShield = statusEffect as SE_Shield;
                 float m_totalAbsorbDamage = (float) typeof(SE_Shield).GetField("m_totalAbsorbDamage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(staffShield);
-                float m_damage = (float) typeof(SE_Shield).GetField("m_damage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(staffShield);
-                float remainingAbsorbDamage = (float)Math.Round(m_totalAbsorbDamage - m_damage, Math.Min(15, Math.Max(0, ConfigurationFile.numberOfDecimals.Value)));
-                staffShield.m_name = $"$se_shield: {remainingAbsorbDamage}";
+                if (newShield)
+                {
+                    staffShield.m_name = $"$se_shield: {m_totalAbsorbDamage}";
+                    Logger.Log($"New shield: m_totalAbsorbDamage {m_totalAbsorbDamage}");
+                }
+                else
+                {
+                    //Show remaining damage absorb
+                    float m_damage = (float) typeof(SE_Shield).GetField("m_damage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(staffShield);
+                    float remainingAbsorbDamage = (float)Math.Round(m_totalAbsorbDamage - m_damage, Math.Min(15, Math.Max(0, ConfigurationFile.numberOfDecimals.Value)));
+                    staffShield.m_name = $"$se_shield: {remainingAbsorbDamage}";
+                    Logger.Log($"Shield numbers: m_totalAbsorbDamage {m_totalAbsorbDamage}, m_damage {m_damage}, remainingAbsorbDamage {remainingAbsorbDamage}");
+                }
             }
         }
     }
