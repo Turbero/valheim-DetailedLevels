@@ -1,17 +1,21 @@
 ### CHANGELOG
 
+## 1.4.2
+
+* Fixed shield buff text when recasting if having one active, the absorbed damage value was not reset
+
 ## 1.4.1
 
 * Added remaining absorb damage to the magic shield buff icon, dynamically updated when being hit
-* Fixed several text updates during the blood magic skill events. For the record, the game skills up Blood Magic when:
-  * your tamed skeletons hit an enemy (summoned troll is NOT an enemy)
-  * your magic shield is destroyed or the tamed skeletons magic shields are destroyed
+* Fixed several text updates during the blood magic skill events. For the record, the Blood Magic skill up happens when:
+  * your tamed allies hit an enemy (summoned troll is NOT an enemy)
+  * your magic shield is destroyed or your tamed allies magic shields are destroyed
 
 ## 1.4.0
 
 * Updated custom options panel with same background as rest of game window backgrounds
-* Little tweak to skillup message sliders when the value is 0 (messages are not shown)
-* Fixed skillup messages when slider values are 0 (they must not pop up)
+* Little tweak to skill up message sliders when the value is 0 (messages are not shown)
+* Fixed skill up messages when slider values are 0 (they must not pop up)
 
 ## 1.3.7
 
@@ -79,7 +83,7 @@
 
 ## 1.1.0
 
-* Added new feature to select skills and attach them to the buff UI and check progress continuosly while fighting, running, building, etc
+* Added new feature to select skills and attach them to the buff UI and check progress continuously while fighting, running, building, etc
 
 ## 1.0.3
 
