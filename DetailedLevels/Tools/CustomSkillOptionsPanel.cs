@@ -13,22 +13,24 @@ namespace DetailedLevels.Tools
 
         public CustomSkillOptionsPanel(Transform copyForCloseButton)
         {
+            Transform skillsFrameTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform;
+
             // Panel
             panel = new GameObject("CustomSkillOptionsPanel", typeof(RectTransform));
             panel.SetActive(false);
-            panel.transform.SetParent(InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform, false);
+            panel.transform.SetParent(skillsFrameTransform, false);
 
             RectTransform panelRect = panel.GetComponent<RectTransform>();
             panelRect.sizeDelta = new Vector2(512, 512);
             panelRect.anchoredPosition = new Vector2(0, 0); // (0,0) = centered
 
             // Background
-            Image original = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("bkg").GetComponent<Image>();
+            Image original = skillsFrameTransform.Find("bkg").GetComponent<Image>();
             Image clone = GameObject.Instantiate(original, panel.transform);
             clone.name = "bkg_customskills";
 
             // Title
-            GameObject originalTitle = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform.Find("topic").gameObject;
+            GameObject originalTitle = skillsFrameTransform.Find("topic").gameObject;
             GameObject titleClone = GameObject.Instantiate(originalTitle, panel.transform);
             titleClone.name = "Title";
             
