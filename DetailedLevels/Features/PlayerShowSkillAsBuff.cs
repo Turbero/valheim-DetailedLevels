@@ -163,7 +163,7 @@ namespace DetailedLevels.Features
             await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milliseconds
             //Search SE_Shield and update
             Logger.Log("BloodMagic_BuffUpdate_Patch - Initialize staff shield value");
-            SE_Shield_Setup_Patch.updateShieldBuffText(player, newShield);
+            SE_Shield_Setup_Patch.updateShieldBuffTextIfExists(player, newShield);
         }
 
         private static async Task WaitForSecondsAsyncBloodMagic(Player player, float seconds)
@@ -184,11 +184,18 @@ namespace DetailedLevels.Features
             if (__instance != null && __instance.GetType() == typeof(Player))
             {
                 Logger.Log("SE_Shield_Setup_Patch - Initialize staff shield value");
-                updateShieldBuffText(__instance as Player, true);
+                updateShieldBuffTextIfExists(__instance as Player, true);
+                
+                //Detect if __instance is NOT the local player, and update the buff text to the m_localplayer if his buff exists on him (meaning he was in range)
+                if (__instance != Player.m_localPlayer)
+                {
+                    Logger.Log("SE_Shield_Setup_Patch - Another player did the spell. Checking local player");
+                    updateShieldBuffTextIfExists(Player.m_localPlayer, true);
+                }
             }
         }
 
-        public static void updateShieldBuffText(Player player, bool newShield)
+        public static void updateShieldBuffTextIfExists(Player player, bool newShield)
         {
             StatusEffect statusEffect = player.GetSEMan().GetStatusEffects().Find(se => se.m_name.Contains("$se_shield"));
             if (statusEffect != null && statusEffect.GetType() == typeof(SE_Shield))
