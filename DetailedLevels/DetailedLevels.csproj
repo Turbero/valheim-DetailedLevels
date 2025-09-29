@@ -51,6 +51,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CustomSlider.cs" />
+    <Compile Include="Tools\CustomStatsPanel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">

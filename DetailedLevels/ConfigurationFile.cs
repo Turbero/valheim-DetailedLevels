@@ -26,6 +26,7 @@ namespace DetailedLevels
         public static ConfigEntry<string> skillUpMessageText;
         public static ConfigEntry<string> skillUpBigMessageText;
         public static ConfigEntry<string> skillUpValueText;
+        public static ConfigEntry<string> statsText;
 
         private static ConfigFile configFile;
         private static string ConfigFileName = DetailedLevels.GUID + ".cfg";
@@ -62,7 +63,8 @@ namespace DetailedLevels
                 skillUpMessageText = config("4 - Language", "SkillUpMessageText", "Skill up message", "Translation for <Skill up message> text");
                 skillUpBigMessageText = config("4 - Language", "SkillUpBigMessageText", "Skill up big message", "Translation for <Skill up big message> text");
                 skillUpValueText = config("4 - Language", "SkillUpValueText", "Each {0} levels", "Translation for <Each X levels> text");
-                    
+                statsText = config("4 - Language", "StatsText", "Stats", "Translation for <Stats> text");
+                
                 deathSkillLoss.SettingChanged += SettingsChanged;
                 
                 SetupWatcher();
@@ -103,8 +105,9 @@ namespace DetailedLevels
                 Logger.Log("m_DeathLowerFactor: " + Player.m_localPlayer.GetSkills().m_DeathLowerFactor);
 
                 PlayerSkillupOptionsPatch.updateSkillLossPercentage();
-                PlayerSkillupOptionsPatch.updateOptionsTexts();
             }
+            PlayerSkillupOptionsPatch.updateOptionsTexts();
+            PlayerSkillupOptionsPatch.reloadTexts();
         }
 
         private static ConfigEntry<T> config<T>(string group, string name, T value, string description,
