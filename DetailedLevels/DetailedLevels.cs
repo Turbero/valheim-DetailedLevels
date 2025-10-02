@@ -11,7 +11,7 @@ namespace DetailedLevels
     {
         public const string GUID = "Turbero.DetailedLevels";
         public const string NAME = "Detailed Levels";
-        public const string VERSION = "1.4.2";
+        public const string VERSION = "1.5.0";
 
         private readonly Harmony harmony = new Harmony(GUID);
 
@@ -68,7 +68,7 @@ namespace DetailedLevels
         }
         private static async Task WaitForSecondsAsync(float seconds)
         {
-            await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milisegundos
+            await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milliseconds
             InventoryGui.instance.m_skillsDialog.Setup(Player.m_localPlayer);
             InventoryGui.instance.m_skillsDialog.gameObject.SetActive(true);
         }
