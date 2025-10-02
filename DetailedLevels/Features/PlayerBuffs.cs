@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -83,6 +84,7 @@ namespace DetailedLevels.Features
 
         private static async Task refreshAllBlueColorsAsync(Player player, float seconds)
         {
+            await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milliseconds
             PlayerColorBuffs.refreshAllBlueColors(player);
         }
     }
