@@ -1,28 +1,31 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using static Skills;
 using static Utils;
 
 namespace DetailedLevels.Features
 {
-    public class PlayerBuffs
+    public static class PlayerBuffs
     {
-        public static Dictionary<SkillType, Sprite> sprites = new Dictionary<SkillType, Sprite>();
-        public static Dictionary<SkillType, Skill> skills = new Dictionary<SkillType, Skill>();
+        public static readonly Dictionary<SkillType, Sprite> sprites = new Dictionary<SkillType, Sprite>();
+        public static readonly Dictionary<SkillType, Skill> skills = new Dictionary<SkillType, Skill>();
         public static void AddSkillBuff(Player player, Skill skill, Sprite skillIcon, GameObject skillRow = null)
         {
             SEMan seMan = player.GetSEMan();
             
-            string value = skillRow != null
-                ? Utils.FindChild(skillRow.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text
-                : PlayerUtils.GetCurrentSkillLevelProgress(skill).ToString();
-            Logger.Log("Skill current value: " + value);
+            float value = skillRow != null
+                ? float.Parse(Utils.FindChild(skillRow.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text)
+                : PlayerUtils.GetCurrentSkillLevelProgress(skill);
+            float skillLevelModifier = PlayerUtils.FindActiveModifierValue(player, skill.m_info.m_skill);
+            Logger.Log("Skill current value: " + value+ ". modifier: "+skillLevelModifier);
+            
 
             // Create new custom status effect
             SE_Stats customBuff = ScriptableObject.CreateInstance<SE_Stats>();
-            customBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {value}";
+            customBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {value}" + (skillLevelModifier > 0 ? $" (+{skillLevelModifier})" : "");
             customBuff.m_tooltip = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}_description";
             customBuff.m_icon = skillIcon; // Use skill icon
             customBuff.name = PlayerUtils.GetValueForNameHash(skill); // to produce distinct hash values
@@ -50,6 +53,10 @@ namespace DetailedLevels.Features
                 skills.Add(skill.m_info.m_skill, skill);
                 Logger.Log($"Cached skill for {customBuff.m_name}");
             }
+            
+            
+            //Apply color after the buff is in Hud.instance (takes little milliseconds) and refresh the rest
+            _ = refreshAllBlueColorsAsync(player, 0.1f);
         }
 
         public static void RemoveSkillBuff(Player player, Skill skill)
@@ -57,7 +64,6 @@ namespace DetailedLevels.Features
             SEMan seMan = player.GetSEMan();
 
             // Find and delete buff
-            string skillName = skill.m_info.m_skill.ToString();
             int nameHash = PlayerUtils.skillStatusEffects.GetValueSafe(skill.m_info.m_skill);
             StatusEffect existingBuff = seMan.GetStatusEffect(nameHash);
             if (existingBuff != null)
@@ -69,7 +75,15 @@ namespace DetailedLevels.Features
 
                 sprites.Remove(skill.m_info.m_skill);
                 skills.Remove(skill.m_info.m_skill);
+
+                //When removing from seMan the colors are reset in white but extra buffs are still in the name. Have to restore the blue color
+                _ = refreshAllBlueColorsAsync(player, 0.1f);
             }
+        }
+
+        private static async Task refreshAllBlueColorsAsync(Player player, float seconds)
+        {
+            PlayerColorBuffs.refreshAllBlueColors(player);
         }
     }
 }

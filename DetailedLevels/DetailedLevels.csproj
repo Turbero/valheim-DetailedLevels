@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
+    <Compile Include="Features\PlayerColorBuffs.cs" />
     <Compile Include="Tools\CustomSkillOptionsPanel.cs" />
     <Compile Include="DetailedLevels.cs" />
     <Compile Include="Experiments\PlayerKillingBirds.cs" />

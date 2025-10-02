@@ -24,9 +24,11 @@ namespace DetailedLevels.Features
                 GameObject obj = ___m_elements[j];
                 Skills.Skill skill = skillList[j];
 
-                string levelText = PlayerUtils.GetCurrentSkillLevelProgress(skill).ToString();
+                float level = PlayerUtils.GetCurrentSkillLevelProgress(skill);
+                float skillLevelModifier = PlayerUtils.FindActiveModifierValue(player, skill.m_info.m_skill);
+                string levelText = ""+level+(skillLevelModifier > 0 ? " (+"+skillLevelModifier+")" : "");
 
-                Utils.FindChild(obj.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text = levelText;
+                Utils.FindChild(obj.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text = level.ToString();
 
                 //Refresh background to adjust after sorting list
                 string skillName = skill.m_info.m_skill.ToString();
@@ -152,7 +154,7 @@ namespace DetailedLevels.Features
         }
     }
     [HarmonyPatch(typeof(Skills), nameof(Skills.GetSkillList))]
-    public static class SkillsDialog_GetSkillListSorted_Patch
+    public class SkillsDialog_GetSkillListSorted_Patch
     {
         static void Postfix(ref List<Skill> __result)
         {
@@ -178,7 +180,7 @@ namespace DetailedLevels.Features
             }
         }
 
-        private static string GetSkillTranslation(this Skill skill)
+        private static string GetSkillTranslation(Skill skill)
         {
             return Localization.instance.Localize("$skill_" + skill.m_info.m_skill.ToString().ToLower());
         }

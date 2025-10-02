@@ -13,7 +13,7 @@ namespace DetailedLevels.Features
     [HarmonyPriority(Priority.VeryHigh)]
     static class SkillsDialog_SkillStatusEffects_Patch
     {
-        static void Postfix(SkillsDialog __instance, ref Player player, ref List<GameObject> ___m_elements)
+        static void Postfix(SkillsDialog __instance, ref List<GameObject> ___m_elements)
         {
             Logger.Log("** SkillsDialog_SkillStatusEffects_Patch.Postfix");
             if (InventoryGui.instance == null) return;
@@ -88,16 +88,17 @@ namespace DetailedLevels.Features
             StatusEffect existingBuff = seMan.GetStatusEffect(nameHash);
             if (existingBuff != null)
             {
-                Skill playerSkill = FindPlayerSkill(player, skillType);
+                Skill playerSkill = PlayerUtils.FindPlayerSkill(player, skillType);
                 float currentSkillLevel = PlayerUtils.GetCurrentSkillLevelProgress(playerSkill);
+                float skillLevelModifier = PlayerUtils.FindActiveModifierValue(player, skillType);
 
-                Logger.Log($"About to update buff: $skill_{skillName.ToLower()} with skill level: {currentSkillLevel}.");
+                Logger.Log($"About to update buff: $skill_{skillName.ToLower()} with skill level {currentSkillLevel} and skill level modifier {skillLevelModifier}.");
 
-                string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {currentSkillLevel}";
+                string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {currentSkillLevel}" + (skillLevelModifier > 0 ? " (+"+skillLevelModifier+")" : string.Empty);
                 Logger.Log($"Old buff name: {existingBuff.m_name}. New buff name: {newBuffName}");
                 if (existingBuff.m_name != newBuffName || forceUpdate)
                 {
-                    existingBuff.m_name = $"$skill_{skillType.ToString().ToLower()}: {currentSkillLevel}";
+                    existingBuff.m_name = newBuffName;
                     Logger.Log($"Updated buff: {skillName} with skill level: {currentSkillLevel}");
                 }
                 else
@@ -105,18 +106,6 @@ namespace DetailedLevels.Features
                     Logger.Log("No need to update buff");
                 }
             }
-        }
-
-        private static Skill FindPlayerSkill(Player player, SkillType skillType)
-        {
-            foreach (var skill in player.GetSkills().GetSkillList())
-            {
-                if (skill.m_info.m_skill == skillType)
-                {
-                    return skill;
-                }
-            }
-            return null;
         }
     }
 
@@ -238,6 +227,74 @@ namespace DetailedLevels.Features
             bool existBuff = PlayerUtils.skillStatusEffects.TryGetValue(SkillType.Dodge, out int nameHash);
             if (existBuff)
                 Player_RaiseSkill_Patch.updateSkillTypeBuff(player, SkillType.Dodge, nameHash);
+        }
+    }
+
+    [HarmonyPatch(typeof(Humanoid), "EquipItem")]
+    [HarmonyPriority(Priority.VeryLow)]
+    public class PlayerEquipItemPatch
+    {
+        [HarmonyPrefix]
+        public static void Postfix(Humanoid __instance, ItemDrop.ItemData item, bool triggerEquipEffects)
+        {
+            _ = PlayerInventoryChanges.recalculateSkillsAsync(__instance, item, 0.1f);
+        }
+    }
+
+    [HarmonyPatch(typeof(Humanoid), "DropItem")]
+    [HarmonyPriority(Priority.VeryLow)]
+    public class PlayerDropItemPatch
+    {
+        [HarmonyPrefix]
+        public static void Postfix(Inventory inventory, ItemDrop.ItemData item, int amount, ref Humanoid __instance)
+        {
+            _ = PlayerInventoryChanges.recalculateSkillsAsync(__instance, item, 0.1f);
+        }
+    }
+    
+    [HarmonyPatch(typeof(Humanoid), "UnequipItem")]
+    [HarmonyPriority(Priority.VeryLow)]
+    public class PlayerUnequipItemPatch
+    {
+        [HarmonyPrefix]
+        public static void Postfix(ItemDrop.ItemData item, bool triggerEquipEffects, ref Humanoid __instance)
+        {
+            _ = PlayerInventoryChanges.recalculateSkillsAsync(__instance, null, 0.1f);
+        }
+    }
+
+    static class PlayerInventoryChanges
+    {
+        public static async Task recalculateSkillsAsync(Humanoid __instance, ItemDrop.ItemData item, float seconds)
+        {
+            await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milliseconds
+            if (__instance is Player)
+            {
+                if (item == null || PlayerUtils.GetTypesThatModifyStats().Contains(item.m_shared.m_itemType))
+                {
+                    Player player = __instance as Player;
+                    //Recalculate skill buffs if some of them has changed
+                    foreach (KeyValuePair<SkillType, int> skillStatusEffect in PlayerUtils.skillStatusEffects)
+                    {
+                        SkillType skillType = skillStatusEffect.Key;
+                        int nameHash = skillStatusEffect.Value;
+                        StatusEffect existingBuff = player.GetSEMan().GetStatusEffect(nameHash) as SE_Stats;
+                        if (existingBuff == null) continue;
+
+                        Skill playerSkill = PlayerUtils.FindPlayerSkill(player, skillType);
+                        string skillName = skillType.ToString();
+                        float currentSkillLevel = PlayerUtils.GetCurrentSkillLevelProgress(playerSkill);
+                        float skillLevelModifier = PlayerUtils.FindActiveModifierValue(player, skillType);
+
+                        Logger.Log($"About to update buff: $skill_{skillName.ToLower()} with skill level {currentSkillLevel} and skill level modifier {skillLevelModifier}.");
+                        string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {currentSkillLevel}" + (skillLevelModifier > 0 ? " (+" + skillLevelModifier + ")" : string.Empty);
+                        Logger.Log($"Old buff name: {existingBuff.m_name}. New buff name: {newBuffName}");
+                        existingBuff.m_name = newBuffName;
+                    }
+
+                    PlayerColorBuffs.refreshAllBlueColors(player);
+                }
+            }
         }
     }
 }

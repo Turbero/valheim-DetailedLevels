@@ -44,8 +44,7 @@ namespace DetailedLevels
             {
                 configFile = plugin.Config;
 
-                _serverConfigLocked = config("1 - General", "Lock Configuration", true,
-                "If on, the configuration is locked and can be changed by server admins only.");
+                _serverConfigLocked = config("1 - General", "Lock Configuration", true, "If on, the configuration is locked and can be changed by server admins only.");
                 _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
 
                 debug = config("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)", false);
@@ -64,7 +63,6 @@ namespace DetailedLevels
                 skillUpBigMessageText = config("4 - Language", "SkillUpBigMessageText", "Skill up big message", "Translation for <Skill up big message> text");
                 skillUpValueText = config("4 - Language", "SkillUpValueText", "Each {0} levels", "Translation for <Each X levels> text");
                 statsText = config("4 - Language", "StatsText", "Stats", "Translation for <Stats> text");
-                
                 deathSkillLoss.SettingChanged += SettingsChanged;
                 
                 SetupWatcher();
@@ -108,6 +106,7 @@ namespace DetailedLevels
             }
             PlayerSkillupOptionsPatch.updateOptionsTexts();
             PlayerSkillupOptionsPatch.reloadTexts();
+            PlayerColorBuffs.refreshAllBlueColors(Player.m_localPlayer);
         }
 
         private static ConfigEntry<T> config<T>(string group, string name, T value, string description,

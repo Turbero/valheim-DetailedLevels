@@ -5,19 +5,18 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static Skills;
 
 namespace DetailedLevels.Features
 {
-    public class PlayerUtils
+    public static class PlayerUtils
     {
-        private static Dictionary<string, Sprite> cachedSprites = new Dictionary<string, Sprite>();
-        private static Dictionary<string, TMP_FontAsset> cachedFonts = new Dictionary<string, TMP_FontAsset>();
+        private static readonly Dictionary<string, Sprite> cachedSprites = new Dictionary<string, Sprite>();
+        private static readonly Dictionary<string, TMP_FontAsset> cachedFonts = new Dictionary<string, TMP_FontAsset>();
 
         // active status effects
-        public static Dictionary<SkillType, int> skillStatusEffects = new Dictionary<SkillType, int>();
+        public static readonly Dictionary<Skills.SkillType, int> skillStatusEffects = new Dictionary<Skills.SkillType, int>();
 
-        public static float GetCurrentSkillLevelProgress(Skill skill)
+        public static float GetCurrentSkillLevelProgress(Skills.Skill skill)
         {
             float accumulator = skill.m_accumulator;
 
@@ -112,6 +111,58 @@ namespace DetailedLevels.Features
             {
                 return cachedFonts.GetValueSafe(name);
             }
+        }
+
+        public static float FindActiveModifierValue(Player player, Skills.SkillType skillType)
+        {
+            float totalModifierValue = 0f;
+            List<StatusEffect> activeEffects = player.GetSEMan().GetStatusEffects();
+            foreach (StatusEffect statusEffect in activeEffects)
+            {
+                if (statusEffect.GetType() == typeof(SE_Stats))
+                {
+                    SE_Stats se = (SE_Stats)statusEffect;
+                    if (se.m_skillLevel == skillType)
+                        totalModifierValue += se.m_skillLevelModifier;
+                    if (se.m_skillLevel2 == skillType)
+                        totalModifierValue += se.m_skillLevelModifier2;
+                }
+                    
+            }
+            
+            
+            return totalModifierValue;
+        }
+
+        public static List<ItemDrop.ItemData.ItemType> GetTypesThatModifyStats()
+        {
+            List<ItemDrop.ItemData.ItemType> types = new List<ItemDrop.ItemData.ItemType>
+            {
+                ItemDrop.ItemData.ItemType.OneHandedWeapon,
+                ItemDrop.ItemData.ItemType.Bow,
+                ItemDrop.ItemData.ItemType.Shield,
+                ItemDrop.ItemData.ItemType.Helmet,
+                ItemDrop.ItemData.ItemType.Chest,
+                ItemDrop.ItemData.ItemType.Legs,
+                ItemDrop.ItemData.ItemType.Hands,
+                ItemDrop.ItemData.ItemType.TwoHandedWeapon,
+                ItemDrop.ItemData.ItemType.Utility,
+                ItemDrop.ItemData.ItemType.Attach_Atgeir,
+                ItemDrop.ItemData.ItemType.TwoHandedWeaponLeft
+            };
+            return types;
+        }
+
+        public static Skills.Skill FindPlayerSkill(Player player, Skills.SkillType skillType)
+        {
+            foreach (var skill in player.GetSkills().GetSkillList())
+            {
+                if (skill.m_info.m_skill == skillType)
+                {
+                    return skill;
+                }
+            }
+            return null;
         }
     }
 }
