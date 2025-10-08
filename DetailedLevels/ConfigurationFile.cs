@@ -29,8 +29,8 @@ namespace DetailedLevels
         public static ConfigEntry<string> statsText;
 
         private static ConfigFile configFile;
-        private static string ConfigFileName = DetailedLevels.GUID + ".cfg";
-        private static string ConfigFileFullPath = Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
+        private static readonly string ConfigFileName = DetailedLevels.GUID + ".cfg";
+        private static readonly string ConfigFileFullPath = Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
 
         private static readonly ConfigSync ConfigSync = new ConfigSync(DetailedLevels.GUID)
         {
@@ -107,6 +107,7 @@ namespace DetailedLevels
             PlayerSkillupOptionsPatch.updateOptionsTexts();
             PlayerSkillupOptionsPatch.reloadTexts();
             PlayerColorBuffs.refreshAllBlueColors(Player.m_localPlayer);
+            SkillTypeCraftStationDescriptionsPatch.updated = false;
         }
 
         private static ConfigEntry<T> config<T>(string group, string name, T value, string description,
