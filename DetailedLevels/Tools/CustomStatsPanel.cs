@@ -11,6 +11,7 @@ namespace DetailedLevels.Tools
     public class CustomStatsPanel
     {
         private GameObject panel;
+        private TextMeshProUGUI statsTopicText;
         private readonly Dictionary<PlayerStatType, TextMeshProUGUI> statsTexts = new Dictionary<PlayerStatType, TextMeshProUGUI>();
         
         public CustomStatsPanel()
@@ -27,12 +28,17 @@ namespace DetailedLevels.Tools
             RectTransform rt = panel.GetComponent<RectTransform>();
             rt.anchoredPosition = new Vector2(0, 0); // centered
 
-            Transform statsTopicTransform = skillsDialog.transform.Find("PlayerStatsFrame/TrophiesFrame/topic");
-            TextMeshProUGUI statsTopicText = statsTopicTransform.GetComponent<TextMeshProUGUI>();
+            panel.transform.Find("TrophiesFrame").name = "MainFrame";
+
+            Transform statsTopicTransform = skillsDialog.transform.Find("PlayerStatsFrame/MainFrame/topic");
+            statsTopicText = statsTopicTransform.GetComponent<TextMeshProUGUI>();
             statsTopicText.text = ConfigurationFile.statsText.Value;
 
-            Transform statsCloseButtonTransform =
-                skillsDialog.transform.Find("PlayerStatsFrame/TrophiesFrame/Closebutton");
+            skillsDialog.transform.Find("PlayerStatsFrame/MainFrame/Trophies").name = "Stats";
+            skillsDialog.transform.Find("PlayerStatsFrame/MainFrame/Stats/TrophyListScroll").name = "StatsListScroll";
+            skillsDialog.transform.Find("PlayerStatsFrame/MainFrame/Stats/TrophyList").name = "StatList";
+
+            Transform statsCloseButtonTransform = skillsDialog.transform.Find("PlayerStatsFrame/MainFrame/Closebutton");
             Button statsCloseButtonButton = statsCloseButtonTransform.GetComponent<Button>();
             statsCloseButtonButton.onClick = new Button.ButtonClickedEvent();
             statsCloseButtonButton.onClick.AddListener(() =>
@@ -164,7 +170,7 @@ namespace DetailedLevels.Tools
         
         private void AddEntry(PlayerStatType type, float value, Vector2 position, Vector2 sizeDelta)
         {
-            Transform contentRoot = InventoryGui.instance.m_skillsDialog.transform.Find("PlayerStatsFrame/TrophiesFrame/Trophies/TrophyList/ListRoot");
+            Transform contentRoot = InventoryGui.instance.m_skillsDialog.transform.Find("PlayerStatsFrame/MainFrame/Stats/StatList/ListRoot");
             if (contentRoot == null) return;
 
             GameObject textObject = new GameObject("Stat_"+type, typeof(RectTransform), typeof(TextMeshProUGUI));
@@ -184,6 +190,7 @@ namespace DetailedLevels.Tools
         
         public void reloadTexts()
         {
+            statsTopicText.text = ConfigurationFile.statsText.Value;
             Dictionary<PlayerStatType, float> mStats = getPlayerDictionaryStats();
             foreach (KeyValuePair<PlayerStatType,TextMeshProUGUI> stat in statsTexts)
             {
