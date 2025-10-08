@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.5.1
+
+* Added skill type description in the craft stations to craftables that make you skill up when they are used so you don't have to craft it in advance and spend materials if you're not interested.
+* Skill up message also skipped when fighting Hildir bosses
+
 ## 1.5.0
 
 * Added:
