@@ -25,6 +25,25 @@ namespace DetailedLevels.Tools
             panel.name = "PlayerStatsFrame";
             panel.SetActive(false);
             
+            List<string> stats = new List<string>
+            {
+                "Daño: 25",
+                "Defensa: 40",
+                "Muertes: 12",
+                "Jefes derrotados: 3",
+                "Tiempo jugado: 2h 15m",
+                "Puntos de habilidad: 125",
+                "Puntos de habilidad: 125",
+                "Puntos de habilidad: 125",
+                "Puntos de habilidad: 125",
+                "Puntos de habilidad: 125",
+                "Puntos de habilidad: 125",
+                "Puntos de habilidad: 125",
+                "Puntos de habilidad: 125"
+            };
+            
+            CustomStatsGroup group = new CustomStatsGroup(panel.transform, new Vector2(0, 0), "Estadísticas", stats);
+            
             RectTransform rt = panel.GetComponent<RectTransform>();
             rt.anchoredPosition = new Vector2(0, 0); // centered
 
