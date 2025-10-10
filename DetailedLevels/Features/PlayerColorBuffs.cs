@@ -84,7 +84,8 @@ namespace DetailedLevels.Features
                     {
                         TextMeshProUGUI text = Hud.instance.m_statusEffectListRoot.GetChild(i).GetComponentInChildren<TextMeshProUGUI>();
                         Logger.Log($"Finding text {textToFind} in {text.text}");
-                        if (text.text.Contains(textToFind))
+                        if (text.text.Contains(textToFind) &&
+                            text.text.Length > textToFind.Length) // buff with skill name and skill level
                         {
                             text.faceColor = new Color32(0, 189, 255, 255); // Extra skill blue color used: (0, 188.955, 255, 255)
                             Logger.Log("Color updated.");
