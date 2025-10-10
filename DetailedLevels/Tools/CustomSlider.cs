@@ -45,7 +45,7 @@ namespace DetailedLevels.Tools
             backgroundRect.anchorMin = new Vector2(0, 0);
             backgroundRect.anchorMax = new Vector2(1, 1);
             backgroundRect.sizeDelta = new Vector2(0, 0);
-            background.GetComponent<Image>().color = Color.gray;  // Cambia el color según tus preferencias
+            background.GetComponent<Image>().color = Color.gray;  // Background color
 
             //Fill Area
             GameObject fillArea = new GameObject("Fill Area", typeof(RectTransform));
@@ -62,7 +62,7 @@ namespace DetailedLevels.Tools
             fillRect.anchorMin = new Vector2(0, 0);
             fillRect.anchorMax = new Vector2(1, 1);
             fillRect.sizeDelta = new Vector2(0, 0);
-            fill.GetComponent<Image>().color = Color.green;  // color
+            fill.GetComponent<Image>().color = Color.green;  // Fill color
             slider.fillRect = fillRect;
 
             //Handle to manipulate value
@@ -70,7 +70,7 @@ namespace DetailedLevels.Tools
             handle.transform.SetParent(sliderObject.transform, false);
             RectTransform handleRect = handle.GetComponent<RectTransform>();
             handleRect.sizeDelta = new Vector2(10, 10);
-            handle.GetComponent<Image>().color = Color.white;  // Color del manejador
+            handle.GetComponent<Image>().color = Color.white;  // Handle color
             slider.targetGraphic = handle.GetComponent<Image>();
             slider.handleRect = handleRect;
 
