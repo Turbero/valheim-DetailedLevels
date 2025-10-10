@@ -1,15 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections.Generic;
 using DetailedLevels.Features;
 
 namespace DetailedLevels.Tools
 {
-
-    public class CustomStatsGroup
+    public class CustomStatsPanelScroll
     {
-        public CustomStatsGroup(Transform parent, Vector2 position, string title, List<string> entries)
+        private readonly GameObject content;
+        public readonly Dictionary<PlayerStatType, TextMeshProUGUI> statsTexts = new Dictionary<PlayerStatType, TextMeshProUGUI>();
+
+        public CustomStatsPanelScroll(Transform parent)
         {
             InventoryGui inventoryGui = InventoryGui.instance;
             
@@ -21,28 +23,11 @@ namespace DetailedLevels.Tools
             panelRT.anchorMin = new Vector2(0.5f, 0.5f);
             panelRT.anchorMax = new Vector2(0.5f, 0.5f);
             panelRT.pivot = new Vector2(0.5f, 0.5f);
-            panelRT.anchoredPosition = position;
-            panelRT.sizeDelta = new Vector2(320, 300);
+            panelRT.anchoredPosition = new Vector2(0, 0);
+            panelRT.sizeDelta = new Vector2(1260, 650); //Size dimension
 
             Image bgImage = customPanel.GetComponent<Image>();
             bgImage.color = new Color(0, 0, 0, 0.6f);
-
-            // --- TÍTULO ---
-            GameObject titleObj = new GameObject("Title", typeof(RectTransform), typeof(TextMeshProUGUI));
-            titleObj.transform.SetParent(customPanel.transform, false);
-            RectTransform titleRT = titleObj.GetComponent<RectTransform>();
-            titleRT.anchorMin = new Vector2(0.5f, 1);
-            titleRT.anchorMax = new Vector2(0.5f, 1);
-            titleRT.pivot = new Vector2(0.5f, 1);
-            titleRT.anchoredPosition = new Vector2(0, -10);
-            titleRT.sizeDelta = new Vector2(300, 30);
-
-            TextMeshProUGUI titleText = titleObj.GetComponent<TextMeshProUGUI>();
-            titleText.text = title;
-            titleText.font = inventoryGui.m_recipeName.font; // igual que el título de recetas
-            titleText.fontSize = 24;
-            titleText.alignment = TextAlignmentOptions.Center;
-            titleText.color = Color.yellow;
 
             // --- SCROLLRECT ---
             GameObject scrollObj = new GameObject("ScrollView", typeof(RectTransform), typeof(ScrollRect), typeof(Image));
@@ -52,12 +37,14 @@ namespace DetailedLevels.Tools
             scrollRT.anchorMin = new Vector2(0, 0);
             scrollRT.anchorMax = new Vector2(1, 1);
             scrollRT.offsetMin = new Vector2(0, 0);
-            scrollRT.offsetMax = new Vector2(-20, -40); // deja espacio para el título y el scrollbar
+            scrollRT.offsetMax = new Vector2(0, 0);
 
             scrollObj.GetComponent<Image>().color = new Color(1, 1, 1, 0.05f);
 
             ScrollRect scrollRect = scrollObj.GetComponent<ScrollRect>();
             scrollRect.horizontal = false;
+            scrollRect.scrollSensitivity = 40f;
+            scrollRect.movementType = ScrollRect.MovementType.Clamped;
 
             // --- VIEWPORT ---
             GameObject viewport = new GameObject("Viewport", typeof(RectTransform), typeof(Mask), typeof(Image));
@@ -73,7 +60,7 @@ namespace DetailedLevels.Tools
             scrollRect.viewport = vpRT;
 
             // --- CONTENT ---
-            GameObject content = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
+            content = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
             content.transform.SetParent(viewport.transform, false);
             RectTransform contentRT = content.GetComponent<RectTransform>();
             contentRT.anchorMin = new Vector2(0, 1);
@@ -86,14 +73,15 @@ namespace DetailedLevels.Tools
             layout.childForceExpandHeight = false;
             layout.childForceExpandWidth = true;
             layout.childAlignment = TextAnchor.UpperLeft;
-            layout.spacing = 20f; // más separación
+            layout.spacing = 25f;
+            layout.padding = new RectOffset(0, 0, 10, 20);
 
             var fitter = content.GetComponent<ContentSizeFitter>();
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             scrollRect.content = contentRT;
 
-            // --- SCROLLBAR (igual al del juego) ---
+            // --- SCROLLBAR ---
             GameObject recipeScroll = inventoryGui.m_recipeListScroll.gameObject;
             GameObject scrollbarObj = Object.Instantiate(recipeScroll, customPanel.transform);
             scrollbarObj.name = "Scrollbar";
@@ -102,7 +90,7 @@ namespace DetailedLevels.Tools
             sbRT.anchorMin = new Vector2(1, 0);
             sbRT.anchorMax = new Vector2(1, 1);
             sbRT.pivot = new Vector2(1, 1);
-            sbRT.sizeDelta = new Vector2(20, 0);
+            sbRT.sizeDelta = new Vector2(11, 0);
             sbRT.anchoredPosition = Vector2.zero;
 
             Scrollbar scrollbar = scrollbarObj.GetComponent<Scrollbar>();
@@ -110,21 +98,65 @@ namespace DetailedLevels.Tools
 
             scrollRect.verticalScrollbar = scrollbar;
             scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+        }
 
-            // --- ENTRADAS ---
-            foreach (string entryText in entries)
+        public void AddHeaderToScrollList(string title)
+        {
+            GameObject titleObj = new GameObject("GroupHeader", typeof(RectTransform), typeof(TextMeshProUGUI));
+            titleObj.transform.SetParent(content.transform, false);
+            RectTransform titleRT = titleObj.GetComponent<RectTransform>();
+            titleRT.anchorMin = new Vector2(0.5f, 1);
+            titleRT.anchorMax = new Vector2(0.5f, 1);
+            titleRT.pivot = new Vector2(0.5f, 1);
+            titleRT.anchoredPosition = new Vector2(0, -10);
+            titleRT.sizeDelta = new Vector2(300, 30);
+
+            TextMeshProUGUI titleText = titleObj.GetComponent<TextMeshProUGUI>();
+            titleText.text = title;
+            titleText.font = InventoryGui.instance.m_recipeName.font; // same font as recipe name window
+            titleText.fontSize = 24;
+            titleText.alignment = TextAlignmentOptions.Center;
+            titleText.color = Color.yellow;
+        }
+
+        public void AddRowToScrollList(Dictionary<PlayerStatType, float> entries)
+        {
+            GameObject entryRow = new GameObject("StatsRow", typeof(RectTransform));
+            entryRow.transform.SetParent(content.transform, false);
+
+            RectTransform rowRT = entryRow.GetComponent<RectTransform>();
+            rowRT.anchorMin = new Vector2(0, 1);
+            rowRT.anchorMax = new Vector2(1, 1);
+            rowRT.pivot = new Vector2(0, 1);
+            rowRT.sizeDelta = new Vector2(0, 30);
+
+            float columnSpacing = 250f; // space betweens columns
+            float startX = 40f;         // left row offset
+
+            int columnIndex = 0;
+            foreach (var entry in entries)
             {
-                GameObject entry = new GameObject("Stat", typeof(RectTransform), typeof(TextMeshProUGUI));
-                entry.transform.SetParent(content.transform, false);
+                GameObject entryGO = new GameObject("Stat", typeof(RectTransform), typeof(TextMeshProUGUI));
+                entryGO.transform.SetParent(entryRow.transform, false);
 
-                TextMeshProUGUI txt = entry.GetComponent<TextMeshProUGUI>();
-                txt.text = entryText;
-                txt.font = PlayerUtils.getFontAsset("Valheim-AveriaSansLibre");
-                txt.fontSize = 18;
-                txt.color = Color.white;
-                txt.alignment = TextAlignmentOptions.Left;
+                RectTransform entryRT = entryGO.GetComponent<RectTransform>();
+                entryRT.anchorMin = new Vector2(0, 0.5f);
+                entryRT.anchorMax = new Vector2(0, 0.5f);
+                entryRT.pivot = new Vector2(0, 0.5f);
+                entryRT.anchoredPosition = new Vector2(startX + columnSpacing * columnIndex, 0);
+                entryRT.sizeDelta = new Vector2(240, 25); // column size
+
+                TextMeshProUGUI entryText = entryGO.GetComponent<TextMeshProUGUI>();
+                entryText.text = entry.Key + ": " + entry.Value;
+                entryText.font = PlayerUtils.getFontAsset("Valheim-AveriaSansLibre");
+                entryText.fontSize = 18;
+                entryText.color = Color.white;
+                entryText.alignment = TextAlignmentOptions.Left;
+
+                statsTexts.Add(entry.Key, entryText);
+
+                columnIndex++;
             }
         }
     }
-
 }
