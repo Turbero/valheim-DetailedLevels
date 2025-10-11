@@ -22,7 +22,7 @@ Use the configuration file "Turbero.DetailedLevels.cfg" that will be created onc
 
 ![](https://i.imgur.com/OSS0gZ7.jpeg)
 
-![](https://i.imgur.com/2dOlprl.jpeg)
+![](https://i.imgur.com/GDXokFC.jpeg)
 
 ## About myself
 
