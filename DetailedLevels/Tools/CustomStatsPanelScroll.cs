@@ -15,7 +15,7 @@ namespace DetailedLevels.Tools
         {
             InventoryGui inventoryGui = InventoryGui.instance;
             
-            GameObject customPanel = new GameObject("CustomStatsGroup", typeof(RectTransform), typeof(Image));
+            GameObject customPanel = new GameObject("CustomStatsPanelScroll", typeof(RectTransform), typeof(Image));
             customPanel.transform.SetParent(parent.transform, false);
             Object.Destroy(customPanel.GetComponent<Image>()); //transparent
 
