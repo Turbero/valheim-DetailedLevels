@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.5.2
+
+* Improved player stats panel. Now scrollable and organized with categories! Check out your performance!
+* Fixed sneak buff blue color when troll full set is equipped
+
 ## 1.5.1
 
 * Added skill type description in the craft stations to craftables that make you skill up when they are used so you don't have to craft it in advance and spend materials if you're not interested.
