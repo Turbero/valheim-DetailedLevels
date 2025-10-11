@@ -74,7 +74,7 @@ namespace DetailedLevels.Tools
             layout.childForceExpandWidth = true;
             layout.childAlignment = TextAnchor.UpperLeft;
             layout.spacing = 25f;
-            layout.padding = new RectOffset(0, 0, 10, 20);
+            layout.padding = new RectOffset(0, 0, 20, 20);
 
             var fitter = content.GetComponent<ContentSizeFitter>();
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
@@ -40,11 +41,19 @@ namespace DetailedLevels.Tools
             Dictionary<PlayerStatType, float> mStats = getPlayerDictionaryStats();
             
             scrollPanel = new CustomStatsPanelScroll(skillsDialog.transform.Find("PlayerStatsFrame/MainFrame/Stats/StatList"));
-            scrollPanel.AddHeaderToScrollList("Main Stats");
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
             {
                 {PlayerStatType.WorldLoads, mStats.GetValueSafe(PlayerStatType.WorldLoads)},
                 {PlayerStatType.Cheats, mStats.GetValueSafe(PlayerStatType.Cheats)}
+            });
+            scrollPanel.AddHeaderToScrollList("Combat");
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.Deaths, mStats.GetValueSafe(PlayerStatType.Deaths)},
+                {PlayerStatType.HitsTakenEnemies, mStats.GetValueSafe(PlayerStatType.HitsTakenEnemies)},
+                {PlayerStatType.HitsTakenPlayers, mStats.GetValueSafe(PlayerStatType.HitsTakenPlayers)},
+                {PlayerStatType.ArrowsShot, mStats.GetValueSafe(PlayerStatType.ArrowsShot)},
+                {PlayerStatType.SkeletonSummons, mStats.GetValueSafe(PlayerStatType.SkeletonSummons)}
             });
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
             {
@@ -56,109 +65,9 @@ namespace DetailedLevels.Tools
             });
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
             {
-                {PlayerStatType.HitsTakenEnemies, mStats.GetValueSafe(PlayerStatType.HitsTakenEnemies)},
-                {PlayerStatType.HitsTakenPlayers, mStats.GetValueSafe(PlayerStatType.HitsTakenPlayers)}
-            });
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.RavenHits, mStats.GetValueSafe(PlayerStatType.RavenHits)},
-                {PlayerStatType.RavenTalk, mStats.GetValueSafe(PlayerStatType.RavenTalk)},
-                {PlayerStatType.RavenAppear, mStats.GetValueSafe(PlayerStatType.RavenAppear)}
-            });
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
                 {PlayerStatType.TombstonesOpenedOwn, mStats.GetValueSafe(PlayerStatType.TombstonesOpenedOwn)},
                 {PlayerStatType.TombstonesOpenedOther, mStats.GetValueSafe(PlayerStatType.TombstonesOpenedOther)},
                 {PlayerStatType.TombstonesFit, mStats.GetValueSafe(PlayerStatType.TombstonesFit)}                
-            });
-            scrollPanel.AddHeaderToScrollList("Travelling");
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.DistanceTraveled, mStats.GetValueSafe(PlayerStatType.DistanceTraveled)},
-                {PlayerStatType.DistanceWalk, mStats.GetValueSafe(PlayerStatType.DistanceWalk)},
-                {PlayerStatType.DistanceRun, mStats.GetValueSafe(PlayerStatType.DistanceRun)},
-                {PlayerStatType.DistanceSail, mStats.GetValueSafe(PlayerStatType.DistanceSail)},
-                {PlayerStatType.DistanceAir, mStats.GetValueSafe(PlayerStatType.DistanceAir)}
-            });
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.TimeInBase, mStats.GetValueSafe(PlayerStatType.TimeInBase)},
-                {PlayerStatType.TimeOutOfBase, mStats.GetValueSafe(PlayerStatType.TimeOutOfBase)},
-                {PlayerStatType.Sleep, mStats.GetValueSafe(PlayerStatType.Sleep)},
-                {PlayerStatType.Jumps, mStats.GetValueSafe(PlayerStatType.Jumps)}
-            });
-            scrollPanel.AddHeaderToScrollList("Farming");
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.LogChops, mStats.GetValueSafe(PlayerStatType.LogChops)},
-                {PlayerStatType.Logs, mStats.GetValueSafe(PlayerStatType.Logs)},
-                {PlayerStatType.TreeChops, mStats.GetValueSafe(PlayerStatType.TreeChops)},
-                {PlayerStatType.Tree, mStats.GetValueSafe(PlayerStatType.Tree)},
-                {PlayerStatType.TreeTier0, mStats.GetValueSafe(PlayerStatType.TreeTier0)}
-            });
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.TreeTier1, mStats.GetValueSafe(PlayerStatType.TreeTier1)},
-                {PlayerStatType.TreeTier2, mStats.GetValueSafe(PlayerStatType.TreeTier2)},
-                {PlayerStatType.TreeTier3, mStats.GetValueSafe(PlayerStatType.TreeTier3)},
-                {PlayerStatType.TreeTier4, mStats.GetValueSafe(PlayerStatType.TreeTier4)},
-                {PlayerStatType.TreeTier5, mStats.GetValueSafe(PlayerStatType.TreeTier5)}
-            });
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.MineHits, mStats.GetValueSafe(PlayerStatType.MineHits)},
-                {PlayerStatType.Mines, mStats.GetValueSafe(PlayerStatType.Mines)},
-                {PlayerStatType.MineTier0, mStats.GetValueSafe(PlayerStatType.MineTier0)},
-                {PlayerStatType.MineTier1, mStats.GetValueSafe(PlayerStatType.MineTier1)},
-                {PlayerStatType.MineTier2, mStats.GetValueSafe(PlayerStatType.MineTier2)},
-            });
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.MineTier3, mStats.GetValueSafe(PlayerStatType.MineTier3)},
-                {PlayerStatType.MineTier4, mStats.GetValueSafe(PlayerStatType.MineTier4)},
-                {PlayerStatType.MineTier5, mStats.GetValueSafe(PlayerStatType.MineTier5)}
-            });
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.ItemsPickedUp, mStats.GetValueSafe(PlayerStatType.ItemsPickedUp)},
-                {PlayerStatType.CreatureTamed, mStats.GetValueSafe(PlayerStatType.CreatureTamed)},
-                {PlayerStatType.FoodEaten, mStats.GetValueSafe(PlayerStatType.FoodEaten)},
-                {PlayerStatType.BeesHarvested, mStats.GetValueSafe(PlayerStatType.BeesHarvested)},
-                {PlayerStatType.SapHarvested, mStats.GetValueSafe(PlayerStatType.SapHarvested)}
-            });
-            scrollPanel.AddHeaderToScrollList("Construction");
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.Builds, mStats.GetValueSafe(PlayerStatType.Builds)},
-                {PlayerStatType.CraftsOrUpgrades, mStats.GetValueSafe(PlayerStatType.CraftsOrUpgrades)},
-                {PlayerStatType.Crafts, mStats.GetValueSafe(PlayerStatType.Crafts)},
-                {PlayerStatType.Upgrades, mStats.GetValueSafe(PlayerStatType.Upgrades)}
-            });
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.ArmorStandUses, mStats.GetValueSafe(PlayerStatType.ArmorStandUses)},
-                {PlayerStatType.ItemStandUses, mStats.GetValueSafe(PlayerStatType.ItemStandUses)},
-                
-            });
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.DoorsOpened, mStats.GetValueSafe(PlayerStatType.DoorsOpened)},
-                {PlayerStatType.DoorsClosed, mStats.GetValueSafe(PlayerStatType.DoorsClosed)},
-                {PlayerStatType.PlaceStacks, mStats.GetValueSafe(PlayerStatType.PlaceStacks)}
-            });
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.TurretAmmoAdded, mStats.GetValueSafe(PlayerStatType.TurretAmmoAdded)},
-                {PlayerStatType.TurretTrophySet, mStats.GetValueSafe(PlayerStatType.TurretTrophySet)},
-                {PlayerStatType.TrapArmed, mStats.GetValueSafe(PlayerStatType.TrapArmed)},
-                {PlayerStatType.TrapTriggered, mStats.GetValueSafe(PlayerStatType.TrapTriggered)}
-            });
-            scrollPanel.AddHeaderToScrollList("Combat");
-            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
-            {
-                {PlayerStatType.Deaths, mStats.GetValueSafe(PlayerStatType.Deaths)},
-                {PlayerStatType.ArrowsShot, mStats.GetValueSafe(PlayerStatType.ArrowsShot)},
-                {PlayerStatType.SkeletonSummons, mStats.GetValueSafe(PlayerStatType.SkeletonSummons)}
             });
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
             {
@@ -232,6 +141,94 @@ namespace DetailedLevels.Tools
                 {PlayerStatType.UsePowerAshlands, mStats.GetValueSafe(PlayerStatType.UsePowerAshlands)},
                 {PlayerStatType.SetPowerDeepNorth, mStats.GetValueSafe(PlayerStatType.SetPowerDeepNorth)},
                 {PlayerStatType.UsePowerDeepNorth, mStats.GetValueSafe(PlayerStatType.UsePowerDeepNorth)}
+            });
+            scrollPanel.AddHeaderToScrollList("Travelling");
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.DistanceTraveled, (float)Math.Round(mStats.GetValueSafe(PlayerStatType.DistanceTraveled), 2)},
+                {PlayerStatType.DistanceWalk, (float)Math.Round(mStats.GetValueSafe(PlayerStatType.DistanceWalk), 2)},
+                {PlayerStatType.DistanceRun, (float)Math.Round(mStats.GetValueSafe(PlayerStatType.DistanceRun), 2)},
+                {PlayerStatType.DistanceSail, (float)Math.Round(mStats.GetValueSafe(PlayerStatType.DistanceSail), 2)},
+                {PlayerStatType.DistanceAir, (float)Math.Round(mStats.GetValueSafe(PlayerStatType.DistanceAir), 2)}
+            });
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.TimeInBase, (float)Math.Round(mStats.GetValueSafe(PlayerStatType.TimeInBase), 2)},
+                {PlayerStatType.TimeOutOfBase, (float)Math.Round(mStats.GetValueSafe(PlayerStatType.TimeOutOfBase), 2)},
+                {PlayerStatType.Sleep, mStats.GetValueSafe(PlayerStatType.Sleep)},
+                {PlayerStatType.Jumps, mStats.GetValueSafe(PlayerStatType.Jumps)}
+            });
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.RavenHits, mStats.GetValueSafe(PlayerStatType.RavenHits)},
+                {PlayerStatType.RavenTalk, mStats.GetValueSafe(PlayerStatType.RavenTalk)},
+                {PlayerStatType.RavenAppear, mStats.GetValueSafe(PlayerStatType.RavenAppear)}
+            });
+            scrollPanel.AddHeaderToScrollList("Farming");
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.LogChops, mStats.GetValueSafe(PlayerStatType.LogChops)},
+                {PlayerStatType.Logs, mStats.GetValueSafe(PlayerStatType.Logs)},
+                {PlayerStatType.TreeChops, mStats.GetValueSafe(PlayerStatType.TreeChops)},
+                {PlayerStatType.Tree, mStats.GetValueSafe(PlayerStatType.Tree)},
+                {PlayerStatType.TreeTier0, mStats.GetValueSafe(PlayerStatType.TreeTier0)}
+            });
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.TreeTier1, mStats.GetValueSafe(PlayerStatType.TreeTier1)},
+                {PlayerStatType.TreeTier2, mStats.GetValueSafe(PlayerStatType.TreeTier2)},
+                {PlayerStatType.TreeTier3, mStats.GetValueSafe(PlayerStatType.TreeTier3)},
+                {PlayerStatType.TreeTier4, mStats.GetValueSafe(PlayerStatType.TreeTier4)},
+                {PlayerStatType.TreeTier5, mStats.GetValueSafe(PlayerStatType.TreeTier5)}
+            });
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.MineHits, mStats.GetValueSafe(PlayerStatType.MineHits)},
+                {PlayerStatType.Mines, mStats.GetValueSafe(PlayerStatType.Mines)},
+                {PlayerStatType.MineTier0, mStats.GetValueSafe(PlayerStatType.MineTier0)},
+                {PlayerStatType.MineTier1, mStats.GetValueSafe(PlayerStatType.MineTier1)},
+                {PlayerStatType.MineTier2, mStats.GetValueSafe(PlayerStatType.MineTier2)},
+            });
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.MineTier3, mStats.GetValueSafe(PlayerStatType.MineTier3)},
+                {PlayerStatType.MineTier4, mStats.GetValueSafe(PlayerStatType.MineTier4)},
+                {PlayerStatType.MineTier5, mStats.GetValueSafe(PlayerStatType.MineTier5)}
+            });
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.ItemsPickedUp, mStats.GetValueSafe(PlayerStatType.ItemsPickedUp)},
+                {PlayerStatType.CreatureTamed, mStats.GetValueSafe(PlayerStatType.CreatureTamed)},
+                {PlayerStatType.FoodEaten, mStats.GetValueSafe(PlayerStatType.FoodEaten)},
+                {PlayerStatType.BeesHarvested, mStats.GetValueSafe(PlayerStatType.BeesHarvested)},
+                {PlayerStatType.SapHarvested, mStats.GetValueSafe(PlayerStatType.SapHarvested)}
+            });
+            scrollPanel.AddHeaderToScrollList("Construction");
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.Builds, mStats.GetValueSafe(PlayerStatType.Builds)},
+                {PlayerStatType.CraftsOrUpgrades, mStats.GetValueSafe(PlayerStatType.CraftsOrUpgrades)},
+                {PlayerStatType.Crafts, mStats.GetValueSafe(PlayerStatType.Crafts)},
+                {PlayerStatType.Upgrades, mStats.GetValueSafe(PlayerStatType.Upgrades)}
+            });
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.ArmorStandUses, mStats.GetValueSafe(PlayerStatType.ArmorStandUses)},
+                {PlayerStatType.ItemStandUses, mStats.GetValueSafe(PlayerStatType.ItemStandUses)},
+                
+            });
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.DoorsOpened, mStats.GetValueSafe(PlayerStatType.DoorsOpened)},
+                {PlayerStatType.DoorsClosed, mStats.GetValueSafe(PlayerStatType.DoorsClosed)},
+                {PlayerStatType.PlaceStacks, mStats.GetValueSafe(PlayerStatType.PlaceStacks)}
+            });
+            scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
+            {
+                {PlayerStatType.TurretAmmoAdded, mStats.GetValueSafe(PlayerStatType.TurretAmmoAdded)},
+                {PlayerStatType.TurretTrophySet, mStats.GetValueSafe(PlayerStatType.TurretTrophySet)},
+                {PlayerStatType.TrapArmed, mStats.GetValueSafe(PlayerStatType.TrapArmed)},
+                {PlayerStatType.TrapTriggered, mStats.GetValueSafe(PlayerStatType.TrapTriggered)}
             });
             scrollPanel.AddHeaderToScrollList("Others");
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
