@@ -10,6 +10,7 @@ namespace DetailedLevels.Tools
     {
         private readonly GameObject content;
         public readonly Dictionary<PlayerStatType, TextMeshProUGUI> statsTexts = new Dictionary<PlayerStatType, TextMeshProUGUI>();
+        private readonly Dictionary<string, TextMeshProUGUI> titleTranslations = new Dictionary<string, TextMeshProUGUI>();
 
         public CustomStatsPanelScroll(Transform parent)
         {
@@ -112,7 +113,8 @@ namespace DetailedLevels.Tools
             titleRT.sizeDelta = new Vector2(300, 30);
 
             TextMeshProUGUI titleText = titleObj.GetComponent<TextMeshProUGUI>();
-            titleText.text = title;
+            titleText.text = Localization.instance.Localize(title);
+            titleTranslations.Add(title, titleText);
             titleText.font = InventoryGui.instance.m_recipeName.font; // same font as recipe name window
             titleText.fontSize = 24;
             titleText.alignment = TextAlignmentOptions.Center;
@@ -157,6 +159,12 @@ namespace DetailedLevels.Tools
 
                 columnIndex++;
             }
+        }
+
+        public void reloadHeaderTitles()
+        {
+            foreach (var titleTranslation in titleTranslations)
+                titleTranslation.Value.text = Localization.instance.Localize(titleTranslation.Key);
         }
     }
 }

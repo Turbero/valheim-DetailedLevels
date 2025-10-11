@@ -46,7 +46,7 @@ namespace DetailedLevels.Tools
                 {PlayerStatType.WorldLoads, mStats.GetValueSafe(PlayerStatType.WorldLoads)},
                 {PlayerStatType.Cheats, mStats.GetValueSafe(PlayerStatType.Cheats)}
             });
-            scrollPanel.AddHeaderToScrollList("Combat");
+            scrollPanel.AddHeaderToScrollList("$menu_combat");
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
             {
                 {PlayerStatType.Deaths, mStats.GetValueSafe(PlayerStatType.Deaths)},
@@ -106,7 +106,7 @@ namespace DetailedLevels.Tools
                 {PlayerStatType.DeathByBoat, mStats.GetValueSafe(PlayerStatType.DeathByBoat)},
                 {PlayerStatType.DeathByStalagtite, mStats.GetValueSafe(PlayerStatType.DeathByStalagtite)}
             });
-            scrollPanel.AddHeaderToScrollList("Progression");
+            scrollPanel.AddHeaderToScrollList(ConfigurationFile.statsProgressionText.Value);
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
             {
                 {PlayerStatType.BossKills, mStats.GetValueSafe(PlayerStatType.BossKills)},
@@ -142,7 +142,7 @@ namespace DetailedLevels.Tools
                 {PlayerStatType.SetPowerDeepNorth, mStats.GetValueSafe(PlayerStatType.SetPowerDeepNorth)},
                 {PlayerStatType.UsePowerDeepNorth, mStats.GetValueSafe(PlayerStatType.UsePowerDeepNorth)}
             });
-            scrollPanel.AddHeaderToScrollList("Travelling");
+            scrollPanel.AddHeaderToScrollList(ConfigurationFile.statsTravellingText.Value);
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
             {
                 {PlayerStatType.DistanceTraveled, (float)Math.Round(mStats.GetValueSafe(PlayerStatType.DistanceTraveled), 2)},
@@ -164,7 +164,7 @@ namespace DetailedLevels.Tools
                 {PlayerStatType.RavenTalk, mStats.GetValueSafe(PlayerStatType.RavenTalk)},
                 {PlayerStatType.RavenAppear, mStats.GetValueSafe(PlayerStatType.RavenAppear)}
             });
-            scrollPanel.AddHeaderToScrollList("Farming");
+            scrollPanel.AddHeaderToScrollList("$menu_resources");
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
             {
                 {PlayerStatType.LogChops, mStats.GetValueSafe(PlayerStatType.LogChops)},
@@ -203,7 +203,7 @@ namespace DetailedLevels.Tools
                 {PlayerStatType.BeesHarvested, mStats.GetValueSafe(PlayerStatType.BeesHarvested)},
                 {PlayerStatType.SapHarvested, mStats.GetValueSafe(PlayerStatType.SapHarvested)}
             });
-            scrollPanel.AddHeaderToScrollList("Construction");
+            scrollPanel.AddHeaderToScrollList("$hud_building");
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
             {
                 {PlayerStatType.Builds, mStats.GetValueSafe(PlayerStatType.Builds)},
@@ -230,7 +230,7 @@ namespace DetailedLevels.Tools
                 {PlayerStatType.TrapArmed, mStats.GetValueSafe(PlayerStatType.TrapArmed)},
                 {PlayerStatType.TrapTriggered, mStats.GetValueSafe(PlayerStatType.TrapTriggered)}
             });
-            scrollPanel.AddHeaderToScrollList("Others");
+            scrollPanel.AddHeaderToScrollList(ConfigurationFile.statsOthersText.Value);
             scrollPanel.AddRowToScrollList(new Dictionary<PlayerStatType, float>
             {
                 {PlayerStatType.DeathByUndefined, mStats.GetValueSafe(PlayerStatType.DeathByUndefined)},
@@ -263,6 +263,7 @@ namespace DetailedLevels.Tools
             {
                 stat.Value.text = stat.Key + ": " + mStats.GetValueSafe(stat.Key);
             }
+            scrollPanel.reloadHeaderTitles();
         }
     }
 }

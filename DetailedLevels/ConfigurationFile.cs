@@ -27,6 +27,9 @@ namespace DetailedLevels
         public static ConfigEntry<string> skillUpBigMessageText;
         public static ConfigEntry<string> skillUpValueText;
         public static ConfigEntry<string> statsText;
+        public static ConfigEntry<string> statsProgressionText;
+        public static ConfigEntry<string> statsTravellingText;
+        public static ConfigEntry<string> statsOthersText;
 
         private static ConfigFile configFile;
         private static readonly string ConfigFileName = DetailedLevels.GUID + ".cfg";
@@ -51,7 +54,7 @@ namespace DetailedLevels
                 hotKey = config("1 - General", "HotKey", KeyCode.F4, "Hot Key to show the skills tab without opening the inventory first (default = F4)", false);
                 numberOfDecimals = config("2 - Levels Data", "NumberOfDecimals", 2, "Number of decimals to show in your levels information (default = 2, min = 0, max = 15)", false);
                 skillUpMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpMessageAfterMultipleLevel", 5, "Shows skill up message after the new level is multiple of the indicated level (0 = disabled, default = 5)", false);
-                skillUpBigMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpBigMessageAfterMultipleLevel", 20, "Shows skill up big message after the new level is multiple of the indicated level (0 = disabled, default = 20)", false);
+                skillUpBigMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpBigMessageAfterMultipleLevel", 10, "Shows skill up big message after the new level is multiple of the indicated level (0 = disabled, default = 20)", false);
                 colorSkillBackground = config("2 - Levels Data", "ColorSkillBackground", Color.cyan, "Choose the color background for selected skills in the skills dialog: red, green, blue, white, black, yellow, cyan, magenta, gray or grey (default = cyan)", false);
                 saveSkillBuffs = config("2 - Levels Data", "SaveSkillBuffs", false, "Enable/disable the option to reload tracked skills after dying (default = false)", false);
                 deathSkillLoss = config("3 - Config", "DeathSkillLoss", 5f, "Amount of skill loss when dying (value between 0 and 100, default = 5 as vanilla)");
@@ -63,8 +66,11 @@ namespace DetailedLevels
                 skillUpBigMessageText = config("4 - Language", "SkillUpBigMessageText", "Skill up big message", "Translation for <Skill up big message> text");
                 skillUpValueText = config("4 - Language", "SkillUpValueText", "Each {0} levels", "Translation for <Each X levels> text");
                 statsText = config("4 - Language", "StatsText", "Stats", "Translation for <Stats> text");
-                deathSkillLoss.SettingChanged += SettingsChanged;
+                statsProgressionText = config("4 - Language", "StatsProgressionText", "Progression", "Translation for <Progression> text (restart game after change)");
+                statsTravellingText = config("4 - Language", "StatsTravellingText", "Travelling", "Translation for <Travelling> text (restart game after change)");
+                statsOthersText = config("4 - Language", "StatsOthersText", "Others", "Translation for <Others> text (restart game after change)");
                 
+                deathSkillLoss.SettingChanged += SettingsChanged;
                 SetupWatcher();
             }
         }

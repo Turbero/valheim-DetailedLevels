@@ -58,6 +58,7 @@ namespace DetailedLevels.Features
             dlStatsButton.onClick.AddListener(() =>
             {
                 Logger.Log("dlStatsButtonObject clicked.");
+                statsPanel.reloadTexts();
                 statsPanel.getPanel().SetActive(true);
                 Logger.Log("dlStatsButtonObject - panel visible.");
             });
