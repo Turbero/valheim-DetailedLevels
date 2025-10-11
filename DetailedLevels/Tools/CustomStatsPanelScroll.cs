@@ -43,7 +43,7 @@ namespace DetailedLevels.Tools
 
             ScrollRect scrollRect = scrollObj.GetComponent<ScrollRect>();
             scrollRect.horizontal = false;
-            scrollRect.scrollSensitivity = 40f;
+            scrollRect.scrollSensitivity = 2000f;
             scrollRect.movementType = ScrollRect.MovementType.Clamped;
 
             // --- VIEWPORT ---
