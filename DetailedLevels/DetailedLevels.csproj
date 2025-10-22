@@ -37,7 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
-    <Compile Include="Features\GameManager.cs" />
     <Compile Include="Features\PlayerColorBuffs.cs" />
     <Compile Include="Features\SkillTypeUITooltipPatch.cs" />
     <Compile Include="Tools\CustomSkillOptionsPanel.cs" />
@@ -54,8 +53,8 @@
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CustomSlider.cs" />
-    <Compile Include="Tools\CustomStatsGroup.cs" />
     <Compile Include="Tools\CustomStatsPanel.cs" />
+    <Compile Include="Tools\CustomStatsPanelScroll.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
