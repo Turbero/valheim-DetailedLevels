@@ -131,9 +131,12 @@ namespace DetailedLevels.Features
 
         public static void updateSkillLossPercentage()
         {
-            lossPercentageTextComponent.text = $"{ConfigurationFile.deathPenaltyText.Value}";
-            float lossPercentage = Player.m_localPlayer.GetSkills().m_DeathLowerFactor * 100f;
-            lossPercentageValueComponent.text = $"= {(lossPercentage > 0 ? "-" : "")}{lossPercentage}%";
+            if (lossPercentageTextComponent != null)
+            {
+                lossPercentageTextComponent.text = $"{ConfigurationFile.deathPenaltyText.Value}";
+                float lossPercentage = Player.m_localPlayer.GetSkills().m_DeathLowerFactor * 100f;
+                lossPercentageValueComponent.text = $"= {(lossPercentage > 0 ? "-" : "")}{lossPercentage}%";
+            }
         }
 
         public static void updateOptionsTexts()
