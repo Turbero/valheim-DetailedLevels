@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.5.3
+
+* Fixed warnings from log when opening the skills dialog for first time
+* Preventing log errors when editing config file before opening the skills dialog for first time when the game is running.
+
 ## 1.5.2
 
 * Improved player stats panel. Now scrollable and organized with categories! Check out your performance!
