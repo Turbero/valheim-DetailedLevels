@@ -26,6 +26,10 @@ namespace DetailedLevels.Features
 
         static void Postfix(SkillsDialog __instance)
         {
+            TMP_FontAsset font = TMP_Settings.defaultFontAsset;
+            if (font == null)
+                TMP_Settings.defaultFontAsset = PlayerUtils.getFontAsset("Valheim-AveriaSansLibre");
+
             Transform closeButtonTransform = __instance.transform.Find("SkillsFrame/Closebutton");
             (closeButtonTransform as RectTransform).anchoredPosition = new Vector2(146, 45);
             (closeButtonTransform as RectTransform).sizeDelta = new Vector2(140, 46);
