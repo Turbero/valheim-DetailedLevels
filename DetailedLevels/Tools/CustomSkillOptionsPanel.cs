@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using DetailedLevels.Features;
 
 namespace DetailedLevels.Tools
 {
@@ -13,6 +12,10 @@ namespace DetailedLevels.Tools
 
         public CustomSkillOptionsPanel(Transform copyForCloseButton)
         {
+            Init(copyForCloseButton);
+        }
+        
+        private void Init(Transform copyForCloseButton) {
             Transform skillsFrameTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame").transform;
 
             // Panel
@@ -64,7 +67,18 @@ namespace DetailedLevels.Tools
             reloadTexts();
         }
 
-        public GameObject getPanel() { return panel; }
+        public GameObject getPanel()
+        {
+            if (panel == null)
+            {
+                Logger.Log("Recreating gameObject panel...");
+                Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton");
+                Button closeButton = closeButtonTransform.GetComponent<Button>();
+                Init(closeButton.transform.parent);
+                Logger.Log("gameObject panel recreated.");
+            }
+            return panel;
+        }
 
         public void reloadTexts()
         {
