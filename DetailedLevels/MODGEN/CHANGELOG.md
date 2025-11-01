@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.5.4
+
+* Fixed issue when changing worlds or logging on and off without closing the game client.
+* Fixed sorting buttons not showing up when logging on and off without closing the game client.
+
 ## 1.5.3
 
 * Fixed warnings from log when opening the skills dialog for first time
