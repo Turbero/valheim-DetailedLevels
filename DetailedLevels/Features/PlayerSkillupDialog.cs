@@ -14,7 +14,8 @@ namespace DetailedLevels.Features
     {
         public static int azSorted = 0;
         public static int levelSorted = 0;
-        private static bool init = false;
+        private static GameObject azButtonObject;
+        private static GameObject levelButtonObject;
 
         static void Postfix(SkillsDialog __instance, ref Player player, ref List<GameObject> ___m_elements)
         {
@@ -45,19 +46,17 @@ namespace DetailedLevels.Features
                 }
             }
 
-            if (!init)
-            {
-                Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton");
-                Button closeButton = closeButtonTransform.GetComponent<Button>();
+            Transform closeButtonTransform = InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/Closebutton");
+            Button closeButton = closeButtonTransform.GetComponent<Button>();
+            if (azButtonObject == null)
                 azButton(closeButton);
+            if (levelButtonObject == null)
                 levelButton(closeButton);
-                init = true;
-            }
         }
 
         private static void azButton(Button baseButton)
         {
-            GameObject azButtonObject = GameObject.Instantiate(baseButton.gameObject, baseButton.transform.parent);
+            azButtonObject = GameObject.Instantiate(baseButton.gameObject, baseButton.transform.parent);
             azButtonObject.name = "AZButton";
 
             RectTransform azButtonRect = azButtonObject.GetComponent<RectTransform>();
@@ -90,7 +89,7 @@ namespace DetailedLevels.Features
 
         private static void levelButton(Button baseButton)
         {
-            GameObject levelButtonObject = GameObject.Instantiate(baseButton.gameObject, baseButton.transform.parent);
+            levelButtonObject = GameObject.Instantiate(baseButton.gameObject, baseButton.transform.parent);
             levelButtonObject.name = "LevelButton";
 
             RectTransform levelButtonRect = levelButtonObject.GetComponent<RectTransform>();
