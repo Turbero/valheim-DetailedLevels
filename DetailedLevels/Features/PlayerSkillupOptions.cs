@@ -145,6 +145,9 @@ namespace DetailedLevels.Features
 
         public static void updateOptionsTexts()
         {
+            //UI not shown/loaded yet
+            if (customSliderSaveSwitch == null) return;
+            
             customSliderSaveSwitch.sliderLabelDescription.text = ConfigurationFile.reloadAfterDyingText.Value;
             customSliderNumberOfDecimals.sliderLabelDescription.text = ConfigurationFile.numberOfDecimalsText.Value;
             customSliderSkillUpMessage.sliderLabelDescription.text = ConfigurationFile.skillUpMessageText.Value;
