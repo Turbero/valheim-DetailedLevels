@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.5.5
+
+* Small fix to avoid exceptions when changing config file manually with the game on.
+
 ## 1.5.4
 
 * Fixed issue when changing worlds or logging on and off without closing the game client.
