@@ -3,6 +3,7 @@ using HarmonyLib;
 using System.Threading.Tasks;
 using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DetailedLevels
 {
@@ -71,6 +72,23 @@ namespace DetailedLevels
             await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milliseconds
             InventoryGui.instance.m_skillsDialog.Setup(Player.m_localPlayer);
             InventoryGui.instance.m_skillsDialog.gameObject.SetActive(true);
+        }
+    }
+    
+    [HarmonyPatch]
+    public class NoWarnings
+    {
+        [HarmonyPatch(typeof(Debug), nameof(Debug.LogWarning), typeof(object), typeof(Object))]
+        [HarmonyPrefix]
+        private static bool LogWarning(object message, Object context)
+        {
+            if (message.ToString().Contains("The LiberationSans SDF Font Asset was not found") || 
+                message.ToString().Contains("The character used for Ellipsis is not available in font asset"))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
