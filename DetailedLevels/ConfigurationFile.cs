@@ -8,6 +8,15 @@ using ServerSync;
 
 namespace DetailedLevels
 {
+    public enum SkillsSortOrder
+    {
+        None,
+        AlphabeticalAscending,
+        AlphabeticalDescending,
+        LevelAscending,
+        LevelDescending
+    }
+    
     internal class ConfigurationFile
     {
         private static ConfigEntry<bool> _serverConfigLocked = null;
@@ -19,6 +28,8 @@ namespace DetailedLevels
         public static ConfigEntry<int> skillUpBigMessageAfterMultipleLevel;
         public static ConfigEntry<Color> colorSkillBackground;
         public static ConfigEntry<bool> saveSkillBuffs;
+        public static ConfigEntry<bool> saveSkillsOrder;
+        public static ConfigEntry<SkillsSortOrder> saveSkillsOrderValue;
         public static ConfigEntry<float> deathSkillLoss;
         public static ConfigEntry<string> deathPenaltyText;
         public static ConfigEntry<string> reloadAfterDyingText;
@@ -26,6 +37,7 @@ namespace DetailedLevels
         public static ConfigEntry<string> skillUpMessageText;
         public static ConfigEntry<string> skillUpBigMessageText;
         public static ConfigEntry<string> skillUpValueText;
+        public static ConfigEntry<string> skillsOrderText;
         public static ConfigEntry<string> statsText;
         public static ConfigEntry<string> statsProgressionText;
         public static ConfigEntry<string> statsTravellingText;
@@ -57,6 +69,8 @@ namespace DetailedLevels
                 skillUpBigMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpBigMessageAfterMultipleLevel", 10, "Shows skill up big message after the new level is multiple of the indicated level (0 = disabled, default = 20)", false);
                 colorSkillBackground = config("2 - Levels Data", "ColorSkillBackground", Color.cyan, "Choose the color background for selected skills in the skills dialog: red, green, blue, white, black, yellow, cyan, magenta, gray or grey (default = cyan)", false);
                 saveSkillBuffs = config("2 - Levels Data", "SaveSkillBuffs", false, "Enable/disable the option to reload tracked skills after dying (default = false)", false);
+                saveSkillsOrder = config("2 - Levels Data", "Save Skills Order", false, "Enable/disable the option to save the order selected in the skills dialog (default = false)", false);
+                saveSkillsOrderValue = config("2 - Levels Data", "Skills Order", SkillsSortOrder.None, "Skills Order to use when skills dialog is opened (default = None)", false);
                 deathSkillLoss = config("3 - Config", "DeathSkillLoss", 5f, "Amount of skill loss when dying (value between 0 and 100, default = 5 as vanilla)");
 
                 deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");
@@ -65,6 +79,7 @@ namespace DetailedLevels
                 skillUpMessageText = config("4 - Language", "SkillUpMessageText", "Skill up message", "Translation for <Skill up message> text");
                 skillUpBigMessageText = config("4 - Language", "SkillUpBigMessageText", "Skill up big message", "Translation for <Skill up big message> text");
                 skillUpValueText = config("4 - Language", "SkillUpValueText", "Each {0} levels", "Translation for <Each X levels> text");
+                skillsOrderText = config("4 - Language", "SkillsOrderText", "Save Skills Order", "Translation for <Save Skills Order> text");
                 statsText = config("4 - Language", "StatsText", "Stats", "Translation for <Stats> text");
                 statsProgressionText = config("4 - Language", "StatsProgressionText", "Progression", "Translation for <Progression> text (restart game after change)");
                 statsTravellingText = config("4 - Language", "StatsTravellingText", "Travelling", "Translation for <Travelling> text (restart game after change)");

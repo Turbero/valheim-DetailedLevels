@@ -22,6 +22,7 @@ namespace DetailedLevels.Features
         private static CustomSlider customSliderNumberOfDecimals;
         private static CustomSlider customSliderSkillUpMessage;
         private static CustomSlider customSliderSkillUpBigMessage;
+        private static CustomSlider customSliderSkillsOrder;
         private static CustomStatsPanel statsPanel;
 
         static void Postfix(SkillsDialog __instance)
@@ -90,6 +91,7 @@ namespace DetailedLevels.Features
             addNumberOfDecimalsSlider(panel.getPanel().transform);
             addSkillUpMessage(panel.getPanel().transform);
             addSkillUpBigMessage(panel.getPanel().transform);
+            addSkillsOrderSlider(panel.getPanel().transform);
 
             reloadTexts();
         }
@@ -248,6 +250,29 @@ namespace DetailedLevels.Features
                 Logger.Log("bigMessage slider changed to " + value);
                 customSliderSkillUpBigMessage.updateValue(calculateSkillupSliderValue(value));
                 ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value = (int)value;
+            });
+        }
+        
+        private static void addSkillsOrderSlider(Transform parent)
+        {
+            customSliderSkillsOrder = new CustomSlider(
+                name: "SkillsOrderSlider",
+                maxValue: 1,
+                sizeDelta: new Vector2(25, 10),
+                position: new Vector2(-14, 45),
+                posXIcon: -1,
+                spriteName: null,
+                posXDescription: -124,
+                description: ConfigurationFile.skillsOrderText.Value,
+                posXValue: 123,
+                initValue: ConfigurationFile.saveSkillsOrder.Value ? 1 : 0,
+                valueDesc: ConfigurationFile.saveSkillsOrder.Value.ToString()
+            );
+            customSliderSkillsOrder.getGameObject().transform.SetParent(parent, false);
+            customSliderSkillsOrder.OnValueChanged((value) =>
+            {
+                ConfigurationFile.saveSkillsOrder.Value = value.Equals(1f);
+                customSliderSkillsOrder.updateValue(ConfigurationFile.saveSkillsOrder.Value.ToString());
             });
         }
 
