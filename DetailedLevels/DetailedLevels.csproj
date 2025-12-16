@@ -41,7 +41,6 @@
     <Compile Include="Features\SkillTypeUITooltipPatch.cs" />
     <Compile Include="Tools\CustomSkillOptionsPanel.cs" />
     <Compile Include="DetailedLevels.cs" />
-    <Compile Include="Experiments\PlayerKillingBirds.cs" />
     <Compile Include="Experiments\PlayerRavenSkillsDialogTip.cs" />
     <Compile Include="Features\PlayerBuffs.cs" />
     <Compile Include="Features\PlayerSkillupOptions.cs" />

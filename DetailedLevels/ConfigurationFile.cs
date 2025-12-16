@@ -70,7 +70,7 @@ namespace DetailedLevels
                 colorSkillBackground = config("2 - Levels Data", "ColorSkillBackground", Color.cyan, "Choose the color background for selected skills in the skills dialog: red, green, blue, white, black, yellow, cyan, magenta, gray or grey (default = cyan)", false);
                 saveSkillBuffs = config("2 - Levels Data", "SaveSkillBuffs", false, "Enable/disable the option to reload tracked skills after dying (default = false)", false);
                 saveSkillsOrder = config("2 - Levels Data", "Save Skills Order", false, "Enable/disable the option to save the order selected in the skills dialog (default = false)", false);
-                saveSkillsOrderValue = config("2 - Levels Data", "Skills Order", SkillsSortOrder.None, "Skills Order to use when skills dialog is opened (default = None)", false);
+                saveSkillsOrderValue = config("2 - Levels Data", "Skills Order Value", SkillsSortOrder.None, "Skills Order to use when skills dialog is opened and the save option is enabled (default = None)", false);
                 deathSkillLoss = config("3 - Config", "DeathSkillLoss", 5f, "Amount of skill loss when dying (value between 0 and 100, default = 5 as vanilla)");
 
                 deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");

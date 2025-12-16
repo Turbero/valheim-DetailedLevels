@@ -8,6 +8,38 @@ using static Utils;
 
 namespace DetailedLevels.Features
 {
+    [HarmonyPatch(typeof(Game), "Start")]
+    public class GameStartPatch {
+        private static void Postfix() {
+            //Initialize order
+            Logger.Log($"Sort preparation: {ConfigurationFile.saveSkillsOrder.Value} {ConfigurationFile.saveSkillsOrderValue.Value}");
+            if (ConfigurationFile.saveSkillsOrder.Value)
+            {
+                if (ConfigurationFile.saveSkillsOrderValue.Value == SkillsSortOrder.AlphabeticalAscending)
+                {
+                    SkillsDialogAdditions_Patch.azSorted = 1;
+                    SkillsDialogAdditions_Patch.levelSorted = 0;
+                }
+                else if (ConfigurationFile.saveSkillsOrderValue.Value == SkillsSortOrder.AlphabeticalDescending)
+                {
+                    SkillsDialogAdditions_Patch.azSorted = 2;
+                    SkillsDialogAdditions_Patch.levelSorted = 0;
+                }
+                else if (ConfigurationFile.saveSkillsOrderValue.Value == SkillsSortOrder.LevelAscending)
+                {
+                    SkillsDialogAdditions_Patch.azSorted = 0;
+                    SkillsDialogAdditions_Patch.levelSorted = 1;
+                }
+                else if (ConfigurationFile.saveSkillsOrderValue.Value == SkillsSortOrder.LevelDescending)
+                {
+                    SkillsDialogAdditions_Patch.azSorted = 0;
+                    SkillsDialogAdditions_Patch.levelSorted = 2;
+                }
+                Logger.Log($"Sort selected: azSorted {SkillsDialogAdditions_Patch.azSorted}, levelSorted {SkillsDialogAdditions_Patch.levelSorted}");
+            }
+        }
+    }
+    
     [HarmonyPatch(typeof(SkillsDialog), nameof(SkillsDialog.Setup))]
     [HarmonyPriority(Priority.VeryLow)]
     public class SkillsDialogAdditions_Patch
@@ -19,6 +51,8 @@ namespace DetailedLevels.Features
 
         static void Postfix(SkillsDialog __instance, ref Player player, ref List<GameObject> ___m_elements)
         {
+            Logger.Log($"Sort selected: azSorted {azSorted}, levelSorted {levelSorted}");
+            
             List<Skills.Skill> skillList = player.GetSkills().GetSkillList();
             for (int j = 0; j < skillList.Count; j++)
             {
@@ -77,11 +111,15 @@ namespace DetailedLevels.Features
                 {
                     azSorted = 1;
                     buttonText.text = "Z-A";
+                    if (ConfigurationFile.saveSkillsOrder.Value)
+                        ConfigurationFile.saveSkillsOrderValue.Value = SkillsSortOrder.AlphabeticalAscending;
                 }
                 else
                 {
                     azSorted = 2;
                     buttonText.text = "A-Z";
+                    if (ConfigurationFile.saveSkillsOrder.Value)
+                        ConfigurationFile.saveSkillsOrderValue.Value = SkillsSortOrder.AlphabeticalDescending;
                 }
                 InventoryGui.instance.m_skillsDialog.Setup(Player.m_localPlayer);
             });
@@ -110,11 +148,15 @@ namespace DetailedLevels.Features
                 {
                     levelSorted = 1;
                     buttonText.text = "100-1";
+                    if (ConfigurationFile.saveSkillsOrder.Value)
+                        ConfigurationFile.saveSkillsOrderValue.Value = SkillsSortOrder.LevelAscending;
                 }
                 else
                 {
                     levelSorted = 2;
                     buttonText.text = "1-100";
+                    if (ConfigurationFile.saveSkillsOrder.Value)
+                        ConfigurationFile.saveSkillsOrderValue.Value = SkillsSortOrder.LevelDescending;
                 }
                 InventoryGui.instance.m_skillsDialog.Setup(Player.m_localPlayer);
             });
@@ -159,12 +201,12 @@ namespace DetailedLevels.Features
         {
             if (SkillsDialogAdditions_Patch.azSorted == 1)
             {
-                Logger.Log("SkillsDialog_SkillStatusEffects_Patch.Postfix aZsorted = 1");
+                Logger.Log("SkillsDialog_SkillStatusEffects_Patch.Postfix azSorted = 1");
                 __result.Sort((a, b) => GetSkillTranslation(a).CompareTo(GetSkillTranslation(b)));
             }
             else if (SkillsDialogAdditions_Patch.azSorted == 2)
             {
-                Logger.Log("SkillsDialog_SkillStatusEffects_Patch.Postfix aZsorted = 2");
+                Logger.Log("SkillsDialog_SkillStatusEffects_Patch.Postfix azSorted = 2");
                 __result.Sort((a, b) => GetSkillTranslation(b).CompareTo(GetSkillTranslation(a)));
             }
             else if (SkillsDialogAdditions_Patch.levelSorted == 1)
