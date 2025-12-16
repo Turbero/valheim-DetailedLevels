@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 1.5.6
+
+* Added option to save last skills order selected and load skills dialog for first time with same order
+* Removed warnings when drawing skills dialog and stats dialog on the screen
+
 ## 1.5.5
 
 * Small fix to avoid exceptions when changing config file manually with the game on.
