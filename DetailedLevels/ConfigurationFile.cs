@@ -42,6 +42,7 @@ namespace DetailedLevels
         public static ConfigEntry<string> statsProgressionText;
         public static ConfigEntry<string> statsTravellingText;
         public static ConfigEntry<string> statsOthersText;
+        public static ConfigEntry<bool> dayMessageOff;
 
         private static ConfigFile configFile;
         private static readonly string ConfigFileName = DetailedLevels.GUID + ".cfg";
@@ -84,6 +85,8 @@ namespace DetailedLevels
                 statsProgressionText = config("4 - Language", "StatsProgressionText", "Progression", "Translation for <Progression> text (restart game after change)");
                 statsTravellingText = config("4 - Language", "StatsTravellingText", "Travelling", "Translation for <Travelling> text (restart game after change)");
                 statsOthersText = config("4 - Language", "StatsOthersText", "Others", "Translation for <Others> text (restart game after change)");
+                
+                dayMessageOff = config("5 - Others", "Turn off Day Message", false, "If on, the mod will disable the day count message when attempting to display it on the player's screen.");
                 
                 deathSkillLoss.SettingChanged += SettingsChanged;
                 SetupWatcher();
