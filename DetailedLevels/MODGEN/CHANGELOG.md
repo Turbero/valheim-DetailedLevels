@@ -1,5 +1,11 @@
 ### CHANGELOG
 
+## 1.5.7
+
+* Added option to hide "day x" message at the beginning of each day (default = false, activate manually in the .cfg file)
+
+(Why adding here if not related to levels? I was asked to recover certain mod ability for a community server and they were already using this mod anyway lol)
+
 ## 1.5.6
 
 * Added option to save last skills order selected and load skills dialog for first time with same order
