@@ -1,5 +1,16 @@
 ### CHANGELOG
 
+## 1.6.0
+
+* Added new config option to show the skill number values with decimals or percentage (decimals by default). It can be changed in a new slider in the skill options panel in-game.
+* Removed config to set the skills death penalty (to avoid overwriting other mods configuration). You can still see the player value in the options panel.
+* Swapped some configurations to different categories. If any trouble, just delete and regenerate the .cfg file.
+
+Minor fixes:
+* Fixed issue to avoid repeating equipment buff text in the skills dialog.
+* Fixed reloading some config options to update them in the options panel immediately.
+* Fixed shown value in some sliders when changing them.
+
 ## 1.5.7
 
 * Added option to hide "day x" message at the beginning of each day (default = false, activate manually in the .cfg file)
