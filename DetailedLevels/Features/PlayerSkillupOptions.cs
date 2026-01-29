@@ -102,6 +102,7 @@ namespace DetailedLevels.Features
             buttonStatsText.text = ConfigurationFile.statsText.Value;
             panel.reloadTexts();
             statsPanel.reloadTexts();
+            updateSkillLossPercentage();
         }
 
         private static void addSoftDeathInfo(Transform parent)
@@ -308,10 +309,7 @@ namespace DetailedLevels.Features
     {
         static void Postfix(Player __instance, bool spawnValkyrie)
         {
-            //1 - Update skill loss from config at loading
-            __instance.GetSkills().m_DeathLowerFactor = ConfigurationFile.deathSkillLoss.Value / 100f;
-            
-            //2 - Add selected buffs before dying
+            //Add selected buffs before dying
             if (ConfigurationFile.saveSkillBuffs.Value)
             {
                 //Workaround to manipulate dictionary while entries can be removed or added dynamically in AddSKillBuff

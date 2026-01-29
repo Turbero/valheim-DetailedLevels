@@ -30,7 +30,6 @@ namespace DetailedLevels
         public static ConfigEntry<bool> saveSkillBuffs;
         public static ConfigEntry<bool> saveSkillsOrder;
         public static ConfigEntry<SkillsSortOrder> saveSkillsOrderValue;
-        public static ConfigEntry<float> deathSkillLoss;
         public static ConfigEntry<string> deathPenaltyText;
         public static ConfigEntry<string> reloadAfterDyingText;
         public static ConfigEntry<string> numberOfDecimalsText;
@@ -72,8 +71,7 @@ namespace DetailedLevels
                 saveSkillBuffs = config("2 - Levels Data", "SaveSkillBuffs", false, "Enable/disable the option to reload tracked skills after dying (default = false)", false);
                 saveSkillsOrder = config("2 - Levels Data", "Save Skills Order", false, "Enable/disable the option to save the order selected in the skills dialog (default = false)", false);
                 saveSkillsOrderValue = config("2 - Levels Data", "Skills Order Value", SkillsSortOrder.None, "Skills Order to use when skills dialog is opened and the save option is enabled (default = None)", false);
-                deathSkillLoss = config("3 - Config", "DeathSkillLoss", 5f, "Amount of skill loss when dying (value between 0 and 100, default = 5 as vanilla)");
-
+                
                 deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");
                 reloadAfterDyingText = config("4 - Language", "ReloadAfterDyingText", "Reload after dying", "Translation for <Reload after dying> text");
                 numberOfDecimalsText  = config("4 - Language", "NumberOfDecimalsText", "Number of decimals", "Translation for <Number of decimals> text");
@@ -88,7 +86,6 @@ namespace DetailedLevels
                 
                 dayMessageOff = config("5 - Others", "Turn off Day Message", false, "If on, the mod will disable the day count message when attempting to display it on the player's screen.");
                 
-                deathSkillLoss.SettingChanged += SettingsChanged;
                 SetupWatcher();
             }
         }
@@ -121,13 +118,6 @@ namespace DetailedLevels
 
         private static void SettingsChanged(object sender, EventArgs e)
         {
-            if (0 <= deathSkillLoss.Value && deathSkillLoss.Value <= 100)
-            {
-                Player.m_localPlayer.GetSkills().m_DeathLowerFactor = deathSkillLoss.Value / 100f;
-                Logger.Log("m_DeathLowerFactor: " + Player.m_localPlayer.GetSkills().m_DeathLowerFactor);
-
-                PlayerSkillupOptionsPatch.updateSkillLossPercentage();
-            }
             PlayerSkillupOptionsPatch.updateOptionsTexts();
             PlayerSkillupOptionsPatch.reloadTexts();
             PlayerColorBuffs.refreshAllBlueColors(Player.m_localPlayer);
