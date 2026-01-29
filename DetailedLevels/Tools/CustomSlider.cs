@@ -125,9 +125,14 @@ namespace DetailedLevels.Tools
             slider.onValueChanged.AddListener(call);
         }
 
-        public void updateValue(string value)
+        public void updateTextValue(string value)
         {
             sliderValue.text = value;
+        }
+        
+        public void updateValue(float value)
+        {
+            slider.value = value;
         }
 
         public float getValue()

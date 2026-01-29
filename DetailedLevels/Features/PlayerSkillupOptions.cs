@@ -20,9 +20,10 @@ namespace DetailedLevels.Features
         private static TextMeshProUGUI lossPercentageValueComponent;
         private static CustomSlider customSliderSaveSwitch;
         private static CustomSlider customSliderNumberOfDecimals;
+        private static CustomSlider customSliderSkillValuesFormat;
         private static CustomSlider customSliderSkillUpMessage;
         private static CustomSlider customSliderSkillUpBigMessage;
-        private static CustomSlider customSliderSkillsOrder;
+        private static CustomSlider customSliderSaveSkillsOrder;
         private static CustomStatsPanel statsPanel;
 
         static void Postfix(SkillsDialog __instance)
@@ -89,6 +90,7 @@ namespace DetailedLevels.Features
             addSoftDeathInfo(panel.getPanel().transform);
             addSaveSwitchButton(panel.getPanel().transform);
             addNumberOfDecimalsSlider(panel.getPanel().transform);
+            addSkillValueFormatSlider(panel.getPanel().transform);
             addSkillUpMessage(panel.getPanel().transform);
             addSkillUpBigMessage(panel.getPanel().transform);
             addSkillsOrderSlider(panel.getPanel().transform);
@@ -136,7 +138,7 @@ namespace DetailedLevels.Features
             updateSkillLossPercentage();
         }
 
-        public static void updateSkillLossPercentage()
+        private static void updateSkillLossPercentage()
         {
             if (lossPercentageTextComponent != null)
             {
@@ -152,11 +154,28 @@ namespace DetailedLevels.Features
             if (customSliderSaveSwitch == null) return;
             
             customSliderSaveSwitch.sliderLabelDescription.text = ConfigurationFile.reloadAfterDyingText.Value;
+            //TODO customSliderSaveSwitch.updateValue(ConfigurationFile.saveSkillBuffs.Value ? 0 : 1);
+            //TODO customSliderSaveSwitch.updateTextValue(ConfigurationFile.saveSkillBuffs.Value.ToString());
+            
             customSliderNumberOfDecimals.sliderLabelDescription.text = ConfigurationFile.numberOfDecimalsText.Value;
+            customSliderNumberOfDecimals.updateValue(ConfigurationFile.numberOfDecimals.Value);
+            //customSliderNumberOfDecimals.updateTextValue(ConfigurationFile.numberOfDecimals.Value.ToString());
+            
+            customSliderSkillValuesFormat.sliderLabelDescription.text = ConfigurationFile.skillValuesFormatText.Value;
+            customSliderSkillValuesFormat.updateValue(ConfigurationFile.skillValuesFormat.Value == SkillValuesFormat.Decimals ? 0 : 1);
+            //customSliderSkillValuesFormat.updateTextValue(GetSkillValuesFormatRepresentation(ConfigurationFile.skillValuesFormat.Value));
+            
             customSliderSkillUpMessage.sliderLabelDescription.text = ConfigurationFile.skillUpMessageText.Value;
-            customSliderSkillUpMessage.updateValue(calculateSkillupSliderValue(customSliderSkillUpMessage.getValue()));
+            customSliderSkillUpMessage.updateValue(ConfigurationFile.skillUpMessageAfterMultipleLevel.Value);
+            //customSliderSkillUpMessage.updateTextValue(calculateSkillupSliderValue(customSliderSkillUpMessage.getValue()));
+            
             customSliderSkillUpBigMessage.sliderLabelDescription.text = ConfigurationFile.skillUpBigMessageText.Value;
-            customSliderSkillUpBigMessage.updateValue(calculateSkillupSliderValue(customSliderSkillUpBigMessage.getValue()));
+            customSliderSkillUpBigMessage.updateValue(ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value);
+            //customSliderSkillUpBigMessage.updateTextValue(calculateSkillupSliderValue(customSliderSkillUpBigMessage.getValue()));
+
+            customSliderSaveSkillsOrder.sliderLabelDescription.text = ConfigurationFile.skillsOrderText.Value;
+            //TODO customSliderSaveSkillsOrder.updateValue(ConfigurationFile.saveSkillsOrder.Value ? 0 : 1);
+            //TODO customSliderSaveSkillsOrder.updateTextValue(ConfigurationFile.saveSkillsOrder.Value.ToString());
         }
 
         private static void addSaveSwitchButton(Transform parent)
@@ -175,10 +194,10 @@ namespace DetailedLevels.Features
                 valueDesc: ConfigurationFile.saveSkillBuffs.Value.ToString()
             );
             customSliderSaveSwitch.getGameObject().transform.SetParent(parent, false);
-            customSliderSaveSwitch.OnValueChanged((value) =>
+            customSliderSaveSwitch.OnValueChanged(value =>
             {
+                customSliderSaveSwitch.updateTextValue(value.Equals(1f).ToString());
                 ConfigurationFile.saveSkillBuffs.Value = value.Equals(1f);
-                customSliderSaveSwitch.updateValue(ConfigurationFile.saveSkillBuffs.Value.ToString());
             });
         }
 
@@ -198,12 +217,45 @@ namespace DetailedLevels.Features
                 valueDesc: ConfigurationFile.numberOfDecimals.Value.ToString()
             );
             customSliderNumberOfDecimals.getGameObject().transform.SetParent(parent, false);
-            customSliderNumberOfDecimals.OnValueChanged((value) =>
+            customSliderNumberOfDecimals.OnValueChanged(value =>
             {
                 Logger.Log("slider changed to " + value);
-                customSliderNumberOfDecimals.updateValue(value.ToString());
+                customSliderNumberOfDecimals.updateTextValue(value.ToString());
                 ConfigurationFile.numberOfDecimals.Value = (int)value;
             });
+        }
+        
+        private static void addSkillValueFormatSlider(Transform parent)
+        {
+            customSliderSkillValuesFormat = new CustomSlider(
+                name: "SkillValuesFormatSlider",
+                maxValue: 1,
+                sizeDelta: new Vector2(25, 10),
+                position: new Vector2(-17, 105),
+                posXIcon: 0,
+                spriteName: null,
+                posXDescription: -124,
+                description: ConfigurationFile.skillValuesFormatText.Value,
+                posXValue: 123,
+                initValue: (int)ConfigurationFile.skillValuesFormat.Value,
+                valueDesc: GetSkillValuesFormatRepresentation(ConfigurationFile.skillValuesFormat.Value)
+            );
+            customSliderSkillValuesFormat.getGameObject().transform.SetParent(parent, false);
+            customSliderSkillValuesFormat.OnValueChanged(value =>
+            {
+                Logger.Log("slider changed to " + value);
+                SkillValuesFormat format = value == 0 ? SkillValuesFormat.Decimals : SkillValuesFormat.Percentage;
+                customSliderSkillValuesFormat.updateTextValue(GetSkillValuesFormatRepresentation(format));
+                ConfigurationFile.skillValuesFormat.Value = format;
+            });
+        }
+
+        private static string GetSkillValuesFormatRepresentation(SkillValuesFormat skillValuesFormat)
+        {
+            if (skillValuesFormat == SkillValuesFormat.Decimals)
+                return "X,YY";
+            else
+                return "X (YY%)";
         }
 
         private static void addSkillUpMessage(Transform parent)
@@ -212,7 +264,7 @@ namespace DetailedLevels.Features
                 name: "SkillUpMessageSlider",
                 maxValue: 100,
                 sizeDelta: new Vector2(150, 10),
-                position: new Vector2(45, 105),
+                position: new Vector2(45, 75),
                 posXIcon: 0,
                 spriteName: null,
                 posXDescription: -186,
@@ -225,7 +277,7 @@ namespace DetailedLevels.Features
             customSliderSkillUpMessage.OnValueChanged((value) =>
             {
                 Logger.Log("message slider changed to " + value);
-                customSliderSkillUpMessage.updateValue(calculateSkillupSliderValue(value));
+                customSliderSkillUpMessage.updateTextValue(calculateSkillupSliderValue(value));
                 ConfigurationFile.skillUpMessageAfterMultipleLevel.Value = (int)value;
             });
         }
@@ -236,7 +288,7 @@ namespace DetailedLevels.Features
                 name: "SkillUpBigMessageSlider",
                 maxValue: 100,
                 sizeDelta: new Vector2(150, 10),
-                position: new Vector2(45, 75),
+                position: new Vector2(45, 45),
                 posXIcon: 0,
                 spriteName: null,
                 posXDescription: -186,
@@ -246,21 +298,21 @@ namespace DetailedLevels.Features
                 valueDesc: calculateSkillupSliderValue(ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value)
             );
             customSliderSkillUpBigMessage.getGameObject().transform.SetParent(parent, false);
-            customSliderSkillUpBigMessage.OnValueChanged((value) =>
+            customSliderSkillUpBigMessage.OnValueChanged(value =>
             {
                 Logger.Log("bigMessage slider changed to " + value);
-                customSliderSkillUpBigMessage.updateValue(calculateSkillupSliderValue(value));
+                customSliderSkillUpBigMessage.updateTextValue(calculateSkillupSliderValue(value));
                 ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value = (int)value;
             });
         }
         
         private static void addSkillsOrderSlider(Transform parent)
         {
-            customSliderSkillsOrder = new CustomSlider(
-                name: "SkillsOrderSlider",
+            customSliderSaveSkillsOrder = new CustomSlider(
+                name: "SaveSkillsOrderSlider",
                 maxValue: 1,
                 sizeDelta: new Vector2(25, 10),
-                position: new Vector2(-14, 45),
+                position: new Vector2(-14, 15),
                 posXIcon: -1,
                 spriteName: null,
                 posXDescription: -124,
@@ -269,11 +321,11 @@ namespace DetailedLevels.Features
                 initValue: ConfigurationFile.saveSkillsOrder.Value ? 1 : 0,
                 valueDesc: ConfigurationFile.saveSkillsOrder.Value.ToString()
             );
-            customSliderSkillsOrder.getGameObject().transform.SetParent(parent, false);
-            customSliderSkillsOrder.OnValueChanged((value) =>
+            customSliderSaveSkillsOrder.getGameObject().transform.SetParent(parent, false);
+            customSliderSaveSkillsOrder.OnValueChanged(value =>
             {
+                customSliderSaveSkillsOrder.updateTextValue(value.Equals(1f).ToString());
                 ConfigurationFile.saveSkillsOrder.Value = value.Equals(1f);
-                customSliderSkillsOrder.updateValue(ConfigurationFile.saveSkillsOrder.Value.ToString());
             });
         }
 

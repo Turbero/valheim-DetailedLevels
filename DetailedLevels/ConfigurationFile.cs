@@ -40,6 +40,7 @@ namespace DetailedLevels
         public static ConfigEntry<string> deathPenaltyText;
         public static ConfigEntry<string> reloadAfterDyingText;
         public static ConfigEntry<string> numberOfDecimalsText;
+        public static ConfigEntry<string> skillValuesFormatText;
         public static ConfigEntry<string> skillUpMessageText;
         public static ConfigEntry<string> skillUpBigMessageText;
         public static ConfigEntry<string> skillUpValueText;
@@ -74,16 +75,17 @@ namespace DetailedLevels
                 numberOfDecimals = config("2 - Levels Data", "NumberOfDecimals", 2, "Number of decimals to show in your levels information (default = 2, min = 0, max = 15)", false);
                 skillUpMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpMessageAfterMultipleLevel", 5, "Shows skill up message after the new level is multiple of the indicated level (0 = disabled, default = 5)", false);
                 skillUpBigMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpBigMessageAfterMultipleLevel", 10, "Shows skill up big message after the new level is multiple of the indicated level (0 = disabled, default = 20)", false);
-                colorSkillBackground = config("2 - Levels Data", "ColorSkillBackground", Color.cyan, "Choose the color background for selected skills in the skills dialog: red, green, blue, white, black, yellow, cyan, magenta, gray or grey (default = cyan)", false);
-                saveSkillBuffs = config("2 - Levels Data", "SaveSkillBuffs", false, "Enable/disable the option to reload tracked skills after dying (default = false)", false);
-                saveSkillsOrder = config("2 - Levels Data", "Save Skills Order", false, "Enable/disable the option to save the order selected in the skills dialog (default = false)", false);
-                saveSkillsOrderValue = config("2 - Levels Data", "Skills Order Value", SkillsSortOrder.None, "Skills Order to use when skills dialog is opened and the save option is enabled (default = None)", false);
                 
+                colorSkillBackground = config("3 - Config", "ColorSkillBackground", Color.cyan, "Choose the color background for selected skills in the skills dialog: red, green, blue, white, black, yellow, cyan, magenta, gray or grey (default = cyan)", false);
+                saveSkillBuffs = config("3 - Config", "SaveSkillBuffs", false, "Enable/disable the option to reload tracked skills after dying (default = false)", false);
+                saveSkillsOrder = config("3 - Config", "Save Skills Order", false, "Enable/disable the option to save the order selected in the skills dialog (default = false)", false);
+                saveSkillsOrderValue = config("3 - Config", "Skills Order Value", SkillsSortOrder.None, "Skills Order to use when skills dialog is opened and the save option is enabled (default = None)", false);
                 skillValuesFormat = config("3 - Config", "Skill Values Format", SkillValuesFormat.Decimals, "Show the skill number values with decimals or percentage (default = Decimals)", false);
 
                 deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");
                 reloadAfterDyingText = config("4 - Language", "ReloadAfterDyingText", "Reload after dying", "Translation for <Reload after dying> text");
                 numberOfDecimalsText  = config("4 - Language", "NumberOfDecimalsText", "Number of decimals", "Translation for <Number of decimals> text");
+                skillValuesFormatText  = config("4 - Language", "Skill Values Format Text", "Skill Values Format", "Translation for <Skill Values Format> text");
                 skillUpMessageText = config("4 - Language", "SkillUpMessageText", "Skill up message", "Translation for <Skill up message> text");
                 skillUpBigMessageText = config("4 - Language", "SkillUpBigMessageText", "Skill up big message", "Translation for <Skill up big message> text");
                 skillUpValueText = config("4 - Language", "SkillUpValueText", "Each {0} levels", "Translation for <Each X levels> text");
