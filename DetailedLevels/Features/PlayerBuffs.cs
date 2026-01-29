@@ -3,9 +3,7 @@ using HarmonyLib;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TMPro;
 using static Skills;
-using static Utils;
 
 namespace DetailedLevels.Features
 {
@@ -17,16 +15,14 @@ namespace DetailedLevels.Features
         {
             SEMan seMan = player.GetSEMan();
             
-            float value = skillRow != null
-                ? float.Parse(Utils.FindChild(skillRow.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text)
-                : PlayerUtils.GetCurrentSkillLevelProgress(skill);
+            float value = PlayerUtils.GetCurrentSkillLevelProgress(skill);
             float skillLevelModifier = PlayerUtils.FindActiveModifierValue(player, skill.m_info.m_skill);
             Logger.Log("Skill current value: " + value+ ". modifier: "+skillLevelModifier);
             
 
             // Create new custom status effect
             SE_Stats customBuff = ScriptableObject.CreateInstance<SE_Stats>();
-            customBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {value}" + (skillLevelModifier > 0 ? $" (+{skillLevelModifier})" : "");
+            customBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {PlayerUtils.GetSkillValueToShow(value, skillLevelModifier)}";
             customBuff.m_tooltip = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}_description";
             customBuff.m_icon = skillIcon; // Use skill icon
             customBuff.name = PlayerUtils.GetValueForNameHash(skill); // to produce distinct hash values

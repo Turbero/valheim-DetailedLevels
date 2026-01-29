@@ -16,6 +16,12 @@ namespace DetailedLevels
         LevelAscending,
         LevelDescending
     }
+
+    public enum SkillValuesFormat
+    {
+        Decimals,
+        Percentage
+    }
     
     internal class ConfigurationFile
     {
@@ -30,6 +36,7 @@ namespace DetailedLevels
         public static ConfigEntry<bool> saveSkillBuffs;
         public static ConfigEntry<bool> saveSkillsOrder;
         public static ConfigEntry<SkillsSortOrder> saveSkillsOrderValue;
+        public static ConfigEntry<SkillValuesFormat> skillValuesFormat;
         public static ConfigEntry<string> deathPenaltyText;
         public static ConfigEntry<string> reloadAfterDyingText;
         public static ConfigEntry<string> numberOfDecimalsText;
@@ -72,6 +79,8 @@ namespace DetailedLevels
                 saveSkillsOrder = config("2 - Levels Data", "Save Skills Order", false, "Enable/disable the option to save the order selected in the skills dialog (default = false)", false);
                 saveSkillsOrderValue = config("2 - Levels Data", "Skills Order Value", SkillsSortOrder.None, "Skills Order to use when skills dialog is opened and the save option is enabled (default = None)", false);
                 
+                skillValuesFormat = config("3 - Config", "Skill Values Format", SkillValuesFormat.Decimals, "Show the skill number values with decimals or percentage (default = Decimals)", false);
+
                 deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");
                 reloadAfterDyingText = config("4 - Language", "ReloadAfterDyingText", "Reload after dying", "Translation for <Reload after dying> text");
                 numberOfDecimalsText  = config("4 - Language", "NumberOfDecimalsText", "Number of decimals", "Translation for <Number of decimals> text");

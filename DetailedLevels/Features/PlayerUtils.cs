@@ -27,7 +27,10 @@ namespace DetailedLevels.Features
             if (accumulator > 0)
             {
                 // Number of decimals
-                levelText = (float)Math.Round(skillLevel + levelPercentage, Math.Min(15, Math.Max(0, ConfigurationFile.numberOfDecimals.Value)));
+                levelText = (float)Math.Round(skillLevel + levelPercentage, Math.Min(15, 
+                    Math.Max(0, 
+                    ConfigurationFile.numberOfDecimals.Value + (ConfigurationFile.skillValuesFormat.Value == SkillValuesFormat.Percentage ? 2 : 0)
+                )));
             }
 
             float nextLevelRequirement = GetNextLevelRequirement(skill);
@@ -36,6 +39,23 @@ namespace DetailedLevels.Features
             Logger.Log($"nextLevelRequirement: {nextLevelRequirement}, levelPercentage: {levelPercentage}, levelText: {levelText}");
 
             return levelText;
+        }
+
+        public static string GetSkillValueToShow(float calculatedSkillValue, float skillLevelModifier)
+        {
+            if (ConfigurationFile.skillValuesFormat.Value == SkillValuesFormat.Decimals)
+            {
+                return calculatedSkillValue
+                    + (skillLevelModifier > 0 ? $" (+{skillLevelModifier})" : "");
+            }
+            else
+            {
+                float percentageProgress = (float)Math.Round((calculatedSkillValue - (int)calculatedSkillValue) * 100, ConfigurationFile.numberOfDecimals.Value);
+                int intSkill = (int)calculatedSkillValue;
+                return intSkill 
+                       + (skillLevelModifier > 0 ? $" (+{skillLevelModifier})" : string.Empty) 
+                       + (percentageProgress > 0 ? $" ({percentageProgress}%)" : string.Empty);
+            }
         }
 
         private static float GetNextLevelRequirement(Skills.Skill skill)

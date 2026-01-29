@@ -61,9 +61,9 @@ namespace DetailedLevels.Features
 
                 float level = PlayerUtils.GetCurrentSkillLevelProgress(skill);
                 float skillLevelModifier = PlayerUtils.FindActiveModifierValue(player, skill.m_info.m_skill);
-                string levelText = ""+level+(skillLevelModifier > 0 ? " (+"+skillLevelModifier+")" : "");
+                string levelTextWithoutModifier = PlayerUtils.GetSkillValueToShow(level, 0);
 
-                Utils.FindChild(obj.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text = level.ToString();
+                Utils.FindChild(obj.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text = levelTextWithoutModifier;
 
                 //Refresh background to adjust after sorting list
                 string skillName = skill.m_info.m_skill.ToString();
@@ -72,6 +72,7 @@ namespace DetailedLevels.Features
                 if (existingBuff != null)
                 {
                     PlayerUtils.setSkillRowBackgroundColor(obj, ConfigurationFile.colorSkillBackground.Value);
+                    string levelText = PlayerUtils.GetSkillValueToShow(level, skillLevelModifier);
                     existingBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {levelText}"; //Refresh value in buff section
                 }
                 else

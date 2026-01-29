@@ -94,7 +94,7 @@ namespace DetailedLevels.Features
 
                 Logger.Log($"About to update buff: $skill_{skillName.ToLower()} with skill level {currentSkillLevel} and skill level modifier {skillLevelModifier}.");
 
-                string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {currentSkillLevel}" + (skillLevelModifier > 0 ? " (+"+skillLevelModifier+")" : string.Empty);
+                string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {PlayerUtils.GetSkillValueToShow(currentSkillLevel, skillLevelModifier)}";
                 Logger.Log($"Old buff name: {existingBuff.m_name}. New buff name: {newBuffName}");
                 if (existingBuff.m_name != newBuffName || forceUpdate)
                 {
@@ -287,7 +287,7 @@ namespace DetailedLevels.Features
                         float skillLevelModifier = PlayerUtils.FindActiveModifierValue(player, skillType);
 
                         Logger.Log($"About to update buff: $skill_{skillName.ToLower()} with skill level {currentSkillLevel} and skill level modifier {skillLevelModifier}.");
-                        string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {currentSkillLevel}" + (skillLevelModifier > 0 ? " (+" + skillLevelModifier + ")" : string.Empty);
+                        string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {PlayerUtils.GetSkillValueToShow(currentSkillLevel, skillLevelModifier)}";
                         Logger.Log($"Old buff name: {existingBuff.m_name}. New buff name: {newBuffName}");
                         existingBuff.m_name = newBuffName;
                     }
