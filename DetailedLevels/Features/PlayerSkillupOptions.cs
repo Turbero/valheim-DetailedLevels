@@ -1,4 +1,5 @@
-﻿using DetailedLevels.Tools;
+﻿using System;
+using DetailedLevels.Tools;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection;
@@ -143,7 +144,7 @@ namespace DetailedLevels.Features
             if (lossPercentageTextComponent != null)
             {
                 lossPercentageTextComponent.text = $"{ConfigurationFile.deathPenaltyText.Value}";
-                float lossPercentage = Player.m_localPlayer.GetSkills().m_DeathLowerFactor * 100f;
+                var lossPercentage = Math.Round(Player.m_localPlayer.GetSkills().m_DeathLowerFactor * Game.m_skillReductionRate * 100f, 2);
                 lossPercentageValueComponent.text = $"= {(lossPercentage > 0 ? "-" : "")}{lossPercentage}%";
             }
         }
@@ -155,27 +156,21 @@ namespace DetailedLevels.Features
             
             customSliderSaveSwitch.sliderLabelDescription.text = ConfigurationFile.reloadAfterDyingText.Value;
             //TODO customSliderSaveSwitch.updateValue(ConfigurationFile.saveSkillBuffs.Value ? 0 : 1);
-            //TODO customSliderSaveSwitch.updateTextValue(ConfigurationFile.saveSkillBuffs.Value.ToString());
             
             customSliderNumberOfDecimals.sliderLabelDescription.text = ConfigurationFile.numberOfDecimalsText.Value;
             customSliderNumberOfDecimals.updateValue(ConfigurationFile.numberOfDecimals.Value);
-            //customSliderNumberOfDecimals.updateTextValue(ConfigurationFile.numberOfDecimals.Value.ToString());
             
             customSliderSkillValuesFormat.sliderLabelDescription.text = ConfigurationFile.skillValuesFormatText.Value;
             customSliderSkillValuesFormat.updateValue(ConfigurationFile.skillValuesFormat.Value == SkillValuesFormat.Decimals ? 0 : 1);
-            //customSliderSkillValuesFormat.updateTextValue(GetSkillValuesFormatRepresentation(ConfigurationFile.skillValuesFormat.Value));
             
             customSliderSkillUpMessage.sliderLabelDescription.text = ConfigurationFile.skillUpMessageText.Value;
             customSliderSkillUpMessage.updateValue(ConfigurationFile.skillUpMessageAfterMultipleLevel.Value);
-            //customSliderSkillUpMessage.updateTextValue(calculateSkillupSliderValue(customSliderSkillUpMessage.getValue()));
             
             customSliderSkillUpBigMessage.sliderLabelDescription.text = ConfigurationFile.skillUpBigMessageText.Value;
             customSliderSkillUpBigMessage.updateValue(ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value);
-            //customSliderSkillUpBigMessage.updateTextValue(calculateSkillupSliderValue(customSliderSkillUpBigMessage.getValue()));
-
+            
             customSliderSaveSkillsOrder.sliderLabelDescription.text = ConfigurationFile.skillsOrderText.Value;
             //TODO customSliderSaveSkillsOrder.updateValue(ConfigurationFile.saveSkillsOrder.Value ? 0 : 1);
-            //TODO customSliderSaveSkillsOrder.updateTextValue(ConfigurationFile.saveSkillsOrder.Value.ToString());
         }
 
         private static void addSaveSwitchButton(Transform parent)
