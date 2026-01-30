@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.6.1
+
+* Fixed skill loss rate value in the options panel (it was not adding up the skill reduction rate from the world modifier)
+
 ## 1.6.0
 
 * Added new config option to show the skill number values with decimals or percentage (decimals by default). It can be changed in a new slider in the skill options panel in-game.
