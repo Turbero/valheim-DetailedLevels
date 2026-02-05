@@ -66,6 +66,8 @@ namespace DetailedLevels
 
             InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/CustomSkillOptionsPanel").gameObject.SetActive(false);
             
+            InventoryGui.instance.m_skillsDialog.transform.Find("TabStatsButton").gameObject.SetActive(false);
+            InventoryGui.instance.m_skillsDialog.transform.Find("TabKillStatsButton").gameObject.SetActive(false);
         }
         private static async Task WaitForSecondsAsync(float seconds)
         {

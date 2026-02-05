@@ -26,13 +26,12 @@ namespace DetailedLevels.Features
         private static CustomSlider customSliderSkillUpBigMessage;
         private static CustomSlider customSliderSaveSkillsOrder;
         private static CustomStatsPanel statsPanel;
+        private static CustomStatsPanelKills statsPanelKills;
+        private static GameObject tabStatsButtonObject;
+        private static GameObject tabKillStatsButtonObject;
 
         static void Postfix(SkillsDialog __instance)
         {
-            TMP_FontAsset font = TMP_Settings.defaultFontAsset;
-            if (font == null)
-                TMP_Settings.defaultFontAsset = PlayerUtils.getFontAsset("Valheim-AveriaSansLibre");
-
             Transform closeButtonTransform = __instance.transform.Find("SkillsFrame/Closebutton");
             (closeButtonTransform as RectTransform).anchoredPosition = new Vector2(146, 45);
             (closeButtonTransform as RectTransform).sizeDelta = new Vector2(140, 46);
@@ -64,10 +63,12 @@ namespace DetailedLevels.Features
             dlStatsButton.onClick = new Button.ButtonClickedEvent();
             dlStatsButton.onClick.AddListener(() =>
             {
-                Logger.Log("dlStatsButtonObject clicked.");
                 statsPanel.reloadTexts();
                 statsPanel.getPanel().SetActive(true);
-                Logger.Log("dlStatsButtonObject - panel visible.");
+                statsPanelKills.reloadTexts();
+                statsPanelKills.getPanel().SetActive(false);
+                tabStatsButtonObject.SetActive(true);
+                tabKillStatsButtonObject.SetActive(true);
             });
 
             buttonStatsText = dlStatsButtonObject.GetComponentInChildren<TextMeshProUGUI>();
@@ -78,16 +79,16 @@ namespace DetailedLevels.Features
             // Custom panels
             panel = new CustomSkillOptionsPanel(closeButton.transform.parent);
             statsPanel = new CustomStatsPanel();
+            statsPanelKills = new CustomStatsPanelKills();
 
             Button dlOptionsButton = dlOptionsButtonObject.GetComponent<Button>();
             dlOptionsButton.onClick = new Button.ButtonClickedEvent();
             dlOptionsButton.onClick.AddListener(() =>
             {
-                Logger.Log("DLOptionsButton clicked.");
                 panel.getPanel().SetActive(true);
-                Logger.Log("DLOptionsButton - panel visible.");
             });
 
+            initStatsTabButtons(__instance, statsPanel, statsPanelKills);
             addSoftDeathInfo(panel.getPanel().transform);
             addSaveSwitchButton(panel.getPanel().transform);
             addNumberOfDecimalsSlider(panel.getPanel().transform);
@@ -99,12 +100,70 @@ namespace DetailedLevels.Features
             reloadTexts();
         }
 
+        private static void initStatsTabButtons(SkillsDialog skillsDialog, CustomStatsPanel customStatsPanel, CustomStatsPanelKills customStatsPanelKills)
+        {
+            Transform closeButtonTransform = skillsDialog.transform.Find("SkillsFrame/Closebutton");
+            
+            //Stats button
+            tabStatsButtonObject = GameObject.Instantiate(closeButtonTransform.gameObject, skillsDialog.transform);
+            tabStatsButtonObject.name = "TabStatsButton";
+            RectTransform tabStatsButtonRect = tabStatsButtonObject.GetComponent<RectTransform>();
+            tabStatsButtonRect.anchoredPosition = new Vector2(-550, 843);
+            tabStatsButtonRect.sizeDelta = new Vector2(140, 46);
+            Button tabStatsButton = tabStatsButtonObject.GetComponent<Button>();
+            tabStatsButton.onClick = new Button.ButtonClickedEvent();
+            tabStatsButton.interactable = false;
+            TextMeshProUGUI buttonStatsText = tabStatsButtonObject.GetComponentInChildren<TextMeshProUGUI>();
+            buttonStatsText.fontStyle = FontStyles.Normal;
+            buttonStatsText.color = TITLE_COLOR;
+            buttonStatsText.alignment = TextAlignmentOptions.Center;
+            buttonStatsText.text = "Main Stats";
+            tabStatsButtonObject.SetActive(false);
+            
+            //Kill stats button
+            tabKillStatsButtonObject = GameObject.Instantiate(closeButtonTransform.gameObject, skillsDialog.transform);
+            tabKillStatsButtonObject.name = "TabKillStatsButton";
+            RectTransform tabKillStatsButtonRect = tabKillStatsButtonObject.GetComponent<RectTransform>();
+            tabKillStatsButtonRect.anchoredPosition = new Vector2(-400, 843);
+            tabKillStatsButtonRect.sizeDelta = new Vector2(140, 46);
+            Button tabKillStatsButton = tabKillStatsButtonObject.GetComponent<Button>();
+            tabKillStatsButton.onClick = new Button.ButtonClickedEvent();
+            tabKillStatsButton.interactable = true;
+            TextMeshProUGUI buttonKillStatsText = tabKillStatsButtonObject.GetComponentInChildren<TextMeshProUGUI>();
+            buttonKillStatsText.fontStyle = FontStyles.Normal;
+            buttonKillStatsText.color = TITLE_COLOR;
+            buttonKillStatsText.alignment = TextAlignmentOptions.Center;
+            buttonKillStatsText.text = "Kill Stats";
+            tabKillStatsButtonObject.SetActive(false);
+            
+            tabStatsButton.onClick.AddListener(() =>
+            {
+                tabStatsButton.interactable = false;
+                tabKillStatsButton.interactable = true;
+                statsPanel.getPanel().SetActive(true);
+                statsPanelKills.getPanel().SetActive(false);
+                customStatsPanel.getPanel().SetActive(true); 
+                customStatsPanelKills.getPanel().SetActive(false);
+                
+            });
+            tabKillStatsButton.onClick.AddListener(() =>
+            {
+                tabStatsButton.interactable = true;
+                tabKillStatsButton.interactable = false;
+                statsPanel.getPanel().SetActive(false);
+                statsPanelKills.getPanel().SetActive(true);
+                customStatsPanel.getPanel().SetActive(false); 
+                customStatsPanelKills.getPanel().SetActive(true);
+            });
+        }
+
         public static void reloadTexts()
         {
             buttonOptionsText.text = Localization.instance.Localize("$button_ps_start");
             buttonStatsText.text = ConfigurationFile.statsText.Value;
             panel.reloadTexts();
             statsPanel.reloadTexts();
+            statsPanelKills.reloadTexts();
             updateSkillLossPercentage();
         }
 

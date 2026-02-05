@@ -9,7 +9,7 @@ namespace DetailedLevels.Tools
     public class CustomStatsPanelScroll
     {
         private readonly GameObject content;
-        public readonly Dictionary<PlayerStatType, TextMeshProUGUI> statsTexts = new Dictionary<PlayerStatType, TextMeshProUGUI>();
+        public readonly Dictionary<string, TextMeshProUGUI> statsTexts = new Dictionary<string, TextMeshProUGUI>();
         private readonly Dictionary<string, TextMeshProUGUI> titleTranslations = new Dictionary<string, TextMeshProUGUI>();
 
         public CustomStatsPanelScroll(Transform parent)
@@ -25,7 +25,7 @@ namespace DetailedLevels.Tools
             panelRT.anchorMax = new Vector2(0.5f, 0.5f);
             panelRT.pivot = new Vector2(0.5f, 0.5f);
             panelRT.anchoredPosition = new Vector2(0, 0);
-            panelRT.sizeDelta = new Vector2(1260, 650); //Size dimension
+            panelRT.sizeDelta = new Vector2(1260, 550); //Size dimension
 
             Image bgImage = customPanel.GetComponent<Image>();
             bgImage.color = new Color(0, 0, 0, 0.6f);
@@ -121,7 +121,7 @@ namespace DetailedLevels.Tools
             titleText.color = Color.yellow;
         }
 
-        public void AddRowToScrollList(Dictionary<PlayerStatType, float> entries)
+        public void AddRowToScrollList(Dictionary<string, float> entries)
         {
             GameObject entryRow = new GameObject("StatsRow", typeof(RectTransform));
             entryRow.transform.SetParent(content.transform, false);
@@ -165,6 +165,14 @@ namespace DetailedLevels.Tools
         {
             foreach (var titleTranslation in titleTranslations)
                 titleTranslation.Value.text = Localization.instance.Localize(titleTranslation.Key);
+        }
+
+        public void ClearAll()
+        {
+            foreach (Transform child in content.transform)
+            {
+                Object.Destroy(child.gameObject);
+            }
         }
     }
 }

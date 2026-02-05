@@ -121,9 +121,9 @@ namespace DetailedLevels
                 configFile.Reload();
                 SettingsChanged(null, null);
             }
-            catch
+            catch (Exception ex)
             {
-                Logger.LogError($"There was an issue loading {ConfigFileName}");
+                Logger.LogError($"There was an issue loading {ConfigFileName}, {ex}");
             }
         }
 
