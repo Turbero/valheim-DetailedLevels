@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using DetailedLevels.Features;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
@@ -46,6 +47,7 @@ namespace DetailedLevels.Tools
             {
                 Logger.Log("statsCloseButtonButton clicked.");
                 panel.SetActive(false);
+                PlayerSkillupOptionsPatch.HideTabButtons();
             });
 
             scrollPanel = new CustomStatsPanelScroll(skillsDialog.transform.Find(panel.name+"/MainFrame/Stats/StatList"));

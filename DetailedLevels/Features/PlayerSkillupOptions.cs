@@ -104,7 +104,7 @@ namespace DetailedLevels.Features
         {
             Transform closeButtonTransform = skillsDialog.transform.Find("SkillsFrame/Closebutton");
             
-            //Stats button
+            //Tab Stats button
             tabStatsButtonObject = GameObject.Instantiate(closeButtonTransform.gameObject, skillsDialog.transform);
             tabStatsButtonObject.name = "TabStatsButton";
             RectTransform tabStatsButtonRect = tabStatsButtonObject.GetComponent<RectTransform>();
@@ -120,7 +120,7 @@ namespace DetailedLevels.Features
             buttonStatsText.text = "Main Stats";
             tabStatsButtonObject.SetActive(false);
             
-            //Kill stats button
+            //Tab Kill stats button
             tabKillStatsButtonObject = GameObject.Instantiate(closeButtonTransform.gameObject, skillsDialog.transform);
             tabKillStatsButtonObject.name = "TabKillStatsButton";
             RectTransform tabKillStatsButtonRect = tabKillStatsButtonObject.GetComponent<RectTransform>();
@@ -388,6 +388,12 @@ namespace DetailedLevels.Features
             return value.Equals(0)
                 ? Localization.instance.Localize("$menu_none")
                 : ConfigurationFile.skillUpValueText.Value.Replace("{0}", value.ToString());
+        }
+
+        public static void HideTabButtons()
+        {
+            tabStatsButtonObject.SetActive(false);
+            tabKillStatsButtonObject.SetActive(false);
         }
     }
 

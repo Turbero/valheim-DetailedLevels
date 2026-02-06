@@ -24,8 +24,8 @@ namespace DetailedLevels.Tools
             panelRT.anchorMin = new Vector2(0.5f, 0.5f);
             panelRT.anchorMax = new Vector2(0.5f, 0.5f);
             panelRT.pivot = new Vector2(0.5f, 0.5f);
-            panelRT.anchoredPosition = new Vector2(0, 0);
-            panelRT.sizeDelta = new Vector2(1260, 550); //Size dimension
+            panelRT.anchoredPosition = new Vector2(0, -30);
+            panelRT.sizeDelta = new Vector2(1260, 590); //Size dimension
 
             Image bgImage = customPanel.GetComponent<Image>();
             bgImage.color = new Color(0, 0, 0, 0.6f);
@@ -169,10 +169,13 @@ namespace DetailedLevels.Tools
 
         public void ClearAll()
         {
+            Logger.Log("Cleaning scroll content to repaint...");
             foreach (Transform child in content.transform)
             {
                 Object.Destroy(child.gameObject);
             }
+            statsTexts.Clear();
+            titleTranslations.Clear();
         }
     }
 }

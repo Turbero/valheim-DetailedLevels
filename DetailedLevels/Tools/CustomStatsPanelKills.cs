@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DetailedLevels.Features;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
@@ -11,6 +11,7 @@ namespace DetailedLevels.Tools
 {
     public class CustomStatsPanelKills
     {
+        private static readonly List<string> MONSTERS_EXCEPTIONS = new List<string>{"TrainingDummy", "Root", "T.W.I.G."};
         private readonly GameObject panel;
         private readonly TextMeshProUGUI statsTopicText;
         private readonly CustomStatsPanelScroll scrollPanel;
@@ -48,22 +49,37 @@ namespace DetailedLevels.Tools
             statsCloseButtonButton.onClick.AddListener(() =>
             {
                 panel.SetActive(false);
+                PlayerSkillupOptionsPatch.HideTabButtons();
             });
         }
 
         private void LoadKillStats()
         {
             Dictionary<string, float> killStats = getDictionaryKillStats();
-            List<string> keys = killStats.Keys.ToList();
-            keys.Sort(); //TODO Sort by Localization value
+            Dictionary<string, float> killStatsTranslated = new Dictionary<string, float>();
+            foreach (var keyValuePair in killStats)
+            {
+                if (!MONSTERS_EXCEPTIONS.Contains(keyValuePair.Key))
+                {
+                    var translation = Localization.instance.Localize(keyValuePair.Key).Replace("<color=orange>", "").Replace("</color>", "");
+                    killStatsTranslated.Add(translation, keyValuePair.Value);
+                }
+            }
+
+            List<string> keys = killStatsTranslated.Keys.ToList();
+            keys.Sort();
             Dictionary<string, float> row = new Dictionary<string, float>();
             for (int i = 0; i < keys.Count; i++)
             {
-                row.Add(Localization.instance.Localize(keys[i]), killStats.GetValueSafe(keys[i]));
-                if (row.Count == 5)
+                float value = killStatsTranslated.GetValueSafe(keys[i]);
+                if (value > 0)
                 {
-                    scrollPanel.AddRowToScrollList(row);
-                    row = new Dictionary<string, float>();
+                    row.Add(keys[i], value);
+                    if (row.Count == 5)
+                    {
+                        scrollPanel.AddRowToScrollList(row);
+                        row = new Dictionary<string, float>();
+                    }
                 }
             }
 
