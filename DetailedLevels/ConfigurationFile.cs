@@ -22,6 +22,12 @@ namespace DetailedLevels
         Decimals,
         Percentage
     }
+
+    public enum KillStatsGroupingFormat
+    {
+        ByInitialLetter,
+        AllTogether
+    }
     
     internal class ConfigurationFile
     {
@@ -37,6 +43,7 @@ namespace DetailedLevels
         public static ConfigEntry<bool> saveSkillsOrder;
         public static ConfigEntry<SkillsSortOrder> saveSkillsOrderValue;
         public static ConfigEntry<SkillValuesFormat> skillValuesFormat;
+        public static ConfigEntry<KillStatsGroupingFormat> killStatsGroupingFormat;
         public static ConfigEntry<string> deathPenaltyText;
         public static ConfigEntry<string> reloadAfterDyingText;
         public static ConfigEntry<string> numberOfDecimalsText;
@@ -81,6 +88,7 @@ namespace DetailedLevels
                 saveSkillsOrder = config("3 - Config", "Save Skills Order", false, "Enable/disable the option to save the order selected in the skills dialog (default = false)", false);
                 saveSkillsOrderValue = config("3 - Config", "Skills Order Value", SkillsSortOrder.None, "Skills Order to use when skills dialog is opened and the save option is enabled (default = None)", false);
                 skillValuesFormat = config("3 - Config", "Skill Values Format", SkillValuesFormat.Decimals, "Show the skill number values with decimals or percentage (default = Decimals)", false);
+                killStatsGroupingFormat = config("3 - Config", "Kill Stats Gropuing Format", KillStatsGroupingFormat.ByInitialLetter, "Show kill stats grouped by initial letter or all together (default = InitialLetter)", false);
 
                 deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");
                 reloadAfterDyingText = config("4 - Language", "ReloadAfterDyingText", "Reload after dying", "Translation for <Reload after dying> text");

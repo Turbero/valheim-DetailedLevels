@@ -67,25 +67,66 @@ namespace DetailedLevels.Tools
             }
 
             List<string> keys = killStatsTranslated.Keys.ToList();
+            if (keys.Count == 0) return;
             keys.Sort();
             Dictionary<string, float> row = new Dictionary<string, float>();
-            for (int i = 0; i < keys.Count; i++)
+            
+            //One group
+            if (ConfigurationFile.killStatsGroupingFormat.Value == KillStatsGroupingFormat.AllTogether)
             {
-                float value = killStatsTranslated.GetValueSafe(keys[i]);
-                if (value > 0)
+                for (int i = 0; i < keys.Count; i++)
                 {
-                    row.Add(keys[i], value);
-                    if (row.Count == 5)
+                    float value = killStatsTranslated.GetValueSafe(keys[i]);
+                    if (value > 0)
                     {
-                        scrollPanel.AddRowToScrollList(row);
-                        row = new Dictionary<string, float>();
+                        row.Add(keys[i], value);
+                        if (row.Count == 5)
+                        {
+                            scrollPanel.AddRowToScrollList(row);
+                            row = new Dictionary<string, float>();
+                        }
                     }
                 }
+                if (row.Count > 0)
+                {
+                    scrollPanel.AddRowToScrollList(row);
+                }
             }
-
-            if (row.Count > 0)
+            else
             {
-                scrollPanel.AddRowToScrollList(row);
+                //Split by initial letter
+                string nextHeader = keys[0].ToCharArray()[0] + "";
+                scrollPanel.AddHeaderToScrollList("          " + nextHeader, TextAlignmentOptions.Left);
+                for (int i = 0; i < keys.Count; i++)
+                {
+                    string firstChar = keys[i].ToCharArray()[0] + "";
+                    if (!firstChar.Equals(nextHeader))
+                    {
+                        if (row.Count > 0)
+                        {
+                            scrollPanel.AddRowToScrollList(row);
+                            row = new Dictionary<string, float>();
+                        }
+
+                        nextHeader = firstChar;
+                        scrollPanel.AddHeaderToScrollList("          " + nextHeader, TextAlignmentOptions.Left);
+                    }
+
+                    float value = killStatsTranslated.GetValueSafe(keys[i]);
+                    if (value > 0)
+                    {
+                        row.Add(keys[i], value);
+                        if (row.Count == 5)
+                        {
+                            scrollPanel.AddRowToScrollList(row);
+                            row = new Dictionary<string, float>();
+                        }
+                    }
+                }
+                if (row.Count > 0)
+                {
+                    scrollPanel.AddRowToScrollList(row);
+                }
             }
         }
 

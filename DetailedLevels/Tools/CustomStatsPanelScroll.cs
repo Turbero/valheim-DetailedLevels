@@ -101,7 +101,7 @@ namespace DetailedLevels.Tools
             scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
         }
 
-        public void AddHeaderToScrollList(string title)
+        public void AddHeaderToScrollList(string title, TextAlignmentOptions textAlignment = TextAlignmentOptions.Center)
         {
             GameObject titleObj = new GameObject("GroupHeader", typeof(RectTransform), typeof(TextMeshProUGUI));
             titleObj.transform.SetParent(content.transform, false);
@@ -117,7 +117,7 @@ namespace DetailedLevels.Tools
             titleTranslations.Add(title, titleText);
             titleText.font = InventoryGui.instance.m_recipeName.font; // same font as recipe name window
             titleText.fontSize = 24;
-            titleText.alignment = TextAlignmentOptions.Center;
+            titleText.alignment = textAlignment;
             titleText.color = Color.yellow;
         }
 
