@@ -184,13 +184,7 @@ namespace DetailedLevels.Features
                         buttonTooltip.m_text = originalTooltip + customText;
                     }
 
-                    //Reload texts in skill options
-                    if (PlayerSkillupOptionsPatch.panel != null)
-                    {
-                        PlayerSkillupOptionsPatch.reloadTexts();
-                        //Hide skill options if open
-                        PlayerSkillupOptionsPatch.panel.getPanel()?.gameObject?.SetActive(false);
-                    }
+                    PlayerSkillupOptionsPatch.InventoryShow();
                 }
             }
         }

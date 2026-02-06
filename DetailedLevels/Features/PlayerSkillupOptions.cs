@@ -13,7 +13,7 @@ namespace DetailedLevels.Features
     [HarmonyPatch(typeof(SkillsDialog), "Awake")]
     public class PlayerSkillupOptionsPatch
     {
-        public static CustomSkillOptionsPanel panel;
+        private static CustomSkillOptionsPanel panel;
         private static readonly Color TITLE_COLOR = new Color(1f, 0.7176f, 0.3603f);
         private static TextMeshProUGUI buttonOptionsText;
         private static TextMeshProUGUI buttonStatsText;
@@ -68,7 +68,9 @@ namespace DetailedLevels.Features
                 statsPanelKills.reloadTexts();
                 statsPanelKills.getPanel().SetActive(false);
                 tabStatsButtonObject.SetActive(true);
+                tabStatsButtonObject.GetComponent<Button>().interactable = false;
                 tabKillStatsButtonObject.SetActive(true);
+                tabKillStatsButtonObject.GetComponent<Button>().interactable = true;
             });
 
             buttonStatsText = dlStatsButtonObject.GetComponentInChildren<TextMeshProUGUI>();
@@ -394,6 +396,19 @@ namespace DetailedLevels.Features
         {
             tabStatsButtonObject.SetActive(false);
             tabKillStatsButtonObject.SetActive(false);
+        }
+
+        public static void InventoryShow()
+        {
+            if (panel != null)
+            {
+                reloadTexts();
+                panel.getPanel()?.gameObject?.SetActive(false);
+                statsPanel.getPanel()?.gameObject?.SetActive(false);
+                statsPanelKills.getPanel()?.gameObject?.SetActive(false);
+                tabStatsButtonObject.SetActive(false);
+                tabKillStatsButtonObject.SetActive(false);
+            }
         }
     }
 
