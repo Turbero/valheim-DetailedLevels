@@ -140,21 +140,9 @@ namespace DetailedLevels.Tools
         
         public void reloadTexts()
         {
-            statsTopicText.text = ConfigurationFile.statsText.Value; //TODO Add config for killStatsTopic text
-            Dictionary<string, float> mStats = getDictionaryKillStats();
-            if (mStats.Count != scrollPanel.statsTexts.Count)
-            {
-                scrollPanel.ClearAll();
-                LoadKillStats();
-            }
-            else
-            {
-                foreach (KeyValuePair<string, TextMeshProUGUI> stat in scrollPanel.statsTexts)
-                {
-                    stat.Value.text = Localization.instance.Localize(stat.Key) + ": " + mStats.GetValueSafe(stat.Key);
-                }
-            }
-
+            statsTopicText.text = ConfigurationFile.statsText.Value;
+            scrollPanel.ClearAll();
+            LoadKillStats();
             scrollPanel.reloadHeaderTitles();
         }
     }
