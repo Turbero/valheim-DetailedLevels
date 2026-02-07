@@ -1,5 +1,13 @@
 ### CHANGELOG
 
+## 1.7.0
+
+Stats enhancements:
+* Added new stats category created in the stats window inside the skill dialog with the number of kills of each monster killed. Monster names automatically translated. 
+* Stats categories separated in tabs: main stats and kill stats.
+* Kill stats are sorted by name. They can be grouped by initial letter or show all together in the .cfg file.
+* Separated death reasons in main stats in a new subcategory "Death Types".
+
 ## 1.6.1
 
 * Fixed skill loss rate value in the options panel (it was not adding up the skill reduction rate from the world modifier)
