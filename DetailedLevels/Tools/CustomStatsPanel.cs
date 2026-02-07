@@ -88,6 +88,7 @@ namespace DetailedLevels.Tools
                 {PlayerStatType.PortalDungeonOut.ToString(), mStats.GetValueSafe(PlayerStatType.PortalDungeonOut)}
                 
             });
+            scrollPanel.AddHeaderToScrollList(ConfigurationFile.statsDeathTypesText.Value);
             scrollPanel.AddRowToScrollList(new Dictionary<string, float>
             {
                 {PlayerStatType.DeathByEnemyHit.ToString(), mStats.GetValueSafe(PlayerStatType.DeathByEnemyHit)},

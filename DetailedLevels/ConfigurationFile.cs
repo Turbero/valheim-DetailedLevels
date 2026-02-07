@@ -53,6 +53,7 @@ namespace DetailedLevels
         public static ConfigEntry<string> skillUpValueText;
         public static ConfigEntry<string> skillsOrderText;
         public static ConfigEntry<string> statsText;
+        public static ConfigEntry<string> statsDeathTypesText;
         public static ConfigEntry<string> statsProgressionText;
         public static ConfigEntry<string> statsTravellingText;
         public static ConfigEntry<string> statsOthersText;
@@ -99,6 +100,7 @@ namespace DetailedLevels
                 skillUpValueText = config("4 - Language", "SkillUpValueText", "Each {0} levels", "Translation for <Each X levels> text");
                 skillsOrderText = config("4 - Language", "SkillsOrderText", "Save Skills Order", "Translation for <Save Skills Order> text");
                 statsText = config("4 - Language", "StatsText", "Stats", "Translation for <Stats> text");
+                statsDeathTypesText = config("4 - Language", "Stats Death Types", "Death Types", "Translation for <Death Types> text (restart game after change)");
                 statsProgressionText = config("4 - Language", "StatsProgressionText", "Progression", "Translation for <Progression> text (restart game after change)");
                 statsTravellingText = config("4 - Language", "StatsTravellingText", "Travelling", "Translation for <Travelling> text (restart game after change)");
                 statsOthersText = config("4 - Language", "StatsOthersText", "Others", "Translation for <Others> text (restart game after change)");
