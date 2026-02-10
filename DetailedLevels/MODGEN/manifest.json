@@ -1,6 +1,6 @@
 {
   "name": "DetailedLevels",
-  "version_number": "1.7.0",
+  "version_number": "1.7.1",
   "website_url": "https://github.com/Turbero/valheim-DetailedLevels",
   "description": "Mod for skills tracking with more details. Enough guessing progress only with the bottom bar. Now with brand-new player stats in-game! Check your performance!",
   "dependencies": [

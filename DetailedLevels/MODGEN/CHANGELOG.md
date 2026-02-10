@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.7.1
+
+* Added compatibility with different monsters which are translated to the same name. It was breaking the skill dialog options (thank you, Dash200017) 
+
 ## 1.7.0
 
 Stats enhancements:
