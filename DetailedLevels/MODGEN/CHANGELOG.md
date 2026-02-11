@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.7.2
+
+* Small fix for kill stats with monster names contained in other monster names (i.e: Greydwarf, Greydwarf Brute and Greydwarf Shaman)
+
 ## 1.7.1
 
 * Added compatibility with different monsters which are translated to the same name. It was breaking the skill dialog options (thank you, Dash200017) 
