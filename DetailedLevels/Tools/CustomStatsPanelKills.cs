@@ -62,7 +62,7 @@ namespace DetailedLevels.Tools
                 if (!MONSTERS_EXCEPTIONS.Contains(keyValuePair.Key))
                 {
                     var translation = Localization.instance.Localize(keyValuePair.Key).Replace("<color=orange>", "").Replace("</color>", "");
-                    var count = killStatsTranslated.Keys.ToList().FindAll(key => key.Contains(translation)).Count;
+                    var count = killStatsTranslated.Keys.ToList().FindAll(key => key.Equals(translation) || key.StartsWith(translation+" (")).Count;
                     if (count > 0)
                         translation = translation + " ("+(count+1)+")";
                     killStatsTranslated.Add(translation, keyValuePair.Value);
