@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.7.3
+
+* Just added small null protection when changing configuration
+
 ## 1.7.2
 
 * Small fix for kill stats with monster names contained in other monster names (i.e: Greydwarf, Greydwarf Brute and Greydwarf Shaman)
