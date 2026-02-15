@@ -161,6 +161,15 @@ namespace DetailedLevels.Features
 
         public static void reloadTexts()
         {
+            if (buttonOptionsText == null ||
+                buttonStatsText == null ||
+                panel == null || panel.getPanel() == null ||
+                statsPanel == null || statsPanel.getPanel() == null ||
+                statsPanelKills == null || statsPanel.getPanel() == null ||
+                lossPercentageTextComponent == null
+            )
+                return;
+            
             buttonOptionsText.text = Localization.instance.Localize("$button_ps_start");
             buttonStatsText.text = ConfigurationFile.statsText.Value;
             panel.reloadTexts();
