@@ -57,7 +57,6 @@ namespace DetailedLevels
         public static ConfigEntry<string> statsProgressionText;
         public static ConfigEntry<string> statsTravellingText;
         public static ConfigEntry<string> statsOthersText;
-        public static ConfigEntry<bool> dayMessageOff;
 
         private static ConfigFile configFile;
         private static readonly string ConfigFileName = DetailedLevels.GUID + ".cfg";
@@ -89,7 +88,7 @@ namespace DetailedLevels
                 saveSkillsOrder = config("3 - Config", "Save Skills Order", false, "Enable/disable the option to save the order selected in the skills dialog (default = false)", false);
                 saveSkillsOrderValue = config("3 - Config", "Skills Order Value", SkillsSortOrder.None, "Skills Order to use when skills dialog is opened and the save option is enabled (default = None)", false);
                 skillValuesFormat = config("3 - Config", "Skill Values Format", SkillValuesFormat.Decimals, "Show the skill number values with decimals or percentage (default = Decimals)", false);
-                killStatsGroupingFormat = config("3 - Config", "Kill Stats Gropuing Format", KillStatsGroupingFormat.ByInitialLetter, "Show kill stats grouped by initial letter or all together (default = InitialLetter)", false);
+                killStatsGroupingFormat = config("3 - Config", "Kill Stats Grouping Format", KillStatsGroupingFormat.ByInitialLetter, "Show kill stats grouped by initial letter or all together (default = InitialLetter)", false);
 
                 deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");
                 reloadAfterDyingText = config("4 - Language", "ReloadAfterDyingText", "Reload after dying", "Translation for <Reload after dying> text");
@@ -104,8 +103,6 @@ namespace DetailedLevels
                 statsProgressionText = config("4 - Language", "StatsProgressionText", "Progression", "Translation for <Progression> text (restart game after change)");
                 statsTravellingText = config("4 - Language", "StatsTravellingText", "Travelling", "Translation for <Travelling> text (restart game after change)");
                 statsOthersText = config("4 - Language", "StatsOthersText", "Others", "Translation for <Others> text (restart game after change)");
-                
-                dayMessageOff = config("5 - Others", "Turn off Day Message", false, "If on, the mod will disable the day count message when attempting to display it on the player's screen.");
                 
                 SetupWatcher();
             }
