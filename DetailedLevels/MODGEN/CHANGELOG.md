@@ -1,5 +1,11 @@
 ### CHANGELOG
 
+## 1.7.4
+
+* Removed option to hide "day x" message at the beginning of each day (this was moved to PvPBiomeDominions mod. If interested, https://thunderstore.io/c/valheim/p/turbero/PvPBiomeDominions/)
+* Now it is fully client-side, I only left the translations synced-forced to apply all players playing in servers.
+* Fixed typo in .cfg option "Kill Stats Grouping Format"
+
 ## 1.7.3
 
 * Just added small null protection when changing configuration

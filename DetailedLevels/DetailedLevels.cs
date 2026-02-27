@@ -12,7 +12,7 @@ namespace DetailedLevels
     {
         public const string GUID = "Turbero.DetailedLevels";
         public const string NAME = "Detailed Levels";
-        public const string VERSION = "1.7.3";
+        public const string VERSION = "1.7.4";
 
         private readonly Harmony harmony = new Harmony(GUID);
 
@@ -32,7 +32,7 @@ namespace DetailedLevels
         {
             if (!Player.m_localPlayer || !InventoryGui.instance) return;
 
-            // Check if certain keys are hit to close Almanac GUI
+            // Check if certain keys are hit to close panel
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab) || Player.m_localPlayer.IsDead())
             {
                 hideCustomPanelAndSkillsDialog();
