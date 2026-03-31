@@ -30,12 +30,14 @@ DISCORD: Turbero (Turbero#3465)
 
 All mods: https://thunderstore.io/c/valheim/p/turbero/
 
-STEAM: https://steamcommunity.com/id/turbero
+Ko-fi: https://ko-fi.com/turbero
 
-For any concerns or doubts, please dm me or open tickets in my GitHub repos.
+STEAM: https://steamcommunity.com/id/turbero
 
 This is my first Valheim mod ever after learning the basics. It's difficult to come up with something not created yet by the whole modding community, which is amazing on the other hand.
 
-I'll be doing my best! =)
+I'll always be doing my best! =)
+
+For any concerns or doubts, please dm me, open tickets in my GitHub repos or click on the image below for my Discord.
 
 <a href="https://discord.gg/y67YeVw62K"><img src="https://i.imgur.com/A9b3EGB.png"></a>

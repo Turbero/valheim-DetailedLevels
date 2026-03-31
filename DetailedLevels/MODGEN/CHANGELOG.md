@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 1.7.5
+
+* Added support for controllers. Now the mod panels can be navigated using the buttons through a gamepad.
+
 ## 1.7.4
 
 * Removed option to hide "day x" message at the beginning of each day (this was moved to PvPBiomeDominions mod. If interested, https://thunderstore.io/c/valheim/p/turbero/PvPBiomeDominions/)
