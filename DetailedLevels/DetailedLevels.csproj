@@ -14,6 +14,7 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +40,7 @@
     <Compile Include="ConfigurationFile.cs" />
     <Compile Include="Features\PlayerColorBuffs.cs" />
     <Compile Include="Features\SkillTypeUITooltipPatch.cs" />
+    <Compile Include="ControllerUtils.cs" />
     <Compile Include="Tools\CustomSkillOptionsPanel.cs" />
     <Compile Include="DetailedLevels.cs" />
     <Compile Include="Experiments\PlayerRavenSkillsDialogTip.cs" />

@@ -41,6 +41,7 @@ namespace DetailedLevels.Features
             GameObject dlOptionsButtonObject =
                 GameObject.Instantiate(closeButton.gameObject, closeButton.transform.parent);
             dlOptionsButtonObject.name = "DLOptionsButton";
+            ControllerUtils.BindGamePad(dlOptionsButtonObject.transform, KeyCode.JoystickButton10, InventoryGui.instance);
 
             RectTransform dlOptionsButtonRect = dlOptionsButtonObject.GetComponent<RectTransform>();
             dlOptionsButtonRect.anchoredPosition = new Vector2(-145, 45);
@@ -55,6 +56,7 @@ namespace DetailedLevels.Features
             GameObject dlStatsButtonObject =
                 GameObject.Instantiate(closeButton.gameObject, closeButton.transform.parent);
             dlStatsButtonObject.name = "DLStatsButton";
+            ControllerUtils.BindGamePad(dlStatsButtonObject.transform, KeyCode.JoystickButton11, InventoryGui.instance);
 
             RectTransform dlStatsButtonRect = dlStatsButtonObject.GetComponent<RectTransform>();
             dlStatsButtonRect.anchoredPosition = new Vector2(0, 45);
@@ -109,34 +111,36 @@ namespace DetailedLevels.Features
             //Tab Stats button
             tabStatsButtonObject = GameObject.Instantiate(closeButtonTransform.gameObject, skillsDialog.transform);
             tabStatsButtonObject.name = "TabStatsButton";
+            tabStatsButtonObject.SetActive(false);
+            ControllerUtils.BindGamePad(tabStatsButtonObject.transform, KeyCode.JoystickButton14, InventoryGui.instance);
             RectTransform tabStatsButtonRect = tabStatsButtonObject.GetComponent<RectTransform>();
             tabStatsButtonRect.anchoredPosition = new Vector2(-550, 843);
             tabStatsButtonRect.sizeDelta = new Vector2(140, 46);
             Button tabStatsButton = tabStatsButtonObject.GetComponent<Button>();
             tabStatsButton.onClick = new Button.ButtonClickedEvent();
             tabStatsButton.interactable = false;
-            TextMeshProUGUI buttonStatsText = tabStatsButtonObject.GetComponentInChildren<TextMeshProUGUI>();
-            buttonStatsText.fontStyle = FontStyles.Normal;
-            buttonStatsText.color = TITLE_COLOR;
-            buttonStatsText.alignment = TextAlignmentOptions.Center;
-            buttonStatsText.text = "Main Stats";
-            tabStatsButtonObject.SetActive(false);
+            TextMeshProUGUI tabStatsButtonText = tabStatsButtonObject.GetComponentInChildren<TextMeshProUGUI>();
+            tabStatsButtonText.fontStyle = FontStyles.Normal;
+            tabStatsButtonText.color = TITLE_COLOR;
+            tabStatsButtonText.alignment = TextAlignmentOptions.Center;
+            tabStatsButtonText.text = "Main Stats";
             
             //Tab Kill stats button
             tabKillStatsButtonObject = GameObject.Instantiate(closeButtonTransform.gameObject, skillsDialog.transform);
             tabKillStatsButtonObject.name = "TabKillStatsButton";
+            tabKillStatsButtonObject.SetActive(false);
+            ControllerUtils.BindGamePad(tabKillStatsButtonObject.transform, KeyCode.JoystickButton15, InventoryGui.instance);
             RectTransform tabKillStatsButtonRect = tabKillStatsButtonObject.GetComponent<RectTransform>();
             tabKillStatsButtonRect.anchoredPosition = new Vector2(-400, 843);
             tabKillStatsButtonRect.sizeDelta = new Vector2(140, 46);
             Button tabKillStatsButton = tabKillStatsButtonObject.GetComponent<Button>();
             tabKillStatsButton.onClick = new Button.ButtonClickedEvent();
             tabKillStatsButton.interactable = true;
-            TextMeshProUGUI buttonKillStatsText = tabKillStatsButtonObject.GetComponentInChildren<TextMeshProUGUI>();
-            buttonKillStatsText.fontStyle = FontStyles.Normal;
-            buttonKillStatsText.color = TITLE_COLOR;
-            buttonKillStatsText.alignment = TextAlignmentOptions.Center;
-            buttonKillStatsText.text = "Kill Stats";
-            tabKillStatsButtonObject.SetActive(false);
+            TextMeshProUGUI tabKillStatsButtonText = tabKillStatsButtonObject.GetComponentInChildren<TextMeshProUGUI>();
+            tabKillStatsButtonText.fontStyle = FontStyles.Normal;
+            tabKillStatsButtonText.color = TITLE_COLOR;
+            tabKillStatsButtonText.alignment = TextAlignmentOptions.Center;
+            tabKillStatsButtonText.text = "Kill Stats";
             
             tabStatsButton.onClick.AddListener(() =>
             {

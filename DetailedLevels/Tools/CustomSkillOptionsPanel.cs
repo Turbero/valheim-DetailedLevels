@@ -48,6 +48,7 @@ namespace DetailedLevels.Tools
             GameObject buttonTextObject = GameObject.Instantiate(closeButtonTransform.gameObject, copyForCloseButton);
             buttonTextObject.name = "DLOptionsCloseButton";
             buttonTextObject.transform.SetParent(panel.transform, false);
+            ControllerUtils.BindGamePad(buttonTextObject.transform, KeyCode.JoystickButton2, InventoryGui.instance);
 
             RectTransform buttonTextRect = buttonTextObject.GetComponent<RectTransform>();
             buttonTextRect.anchoredPosition = new Vector2(0, 40);

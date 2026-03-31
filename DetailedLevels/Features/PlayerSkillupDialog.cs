@@ -93,6 +93,7 @@ namespace DetailedLevels.Features
         {
             azButtonObject = GameObject.Instantiate(baseButton.gameObject, baseButton.transform.parent);
             azButtonObject.name = "AZButton";
+            ControllerUtils.BindGamePad(azButtonObject.transform, KeyCode.JoystickButton4, InventoryGui.instance);
 
             RectTransform azButtonRect = azButtonObject.GetComponent<RectTransform>();
             
@@ -130,6 +131,7 @@ namespace DetailedLevels.Features
         {
             levelButtonObject = GameObject.Instantiate(baseButton.gameObject, baseButton.transform.parent);
             levelButtonObject.name = "LevelButton";
+            ControllerUtils.BindGamePad(levelButtonObject.transform, KeyCode.JoystickButton5, InventoryGui.instance);
 
             RectTransform levelButtonRect = levelButtonObject.GetComponent<RectTransform>();
 

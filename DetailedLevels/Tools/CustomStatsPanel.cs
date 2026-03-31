@@ -41,6 +41,7 @@ namespace DetailedLevels.Tools
 
             //Close button
             Transform statsCloseButtonTransform = skillsDialog.transform.Find(panel.name + "/MainFrame/Closebutton");
+            ControllerUtils.BindGamePad(statsCloseButtonTransform, KeyCode.JoystickButton2, InventoryGui.instance);
             Button statsCloseButtonButton = statsCloseButtonTransform.GetComponent<Button>();
             statsCloseButtonButton.onClick = new Button.ButtonClickedEvent();
             statsCloseButtonButton.onClick.AddListener(() =>
