@@ -42,6 +42,7 @@
     <Compile Include="Features\SE_SkillBuff.cs" />
     <Compile Include="Features\SkillTypeUITooltipPatch.cs" />
     <Compile Include="ControllerUtils.cs" />
+    <Compile Include="ReflectionUtils.cs" />
     <Compile Include="Tools\CustomSkillOptionsPanel.cs" />
     <Compile Include="DetailedLevels.cs" />
     <Compile Include="Experiments\PlayerRavenSkillsDialogTip.cs" />

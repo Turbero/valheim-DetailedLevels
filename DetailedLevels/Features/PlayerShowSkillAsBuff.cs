@@ -152,10 +152,10 @@ namespace DetailedLevels.Features
         {
             if (__instance is SE_Shield)
             {
-                float m_totalAbsorbDamage = (float)typeof(SE_Shield).GetField("m_totalAbsorbDamage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
-                float m_damage = (float)typeof(SE_Shield).GetField("m_damage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
+                float m_totalAbsorbDamage = (float) ReflectionUtils.GetPrivateValue(__instance, "m_totalAbsorbDamage");
+                float m_damage = (float) ReflectionUtils.GetPrivateValue(__instance, "m_damage");
                 float remainingAbsorbDamage = (float)Math.Round(m_totalAbsorbDamage - m_damage, Math.Min(15, Math.Max(0, ConfigurationFile.numberOfDecimals.Value)));
-                float m_time = (float)typeof(SE_Shield).GetField("m_time", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
+                float m_time = (float) ReflectionUtils.GetPrivateValue(__instance, "m_time");
                 string remainingTime = StatusEffect.GetTimeString(__instance.m_ttl - m_time);
                 if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.AboveBuffIcon)
                 {
@@ -183,9 +183,9 @@ namespace DetailedLevels.Features
             if (__instance is SE_Shield)
             {
                 //Should reset damage, game bug fixed with this!
-                typeof(SE_Shield).GetField("m_damage", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(__instance, 0);
+                ReflectionUtils.SetPrivateValue(__instance, "m_damage", 0);
 
-                float m_totalAbsorbDamage = (float)typeof(SE_Shield).GetField("m_totalAbsorbDamage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
+                float m_totalAbsorbDamage = (float) ReflectionUtils.GetPrivateValue(__instance, "m_totalAbsorbDamage");
                 if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.AboveBuffIcon)
                 {
                     __instance.m_name = $"$se_shield: {m_totalAbsorbDamage}";

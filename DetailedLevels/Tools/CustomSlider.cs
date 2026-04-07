@@ -36,7 +36,7 @@ namespace DetailedLevels.Tools
             slider.maxValue = maxValue;
             slider.value = initValue;
             //m_WholeNumbers = 1 makes automatically stepSize=1
-            typeof(Slider).GetField("m_WholeNumbers", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(slider, true);
+            ReflectionUtils.SetPrivateValue(slider, "m_WholeNumbers", true);
 
             //Background
             GameObject background = new GameObject("Background", typeof(RectTransform), typeof(Image));

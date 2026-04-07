@@ -431,8 +431,7 @@ namespace DetailedLevels.Features
         static void Postfix(Player __instance)
         {
             //Reset skills background in skillDialog
-            var field = typeof(SkillsDialog).GetField("m_elements", BindingFlags.NonPublic | BindingFlags.Instance);
-            List<GameObject> skillRows = (List<GameObject>)field.GetValue(InventoryGui.instance.m_skillsDialog);
+            List<GameObject> skillRows = (List<GameObject>) ReflectionUtils.GetPrivateValue(InventoryGui.instance.m_skillsDialog, "m_elements");
             foreach (GameObject skillRow in skillRows)
             {
                 PlayerUtils.setSkillRowBackgroundColor(skillRow, new Color(0f, 0f, 0f, 0f));

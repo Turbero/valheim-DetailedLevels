@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using DetailedLevels.Features;
 using HarmonyLib;
 using TMPro;
@@ -56,7 +55,7 @@ namespace DetailedLevels.Tools
 
         private void LoadKillStats()
         {
-            Dictionary<string, float> killStats = getDictionaryKillStats();
+            Dictionary<string, float> killStats = ((PlayerProfile)ReflectionUtils.GetPrivateValue(Game.instance, "m_playerProfile")).m_enemyStats;
             Dictionary<string, float> killStatsTranslated = new Dictionary<string, float>();
             foreach (var keyValuePair in killStats)
             {
@@ -132,12 +131,6 @@ namespace DetailedLevels.Tools
                     scrollPanel.AddRowToScrollList(row);
                 }
             }
-        }
-
-        private Dictionary<string, float> getDictionaryKillStats()
-        {
-            var field = typeof(Game).GetField("m_playerProfile", BindingFlags.Instance | BindingFlags.NonPublic);
-            return ((PlayerProfile)field?.GetValue(Game.instance))?.m_enemyStats;
         }
 
         public GameObject getPanel() { return panel; }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using DetailedLevels.Features;
 using HarmonyLib;
 using TMPro;
@@ -254,8 +253,7 @@ namespace DetailedLevels.Tools
 
         private static Dictionary<PlayerStatType, float> getPlayerDictionaryStats()
         {
-            var field = typeof(Game).GetField("m_playerProfile", BindingFlags.Instance | BindingFlags.NonPublic);
-            return ((PlayerProfile)field?.GetValue(Game.instance))?.m_playerStats.m_stats;
+            return ((PlayerProfile)ReflectionUtils.GetPrivateValue(Game.instance, "m_playerProfile"))?.m_playerStats.m_stats;
         }
 
         public GameObject getPanel() { return panel; }
