@@ -31,8 +31,8 @@ namespace DetailedLevels
 
     public enum SkillBuffValuePosition
     {
-        AboveBuffIcon,
-        BelowBuffIcon
+        Above,
+        Below
     }
     
     internal class ConfigurationFile
@@ -53,6 +53,7 @@ namespace DetailedLevels
         public static ConfigEntry<KillStatsGroupingFormat> killStatsGroupingFormat;
         public static ConfigEntry<string> deathPenaltyText;
         public static ConfigEntry<string> reloadAfterDyingText;
+        public static ConfigEntry<string> skillValuePositionText;
         public static ConfigEntry<string> numberOfDecimalsText;
         public static ConfigEntry<string> skillValuesFormatText;
         public static ConfigEntry<string> skillUpMessageText;
@@ -87,7 +88,7 @@ namespace DetailedLevels
                 debug = config("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)", false);
                 hotKey = config("1 - General", "HotKey", KeyCode.F4, "Hot Key to show the skills tab without opening the inventory first (default = F4)", false);
                 numberOfDecimals = config("2 - Levels Data", "NumberOfDecimals", 2, "Number of decimals to show in your levels information (default = 2, min = 0, max = 15)", false);
-                skillBuffValuePosition = config("2 - Levels Data", "Skill Buff Value Position", SkillBuffValuePosition.BelowBuffIcon, "Choose the position of the skill value on the buff icon (default = BelowBuffIcon)", false);
+                skillBuffValuePosition = config("2 - Levels Data", "Skill Buff Value Position", SkillBuffValuePosition.Below, "Choose the position of the skill value on the buff icon (default = BelowBuffIcon)", false);
                 skillUpMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpMessageAfterMultipleLevel", 5, "Shows skill up message after the new level is multiple of the indicated level (0 = disabled, default = 5)", false);
                 skillUpBigMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpBigMessageAfterMultipleLevel", 10, "Shows skill up big message after the new level is multiple of the indicated level (0 = disabled, default = 20)", false);
                 
@@ -100,6 +101,7 @@ namespace DetailedLevels
 
                 deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");
                 reloadAfterDyingText = config("4 - Language", "ReloadAfterDyingText", "Reload after dying", "Translation for <Reload after dying> text");
+                skillValuePositionText  = config("4 - Language", "SkillValuePositionText", "Skill value position", "Translation for <Skill value position> text");
                 numberOfDecimalsText  = config("4 - Language", "NumberOfDecimalsText", "Number of decimals", "Translation for <Number of decimals> text");
                 skillValuesFormatText  = config("4 - Language", "Skill Values Format Text", "Skill Values Format", "Translation for <Skill Values Format> text");
                 skillUpMessageText = config("4 - Language", "SkillUpMessageText", "Skill up message", "Translation for <Skill up message> text");

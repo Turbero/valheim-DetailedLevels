@@ -89,7 +89,7 @@ namespace DetailedLevels.Features
                         if (aboveText.text.Contains(textToFind))
                         {
                             //Buff found
-                            if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.AboveBuffIcon)
+                            if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.Above)
                             {
                                 //Above Blue
                                 aboveText.color = new Color(0, 0.741f, 1, 1);

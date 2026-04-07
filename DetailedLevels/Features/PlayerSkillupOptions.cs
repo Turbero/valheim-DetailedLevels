@@ -2,7 +2,6 @@
 using DetailedLevels.Tools;
 using HarmonyLib;
 using System.Collections.Generic;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +20,7 @@ namespace DetailedLevels.Features
         private static TextMeshProUGUI lossPercentageValueComponent;
         private static CustomSlider customSliderSaveSwitch;
         private static CustomSlider customSliderNumberOfDecimals;
+        private static CustomSlider customSliderSkillValuePosition;
         private static CustomSlider customSliderSkillValuesFormat;
         private static CustomSlider customSliderSkillUpMessage;
         private static CustomSlider customSliderSkillUpBigMessage;
@@ -95,6 +95,7 @@ namespace DetailedLevels.Features
             initStatsTabButtons(__instance, statsPanel, statsPanelKills);
             addSoftDeathInfo(panel.getPanel().transform);
             addSaveSwitchButton(panel.getPanel().transform);
+            addSkillValuePositionSlider(panel.getPanel().transform);
             addNumberOfDecimalsSlider(panel.getPanel().transform);
             addSkillValueFormatSlider(panel.getPanel().transform);
             addSkillUpMessage(panel.getPanel().transform);
@@ -231,6 +232,9 @@ namespace DetailedLevels.Features
             customSliderSaveSwitch.sliderLabelDescription.text = ConfigurationFile.reloadAfterDyingText.Value;
             //TODO customSliderSaveSwitch.updateValue(ConfigurationFile.saveSkillBuffs.Value ? 0 : 1);
             
+            customSliderSkillValuePosition.sliderLabelDescription.text = ConfigurationFile.skillValuePositionText.Value;
+            customSliderSkillValuePosition.updateValue((int)ConfigurationFile.skillBuffValuePosition.Value);
+            
             customSliderNumberOfDecimals.sliderLabelDescription.text = ConfigurationFile.numberOfDecimalsText.Value;
             customSliderNumberOfDecimals.updateValue(ConfigurationFile.numberOfDecimals.Value);
             
@@ -269,6 +273,31 @@ namespace DetailedLevels.Features
                 ConfigurationFile.saveSkillBuffs.Value = value.Equals(1f);
             });
         }
+        
+        private static void addSkillValuePositionSlider(Transform parent)
+        {
+            customSliderSkillValuePosition = new CustomSlider(
+                name: "SkillValuePositionSlider",
+                maxValue: 1,
+                sizeDelta: new Vector2(25, 10),
+                position: new Vector2(-17, 135),
+                posXIcon: 0,
+                spriteName: null,
+                posXDescription: -124,
+                description: ConfigurationFile.skillValuePositionText.Value,
+                posXValue: 123,
+                initValue: (int)ConfigurationFile.skillBuffValuePosition.Value,
+                valueDesc: ConfigurationFile.skillBuffValuePosition.Value.ToString()
+            );
+            customSliderSkillValuePosition.getGameObject().transform.SetParent(parent, false);
+            customSliderSkillValuePosition.OnValueChanged(value =>
+            {
+                Logger.Log("slider changed to " + value);
+                SkillBuffValuePosition format = value == 0 ? SkillBuffValuePosition.Above : SkillBuffValuePosition.Below;
+                customSliderSkillValuePosition.updateTextValue(format.ToString());
+                ConfigurationFile.skillBuffValuePosition.Value = format;
+            });
+        }
 
         private static void addNumberOfDecimalsSlider(Transform parent)
         {
@@ -276,7 +305,7 @@ namespace DetailedLevels.Features
                 name: "NumberOfDecimalsSlider",
                 maxValue: 15,
                 sizeDelta: new Vector2(150, 10),
-                position: new Vector2(45, 135),
+                position: new Vector2(45, 105),
                 posXIcon: 0,
                 spriteName: null,
                 posXDescription: -186,
@@ -300,7 +329,7 @@ namespace DetailedLevels.Features
                 name: "SkillValuesFormatSlider",
                 maxValue: 1,
                 sizeDelta: new Vector2(25, 10),
-                position: new Vector2(-17, 105),
+                position: new Vector2(-17, 75),
                 posXIcon: 0,
                 spriteName: null,
                 posXDescription: -124,
@@ -333,7 +362,7 @@ namespace DetailedLevels.Features
                 name: "SkillUpMessageSlider",
                 maxValue: 100,
                 sizeDelta: new Vector2(150, 10),
-                position: new Vector2(45, 75),
+                position: new Vector2(45, 45),
                 posXIcon: 0,
                 spriteName: null,
                 posXDescription: -186,
@@ -357,7 +386,7 @@ namespace DetailedLevels.Features
                 name: "SkillUpBigMessageSlider",
                 maxValue: 100,
                 sizeDelta: new Vector2(150, 10),
-                position: new Vector2(45, 45),
+                position: new Vector2(45, 15),
                 posXIcon: 0,
                 spriteName: null,
                 posXDescription: -186,
@@ -381,7 +410,7 @@ namespace DetailedLevels.Features
                 name: "SaveSkillsOrderSlider",
                 maxValue: 1,
                 sizeDelta: new Vector2(25, 10),
-                position: new Vector2(-14, 15),
+                position: new Vector2(-14, -15),
                 posXIcon: -1,
                 spriteName: null,
                 posXDescription: -124,

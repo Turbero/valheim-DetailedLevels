@@ -7,13 +7,13 @@ namespace DetailedLevels.Features
         
         public override string GetIconText()
         {
-            return ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.BelowBuffIcon ? skillValue : "";
+            return ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.Below ? skillValue : "";
         }
 
         public void UpdateBuffText(string value)
         {
             skillValue = value;
-            if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.AboveBuffIcon)
+            if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.Above)
             {
                 m_name = $"$skill_{skillType.ToString().ToLower()}" + ": "+skillValue;
             }
