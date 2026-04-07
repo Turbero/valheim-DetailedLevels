@@ -68,8 +68,7 @@ namespace DetailedLevels.Features
                 //Refresh background to adjust after sorting list
                 string skillName = skill.m_info.m_skill.ToString();
                 int nameHash = PlayerUtils.skillStatusEffects.GetValueSafe(skill.m_info.m_skill);
-                StatusEffect existingBuff = player.GetSEMan().GetStatusEffect(nameHash);
-                if (existingBuff != null)
+                if (player.GetSEMan().GetStatusEffect(nameHash) is SE_SkillBuff existingBuff)
                 {
                     PlayerUtils.setSkillRowBackgroundColor(obj, ConfigurationFile.colorSkillBackground.Value);
                     string levelText = PlayerUtils.GetSkillValueToShow(level, skillLevelModifier);

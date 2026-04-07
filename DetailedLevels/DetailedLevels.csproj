@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="ConfigurationFile.cs" />
     <Compile Include="Features\PlayerColorBuffs.cs" />
+    <Compile Include="Features\SE_SkillBuff.cs" />
     <Compile Include="Features\SkillTypeUITooltipPatch.cs" />
     <Compile Include="ControllerUtils.cs" />
     <Compile Include="Tools\CustomSkillOptionsPanel.cs" />

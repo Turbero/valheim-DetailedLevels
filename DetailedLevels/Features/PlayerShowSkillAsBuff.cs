@@ -43,7 +43,7 @@ namespace DetailedLevels.Features
             if (!skillStatusEffectsContainsKey)
             {
                 Sprite skillIcon = GetSkillIcon(skillRow);
-                PlayerBuffs.AddSkillBuff(player, skill, skillIcon, skillRow);
+                PlayerBuffs.AddSkillBuff(player, skill, skillIcon);
                 PlayerUtils.setSkillRowBackgroundColor(skillRow, ConfigurationFile.colorSkillBackground.Value);
             }
             else
@@ -85,8 +85,7 @@ namespace DetailedLevels.Features
             Logger.Log($"skillName to find corresponding buff: {skillName} with hash {valueForHashCode}. Stored nameHash: {nameHash}");
 
             SEMan seMan = player.GetSEMan();
-            StatusEffect existingBuff = seMan.GetStatusEffect(nameHash);
-            if (existingBuff != null)
+            if (seMan.GetStatusEffect(nameHash) is SE_SkillBuff existingBuff)
             {
                 Skill playerSkill = PlayerUtils.FindPlayerSkill(player, skillType);
                 float currentSkillLevel = PlayerUtils.GetCurrentSkillLevelProgress(playerSkill);
@@ -94,11 +93,10 @@ namespace DetailedLevels.Features
 
                 Logger.Log($"About to update buff: $skill_{skillName.ToLower()} with skill level {currentSkillLevel} and skill level modifier {skillLevelModifier}.");
 
-                string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {PlayerUtils.GetSkillValueToShow(currentSkillLevel, skillLevelModifier)}";
-                Logger.Log($"Old buff name: {existingBuff.m_name}. New buff name: {newBuffName}");
-                if (existingBuff.m_name != newBuffName || forceUpdate)
+                string skillValueToShow = PlayerUtils.GetSkillValueToShow(currentSkillLevel, skillLevelModifier);
+                if (!existingBuff.skillValue.Equals(skillValueToShow) || forceUpdate)
                 {
-                    existingBuff.m_name = newBuffName;
+                    existingBuff.UpdateBuffText(skillValueToShow);
                     Logger.Log($"Updated buff: {skillName} with skill level: {currentSkillLevel}");
                 }
                 else
@@ -278,18 +276,15 @@ namespace DetailedLevels.Features
                     {
                         SkillType skillType = skillStatusEffect.Key;
                         int nameHash = skillStatusEffect.Value;
-                        StatusEffect existingBuff = player.GetSEMan().GetStatusEffect(nameHash) as SE_Stats;
-                        if (existingBuff == null) continue;
+                        if (player.GetSEMan().GetStatusEffect(nameHash) is SE_SkillBuff existingBuff) {
+                            Skill playerSkill = PlayerUtils.FindPlayerSkill(player, skillType);
+                            float currentSkillLevel = PlayerUtils.GetCurrentSkillLevelProgress(playerSkill);
+                            float skillLevelModifier = PlayerUtils.FindActiveModifierValue(player, skillType);
 
-                        Skill playerSkill = PlayerUtils.FindPlayerSkill(player, skillType);
-                        string skillName = skillType.ToString();
-                        float currentSkillLevel = PlayerUtils.GetCurrentSkillLevelProgress(playerSkill);
-                        float skillLevelModifier = PlayerUtils.FindActiveModifierValue(player, skillType);
-
-                        Logger.Log($"About to update buff: $skill_{skillName.ToLower()} with skill level {currentSkillLevel} and skill level modifier {skillLevelModifier}.");
-                        string newBuffName = $"$skill_{skillType.ToString().ToLower()}: {PlayerUtils.GetSkillValueToShow(currentSkillLevel, skillLevelModifier)}";
-                        Logger.Log($"Old buff name: {existingBuff.m_name}. New buff name: {newBuffName}");
-                        existingBuff.m_name = newBuffName;
+                            Logger.Log($"About to update buff: $skill_{skillType.ToString().ToLower()} with skill level {currentSkillLevel} and skill level modifier {skillLevelModifier}.");
+                            existingBuff.UpdateBuffText(PlayerUtils.GetSkillValueToShow(currentSkillLevel, skillLevelModifier));
+                            Logger.Log($"Updated buff: {existingBuff.Print()}");
+                        }
                     }
 
                     PlayerColorBuffs.refreshAllBlueColors(player);

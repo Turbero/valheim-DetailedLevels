@@ -11,22 +11,23 @@ namespace DetailedLevels.Features
     {
         public static readonly Dictionary<SkillType, Sprite> sprites = new Dictionary<SkillType, Sprite>();
         public static readonly Dictionary<SkillType, Skill> skills = new Dictionary<SkillType, Skill>();
-        public static void AddSkillBuff(Player player, Skill skill, Sprite skillIcon, GameObject skillRow = null)
+
+        public static void AddSkillBuff(Player player, Skill skill, Sprite skillIcon)
         {
             SEMan seMan = player.GetSEMan();
             
             float value = PlayerUtils.GetCurrentSkillLevelProgress(skill);
             float skillLevelModifier = PlayerUtils.FindActiveModifierValue(player, skill.m_info.m_skill);
-            Logger.Log("Skill current value: " + value+ ". modifier: "+skillLevelModifier);
-            
+            Logger.Log("Skill current value: " + value + ". modifier: " + skillLevelModifier);
 
             // Create new custom status effect
-            SE_Stats customBuff = ScriptableObject.CreateInstance<SE_Stats>();
-            customBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {PlayerUtils.GetSkillValueToShow(value, skillLevelModifier)}";
+            SE_SkillBuff customBuff = ScriptableObject.CreateInstance<SE_SkillBuff>();
+            customBuff.name = PlayerUtils.GetValueForNameHash(skill); // to produce distinct hash values
+            customBuff.skillType = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}";
             customBuff.m_tooltip = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}_description";
             customBuff.m_icon = skillIcon; // Use skill icon
-            customBuff.name = PlayerUtils.GetValueForNameHash(skill); // to produce distinct hash values
-
+            customBuff.UpdateBuffText(PlayerUtils.GetSkillValueToShow(value, skillLevelModifier));
+            
             // Apply buff to player
             int nameHash = customBuff.NameHash();
             Logger.Log($"name: {customBuff.name}, m_name: {customBuff.m_name}, nameHash: {nameHash}");
@@ -50,7 +51,6 @@ namespace DetailedLevels.Features
                 skills.Add(skill.m_info.m_skill, skill);
                 Logger.Log($"Cached skill for {customBuff.m_name}");
             }
-            
             
             //Apply color after the buff is in Hud.instance (takes little milliseconds) and refresh the rest
             _ = refreshAllBlueColorsAsync(player, 0.1f);

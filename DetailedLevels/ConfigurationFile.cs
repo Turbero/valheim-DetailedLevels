@@ -28,6 +28,12 @@ namespace DetailedLevels
         ByInitialLetter,
         AllTogether
     }
+
+    public enum SkillBuffValuePosition
+    {
+        AboveBuffIcon,
+        BelowBuffIcon
+    }
     
     internal class ConfigurationFile
     {
@@ -36,6 +42,7 @@ namespace DetailedLevels
         public static ConfigEntry<bool> debug;
         public static ConfigEntry<KeyCode> hotKey;
         public static ConfigEntry<int> numberOfDecimals;
+        public static ConfigEntry<SkillBuffValuePosition> skillBuffValuePosition;
         public static ConfigEntry<int> skillUpMessageAfterMultipleLevel;
         public static ConfigEntry<int> skillUpBigMessageAfterMultipleLevel;
         public static ConfigEntry<Color> colorSkillBackground;
@@ -80,6 +87,7 @@ namespace DetailedLevels
                 debug = config("1 - General", "DebugMode", false, "Enabling/Disabling the debugging in the console (default = false)", false);
                 hotKey = config("1 - General", "HotKey", KeyCode.F4, "Hot Key to show the skills tab without opening the inventory first (default = F4)", false);
                 numberOfDecimals = config("2 - Levels Data", "NumberOfDecimals", 2, "Number of decimals to show in your levels information (default = 2, min = 0, max = 15)", false);
+                skillBuffValuePosition = config("2 - Levels Data", "Skill Buff Value Position", SkillBuffValuePosition.BelowBuffIcon, "Choose the position of the skill value on the buff icon (default = BelowBuffIcon)", false);
                 skillUpMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpMessageAfterMultipleLevel", 5, "Shows skill up message after the new level is multiple of the indicated level (0 = disabled, default = 5)", false);
                 skillUpBigMessageAfterMultipleLevel = config("2 - Levels Data", "SkillUpBigMessageAfterMultipleLevel", 10, "Shows skill up big message after the new level is multiple of the indicated level (0 = disabled, default = 20)", false);
                 
@@ -140,6 +148,17 @@ namespace DetailedLevels
             PlayerSkillupOptionsPatch.reloadTexts();
             PlayerColorBuffs.refreshAllBlueColors(Player.m_localPlayer);
             SkillTypeCraftStationDescriptionsPatch.updated = false;
+            //Refresh buff texts
+            if (Player.m_localPlayer != null)
+            {
+                foreach (var pair in PlayerUtils.skillStatusEffects)
+                {
+                    if (Player.m_localPlayer.GetSEMan().GetStatusEffect(pair.Value) is SE_SkillBuff skillBuff)
+                    {
+                        skillBuff.Refresh();
+                    }
+                }
+            }
         }
 
         private static ConfigEntry<T> config<T>(string group, string name, T value, string description,

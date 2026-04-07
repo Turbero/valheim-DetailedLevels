@@ -78,17 +78,36 @@ namespace DetailedLevels.Features
                 float skillLevelModifer = PlayerUtils.FindActiveModifierValue(player, skillValue.m_info.m_skill);
                 if (skillLevelModifer > 0)
                 {
-                    string textToFind =
-                        Localization.instance.Localize($"$skill_{skillValue.m_info.m_skill.ToString().ToLower()}");
+                    string textToFind = Localization.instance.Localize($"$skill_{skillValue.m_info.m_skill.ToString().ToLower()}");
                     for (int i = 0; i < Hud.instance.m_statusEffectListRoot.childCount; i++)
                     {
-                        TextMeshProUGUI text = Hud.instance.m_statusEffectListRoot.GetChild(i).GetComponentInChildren<TextMeshProUGUI>();
-                        Logger.Log($"Finding text {textToFind} in {text.text}");
-                        if (text.text.Contains(textToFind) &&
-                            text.text.Length > textToFind.Length) // buff with skill name and skill level
+                        TextMeshProUGUI[] textFields = Hud.instance.m_statusEffectListRoot.GetChild(i).GetComponentsInChildren<TextMeshProUGUI>(true);
+                        //Above text
+                        TextMeshProUGUI aboveText = textFields[0];
+                        TextMeshProUGUI belowText = textFields[1];
+                        Logger.Log($"Finding text {textToFind} in {aboveText.text}");
+                        if (aboveText.text.Contains(textToFind))
                         {
-                            text.faceColor = new Color32(0, 189, 255, 255); // Extra skill blue color used: (0, 188.955, 255, 255)
-                            Logger.Log("Color updated.");
+                            //Buff found
+                            if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.AboveBuffIcon)
+                            {
+                                //Above Blue
+                                aboveText.color = new Color(0, 0.741f, 1, 1);
+                                aboveText.faceColor = new Color32(255, 255, 255, 255);
+                                //Below yellow
+                                belowText.color = new Color(1, 0.7176f, 0.3603f, 1);
+                                belowText.faceColor = new Color32(255, 255, 255, 255);
+                            }
+                            else
+                            {
+                                //Above White
+                                aboveText.color = new Color(1, 1, 1, 1);
+                                aboveText.faceColor = new Color32(255, 255, 255, 255);
+                                //Below blue
+                                belowText.color = new Color(0, 0.741f, 1, 1);
+                                belowText.faceColor = new Color32(255, 255, 255, 255);
+                            }
+
                             break;
                         }
                     }
