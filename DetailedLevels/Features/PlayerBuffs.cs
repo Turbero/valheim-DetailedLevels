@@ -23,7 +23,7 @@ namespace DetailedLevels.Features
             // Create new custom status effect
             SE_SkillBuff customBuff = ScriptableObject.CreateInstance<SE_SkillBuff>();
             customBuff.name = PlayerUtils.GetValueForNameHash(skill); // to produce distinct hash values
-            customBuff.skillType = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}";
+            customBuff.skillType = skill.m_info.m_skill;
             customBuff.m_tooltip = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}_description";
             customBuff.m_icon = skillIcon; // Use skill icon
             customBuff.UpdateBuffText(PlayerUtils.GetSkillValueToShow(value, skillLevelModifier));

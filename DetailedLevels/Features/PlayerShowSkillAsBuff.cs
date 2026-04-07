@@ -117,15 +117,6 @@ namespace DetailedLevels.Features
                 Character attacker = hit.GetAttacker();
                 if (attacker != null)
                 {
-                    //Staff shield
-                    
-                    if (__instance.GetType() == typeof(Player))
-                    {
-                        bool autoDamageWithShield = attacker.GetType() == typeof(Player) && (__instance as Player)?.GetPlayerName() == (attacker as Player)?.GetPlayerName();
-                        Logger.Log($"Checking staff shield autoDamage {autoDamageWithShield}...");
-                        _ = WaitForSecondsAsyncStaffShield(__instance as Player, 0.1f, autoDamageWithShield);
-                    }
-                    
                     //Blood magic
                     Logger.Log("Checking blood magic skill up...");
                     // if attacker is a pet/invocation and attacked is a monster there is a bloodmagic skillup!
@@ -144,15 +135,6 @@ namespace DetailedLevels.Features
             }
         }
 
-        private static async Task WaitForSecondsAsyncStaffShield(Player player, float seconds, bool newShield)
-        {
-            // Small delay in async method to wait for updating blood magic skill
-            await Task.Delay((int)(Math.Max(0f, seconds) * 1000)); // to milliseconds
-            //Search SE_Shield and update
-            Logger.Log("BloodMagic_BuffUpdate_Patch - Initialize staff shield value");
-            SE_Shield_Setup_Patch.updateShieldBuffTextIfExists(player, newShield);
-        }
-
         private static async Task WaitForSecondsAsyncBloodMagic(Player player, float seconds)
         {
             // Small delay in async method to wait for updating blood magic skill
@@ -163,44 +145,54 @@ namespace DetailedLevels.Features
         }
     }
 
-    [HarmonyPatch(typeof(SE_Shield), "Setup")]
-    public class SE_Shield_Setup_Patch
+    [HarmonyPatch(typeof(StatusEffect), "GetIconText")]
+    public class SE_Shield_GetIconText_Patch
     {
-        static void Postfix(Character __instance)
+        public static bool Prefix(StatusEffect __instance, ref string __result)
         {
-            if (__instance != null && __instance.GetType() == typeof(Player))
+            if (__instance is SE_Shield)
             {
-                Logger.Log("SE_Shield_Setup_Patch - Initialize staff shield value");
-                updateShieldBuffTextIfExists(__instance as Player, true);
-                
-                //Detect if __instance is NOT the local player, and update the buff text to the m_localplayer if his buff exists on him (meaning he was in range)
-                if (__instance != Player.m_localPlayer)
+                float m_totalAbsorbDamage = (float)typeof(SE_Shield).GetField("m_totalAbsorbDamage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
+                float m_damage = (float)typeof(SE_Shield).GetField("m_damage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
+                float remainingAbsorbDamage = (float)Math.Round(m_totalAbsorbDamage - m_damage, Math.Min(15, Math.Max(0, ConfigurationFile.numberOfDecimals.Value)));
+                float m_time = (float)typeof(SE_Shield).GetField("m_time", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
+                string remainingTime = StatusEffect.GetTimeString(__instance.m_ttl - m_time);
+                if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.AboveBuffIcon)
                 {
-                    Logger.Log("SE_Shield_Setup_Patch - Another player did the spell. Checking local player");
-                    updateShieldBuffTextIfExists(Player.m_localPlayer, true);
-                }
-            }
-        }
-
-        public static void updateShieldBuffTextIfExists(Player player, bool newShield)
-        {
-            StatusEffect statusEffect = player.GetSEMan().GetStatusEffects().Find(se => se.m_name.Contains("$se_shield"));
-            if (statusEffect != null && statusEffect.GetType() == typeof(SE_Shield))
-            {
-                SE_Shield staffShield = statusEffect as SE_Shield;
-                float m_totalAbsorbDamage = (float) typeof(SE_Shield).GetField("m_totalAbsorbDamage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(staffShield);
-                if (newShield)
-                {
-                    staffShield.m_name = $"$se_shield: {m_totalAbsorbDamage}";
-                    Logger.Log($"New shield: m_totalAbsorbDamage {m_totalAbsorbDamage}");
+                    __instance.m_name = $"$se_shield: {remainingAbsorbDamage}";
+                    __result = remainingTime;
                 }
                 else
                 {
-                    //Show remaining damage absorb
-                    float m_damage = (float) typeof(SE_Shield).GetField("m_damage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(staffShield);
-                    float remainingAbsorbDamage = (float)Math.Round(m_totalAbsorbDamage - m_damage, Math.Min(15, Math.Max(0, ConfigurationFile.numberOfDecimals.Value)));
-                    staffShield.m_name = $"$se_shield: {remainingAbsorbDamage}";
-                    Logger.Log($"Shield numbers: m_totalAbsorbDamage {m_totalAbsorbDamage}, m_damage {m_damage}, remainingAbsorbDamage {remainingAbsorbDamage}");
+                    __instance.m_name = "$se_shield";
+                    __result = remainingAbsorbDamage + " (" + remainingTime + ")";
+                }
+
+                return false;
+            }
+
+            return true;
+        } 
+    }
+
+    [HarmonyPatch(typeof(StatusEffect), "ResetTime")]
+    public class SE_Shield_ResetTime_Patch
+    {
+        public static void Postfix(StatusEffect __instance)
+        {
+            if (__instance is SE_Shield)
+            {
+                //Should reset damage, game bug fixed with this!
+                typeof(SE_Shield).GetField("m_damage", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(__instance, 0);
+
+                float m_totalAbsorbDamage = (float)typeof(SE_Shield).GetField("m_totalAbsorbDamage", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
+                if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.AboveBuffIcon)
+                {
+                    __instance.m_name = $"$se_shield: {m_totalAbsorbDamage}";
+                }
+                else
+                {
+                    __instance.m_name = "$se_shield";
                 }
             }
         }

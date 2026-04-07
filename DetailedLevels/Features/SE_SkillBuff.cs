@@ -1,11 +1,8 @@
-using UnityEngine;
-using UnityEngine.PlayerLoop;
-
 namespace DetailedLevels.Features
 {
     public class SE_SkillBuff : SE_Stats
     {
-        public string skillType;
+        public Skills.SkillType skillType;
         public string skillValue;
         
         public override string GetIconText()
@@ -22,7 +19,7 @@ namespace DetailedLevels.Features
             }
             else
             {
-                m_name = skillType;
+                m_name = skillType.ToString();
                 skillValue = value;
             }
         }
