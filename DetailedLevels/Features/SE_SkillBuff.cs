@@ -15,18 +15,18 @@ namespace DetailedLevels.Features
             skillValue = value;
             if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.AboveBuffIcon)
             {
-                m_name = skillType + ": "+skillValue;
+                m_name = $"$skill_{skillType.ToString().ToLower()}" + ": "+skillValue;
             }
             else
             {
-                m_name = skillType.ToString();
+                m_name = $"$skill_{skillType.ToString().ToLower()}";
                 skillValue = value;
             }
         }
 
         public string Print()
         {
-            return skillType + ": " + skillValue;
+            return $"$skill_{skillType.ToString().ToLower()}" + ": " + skillValue;
         }
 
         public void Refresh()
