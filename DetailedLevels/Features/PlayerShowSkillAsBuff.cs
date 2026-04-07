@@ -235,7 +235,6 @@ namespace DetailedLevels.Features
     [HarmonyPriority(Priority.VeryLow)]
     public class PlayerDropItemPatch
     {
-        [HarmonyPrefix]
         public static void Postfix(Inventory inventory, ItemDrop.ItemData item, int amount, ref Humanoid __instance)
         {
             _ = PlayerInventoryChanges.recalculateSkillsAsync(__instance, item, 0.1f);
@@ -246,13 +245,23 @@ namespace DetailedLevels.Features
     [HarmonyPriority(Priority.VeryLow)]
     public class PlayerUnequipItemPatch
     {
-        [HarmonyPrefix]
         public static void Postfix(ItemDrop.ItemData item, bool triggerEquipEffects, ref Humanoid __instance)
         {
             _ = PlayerInventoryChanges.recalculateSkillsAsync(__instance, null, 0.1f);
         }
     }
-
+    
+    [HarmonyPatch(typeof(StatusEffect), "RemoveStartEffects")]
+    public class StatusEffect_RemoveStartEffects_Patch
+    {
+        public static void Postfix(StatusEffect __instance)
+        {
+            Logger.Log("RemoveStartEffects | calling recalculateSkillsAsync after a buff is removed");
+            if (__instance.m_character is Humanoid humanoid)
+                _ = PlayerInventoryChanges.recalculateSkillsAsync(humanoid, null, 0.1f);
+        }
+    }
+    
     static class PlayerInventoryChanges
     {
         public static async Task recalculateSkillsAsync(Humanoid __instance, ItemDrop.ItemData item, float seconds)

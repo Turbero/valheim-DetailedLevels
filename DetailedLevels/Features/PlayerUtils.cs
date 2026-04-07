@@ -168,7 +168,8 @@ namespace DetailedLevels.Features
                 ItemDrop.ItemData.ItemType.TwoHandedWeapon,
                 ItemDrop.ItemData.ItemType.Utility,
                 ItemDrop.ItemData.ItemType.Attach_Atgeir,
-                ItemDrop.ItemData.ItemType.TwoHandedWeaponLeft
+                ItemDrop.ItemData.ItemType.TwoHandedWeaponLeft,
+                ItemDrop.ItemData.ItemType.Trinket
             };
             return types;
         }
