@@ -66,13 +66,11 @@ namespace DetailedLevels.Features
                 Utils.FindChild(obj.transform, "leveltext", (IterativeSearchType)0).GetComponent<TMP_Text>().text = levelTextWithoutModifier;
 
                 //Refresh background to adjust after sorting list
-                string skillName = skill.m_info.m_skill.ToString();
                 int nameHash = PlayerUtils.skillStatusEffects.GetValueSafe(skill.m_info.m_skill);
                 if (player.GetSEMan().GetStatusEffect(nameHash) is SE_SkillBuff existingBuff)
                 {
                     PlayerUtils.setSkillRowBackgroundColor(obj, ConfigurationFile.colorSkillBackground.Value);
-                    string levelText = PlayerUtils.GetSkillValueToShow(level, skillLevelModifier);
-                    existingBuff.m_name = $"$skill_{skill.m_info.m_skill.ToString().ToLower()}: {levelText}"; //Refresh value in buff section
+                    existingBuff.UpdateBuffText(PlayerUtils.GetSkillValueToShow(level, skillLevelModifier));
                 }
                 else
                 {
