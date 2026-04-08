@@ -1,28 +1,32 @@
 # Detailed Levels
 
-Showcase link: https://www.youtube.com/watch?v=dhLkLpgBZ7I
+NEW Showcase link! https://www.youtube.com/watch?v=nqBN60VqOHg
 
-The Detailed Levels plugin shows skills tracking with more details, including float level numbers and buffs to see their progress dynamically without checking the skills dialog all the time.
+(old one: https://www.youtube.com/watch?v=dhLkLpgBZ7I)
+
+The Detailed Levels mod shows skills tracking with more details, including float level numbers and buffs to see their progress dynamically without checking the skills dialog all the time.
 
 ## Main features
 
 Use the configuration file "Turbero.DetailedLevels.cfg" that will be created once the mod is executed for first time in order or a new in-game options panel to use the next features:
-* Select any skill and see its progress dynamically as a buff on your screen
+* Select any skill and see its progress dynamically as a buff on your screen, above or below the icon
 * Sort skills by name or level
 * Choose how many decimals you want to see from 0 to 15 (default = 2)
 * Choose how often you want to see the skill up messages in the center of your screen when you skill up (default = each 5 levels)
 * Translated to ALL LANGUAGES
 * NEW: Access your in-game player stats in the skills panel too!
 
-![](https://i.imgur.com/viNyHJ5.png)
+![](https://i.imgur.com/oQ2LZW9.png)
 
-![](https://i.imgur.com/m9F72bj.jpeg)
+![](https://i.imgur.com/mhxIsXW.jpeg)
 
-![](https://i.imgur.com/OXcZF4X.jpeg)
+![](https://i.imgur.com/PLKBI57.jpeg)
 
-![](https://i.imgur.com/OSS0gZ7.jpeg)
+![](https://i.imgur.com/6lK56eB.jpeg)
 
-![](https://i.imgur.com/GDXokFC.jpeg)
+![](https://i.imgur.com/UPKD1B8.jpeg)
+
+![](https://i.imgur.com/JZAaYX9.jpeg)
 
 ## About myself
 

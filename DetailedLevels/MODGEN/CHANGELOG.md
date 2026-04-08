@@ -1,5 +1,19 @@
 ### CHANGELOG
 
+## 2.0.0
+
+* Finally! Skills values are shown below the buff icons, not as part of the title!
+  * Added new option in .cfg file to show the value above the icon (as usual) or below (new). 
+  * It can be changed in-game in the skills options panel
+  * Default will be "below" when mod is installed for first time.
+* Protection shields also showing remaining damage above or below the icon according to the new option:
+  * In addition, now the remaining damage is updated when receiving elemental or fall damage, not only physical damage from enemies
+  * Game bug fixed:
+    * when recasting the shield with one active the timer is reset but not the damage to absorb.
+    * The mod will also reset the damage to absorb as if it was a new shield. It should be like this, Iron Gate!
+* Now trinket powers triggered by adrenaline will also increase skill buff values accordingly
+* Removed some warnings in console when using a controller
+
 ## 1.7.5
 
 * Added support for controllers. Now the mod panels can be navigated using the buttons through a gamepad.
@@ -29,6 +43,10 @@ Stats enhancements:
 * Stats categories separated in tabs: main stats and kill stats.
 * Kill stats are sorted by name. They can be grouped by initial letter or show all together in the .cfg file.
 * Separated death reasons in main stats in a new subcategory "Death Types".
+
+---
+
+<details><summary><b>Old releases notes (click to expand)</b></summary>
 
 ## 1.6.1
 
@@ -194,3 +212,5 @@ Minor fixes:
 ## 1.0.0
 
 Initial version
+
+</details>
