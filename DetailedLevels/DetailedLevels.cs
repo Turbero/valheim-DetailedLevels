@@ -86,7 +86,7 @@ namespace DetailedLevels
         {
             if (message.ToString().Contains("The LiberationSans SDF Font Asset was not found") || 
                 message.ToString().Contains("The character used for Ellipsis is not available in font asset") ||
-                message.ToString().Contains("lacks a proper counterpart in the GamepadButton enum. Returning South Button."))
+                message.ToString().Contains("lacks a proper counterpart in the GamepadButton enum"))
             {
                 return false;
             }
