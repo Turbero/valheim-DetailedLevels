@@ -155,17 +155,20 @@ namespace DetailedLevels.Features
                 float m_totalAbsorbDamage = (float) ReflectionUtils.GetPrivateValue(__instance, "m_totalAbsorbDamage");
                 float m_damage = (float) ReflectionUtils.GetPrivateValue(__instance, "m_damage");
                 float remainingAbsorbDamage = (float)Math.Round(m_totalAbsorbDamage - m_damage, Math.Min(15, Math.Max(0, ConfigurationFile.numberOfDecimals.Value)));
+                string remainingAbsorbDamageFinal = ConfigurationFile.skillValuesFormat.Value == SkillValuesFormat.Percentage
+                    ? Math.Round(remainingAbsorbDamage * 100 / m_totalAbsorbDamage, ConfigurationFile.numberOfDecimals.Value) +"%"
+                    : remainingAbsorbDamage.ToString();
                 float m_time = (float) ReflectionUtils.GetPrivateValue(__instance, "m_time");
                 string remainingTime = StatusEffect.GetTimeString(__instance.m_ttl - m_time);
                 if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.Above)
                 {
-                    __instance.m_name = $"$se_shield: {remainingAbsorbDamage}";
+                    __instance.m_name = $"$se_shield: {remainingAbsorbDamageFinal}";
                     __result = remainingTime;
                 }
                 else
                 {
                     __instance.m_name = "$se_shield";
-                    __result = remainingAbsorbDamage + " (" + remainingTime + ")";
+                    __result = remainingAbsorbDamageFinal + " (" + remainingTime + ")";
                 }
 
                 return false;
@@ -188,7 +191,10 @@ namespace DetailedLevels.Features
                 float m_totalAbsorbDamage = (float) ReflectionUtils.GetPrivateValue(__instance, "m_totalAbsorbDamage");
                 if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.Above)
                 {
-                    __instance.m_name = $"$se_shield: {m_totalAbsorbDamage}";
+                    string absorbDamage = ConfigurationFile.skillValuesFormat.Value == SkillValuesFormat.Percentage
+                        ? "100%"
+                        : m_totalAbsorbDamage+"";
+                    __instance.m_name = $"$se_shield: {absorbDamage}";
                 }
                 else
                 {
