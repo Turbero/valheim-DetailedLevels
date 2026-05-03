@@ -1,6 +1,7 @@
 .idea
-**/MODGEN/*.dll
-**/MODGEN/*.zip
+**/MODGEN/**/*.dll
+**/MODGEN/**/*.zip
+**/MODGEN/**/*.png
 **/*.vbs
 
 ## Ignore Visual Studio temporary files, build results, and
