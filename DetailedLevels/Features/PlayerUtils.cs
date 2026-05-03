@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -136,6 +138,8 @@ namespace DetailedLevels.Features
         public static float FindActiveModifierValue(Player player, Skills.SkillType skillType)
         {
             float totalModifierValue = 0f;
+            
+            //Modifiers from statuseffects
             List<StatusEffect> activeEffects = player.GetSEMan().GetStatusEffects();
             foreach (StatusEffect statusEffect in activeEffects)
             {
@@ -149,9 +153,49 @@ namespace DetailedLevels.Features
                 }
                     
             }
-            
+
+            //Modifier from EpicLoot
+            foreach (var equippedItem in player.GetInventory().GetEquippedItems())
+            {
+                bool has = equippedItem.m_customData.TryGetValue("randyknapp.mods.epicloot#EpicLoot.MagicItemComponent", out string value);
+                if (has && !string.IsNullOrEmpty(value))
+                {
+                    //Find skill modifiers
+                    float skillValue = GetEpicSkillValueFromJson(value, skillType);
+                    if (skillValue >= 0)
+                    {
+                        Logger.Log($"Found modifier for skill {skillType}: {skillValue}");
+                        totalModifierValue += skillValue;
+                    }
+                }
+            }
             
             return totalModifierValue;
+        }
+        
+        public static float GetEpicSkillValueFromJson(string json, Skills.SkillType skillType)
+        {
+            string pattern1 = "\"EffectValue\":([0-9]+.?[0-9]*),\"EffectType\":\"Add"+skillType+"Skill\"";
+            var match1 = Regex.Match(json, pattern1);
+            if (match1.Success)
+            {
+                var valueStr = match1.Groups[1].Value;
+                if (float.TryParse(valueStr, NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
+                    return value;
+            }
+            else
+            {
+                var pattern2 = "\"EffectType\":\"Add"+skillType+"Skill\",\"EffectValue\":([0-9]+.?[0-9]*)";
+                var match2 = Regex.Match(json, pattern2);
+                if (match2.Success)
+                {
+                    string valueStr = match2.Groups[1].Value;
+                    if (float.TryParse(valueStr, NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
+                        return value;
+                }
+            }
+
+            return -1f;
         }
 
         public static List<ItemDrop.ItemData.ItemType> GetTypesThatModifyStats()

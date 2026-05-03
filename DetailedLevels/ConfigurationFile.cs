@@ -148,11 +148,11 @@ namespace DetailedLevels
         {
             PlayerSkillupOptionsPatch.updateOptionsTexts();
             PlayerSkillupOptionsPatch.reloadTexts();
-            PlayerColorBuffs.refreshAllBlueColors(Player.m_localPlayer);
             SkillTypeCraftStationDescriptionsPatch.updated = false;
             //Refresh buff texts
             if (Player.m_localPlayer != null)
             {
+                PlayerColorBuffs.refreshAllBlueColors(Player.m_localPlayer);
                 foreach (var pair in PlayerUtils.skillStatusEffects)
                 {
                     if (Player.m_localPlayer.GetSEMan().GetStatusEffect(pair.Value) is SE_SkillBuff skillBuff)

@@ -6,7 +6,7 @@ namespace DetailedLevels.Features
 {
     static class CampfireCheck
     {
-        public static bool campfireCheckActive = false;
+        private static bool campfireCheckActive = false;
 
         [HarmonyPatch(typeof(SEMan), "AddStatusEffect", typeof(StatusEffect), typeof(bool), typeof(int), typeof(float))]
         public class SEManAddStatusPatch1
@@ -75,20 +75,21 @@ namespace DetailedLevels.Features
         {
             foreach (Skills.Skill skillValue in PlayerBuffs.skills.Values)
             {
-                float skillLevelModifer = PlayerUtils.FindActiveModifierValue(player, skillValue.m_info.m_skill);
-                if (skillLevelModifer > 0)
+                string textToFind = Localization.instance.Localize($"$skill_{skillValue.m_info.m_skill.ToString().ToLower()}");
+                for (int i = 0; i < Hud.instance.m_statusEffectListRoot.childCount; i++)
                 {
-                    string textToFind = Localization.instance.Localize($"$skill_{skillValue.m_info.m_skill.ToString().ToLower()}");
-                    for (int i = 0; i < Hud.instance.m_statusEffectListRoot.childCount; i++)
+                    TextMeshProUGUI[] textFields = Hud.instance.m_statusEffectListRoot.GetChild(i).GetComponentsInChildren<TextMeshProUGUI>(true);
+                    //Above text
+                    TextMeshProUGUI aboveText = textFields[0];
+                    TextMeshProUGUI belowText = textFields[1];
+                    Logger.Log($"Finding text {textToFind} in {aboveText.text}");
+                    if (aboveText.text.Contains(textToFind))
                     {
-                        TextMeshProUGUI[] textFields = Hud.instance.m_statusEffectListRoot.GetChild(i).GetComponentsInChildren<TextMeshProUGUI>(true);
-                        //Above text
-                        TextMeshProUGUI aboveText = textFields[0];
-                        TextMeshProUGUI belowText = textFields[1];
-                        Logger.Log($"Finding text {textToFind} in {aboveText.text}");
-                        if (aboveText.text.Contains(textToFind))
+                        //Buff found
+                        float skillLevelModifer = PlayerUtils.FindActiveModifierValue(player, skillValue.m_info.m_skill);
+                        Logger.Log($"{skillValue.m_info.m_skill} - {skillLevelModifer}");
+                        if (skillLevelModifer > 0)
                         {
-                            //Buff found
                             if (ConfigurationFile.skillBuffValuePosition.Value == SkillBuffValuePosition.Above)
                             {
                                 //Above Blue
@@ -107,9 +108,18 @@ namespace DetailedLevels.Features
                                 belowText.color = new Color(0, 0.741f, 1, 1);
                                 belowText.faceColor = new Color32(255, 255, 255, 255);
                             }
-
-                            break;
                         }
+                        else
+                        {
+                            //Above White
+                            aboveText.color = new Color(1, 1, 1, 1);
+                            aboveText.faceColor = new Color32(255, 255, 255, 255);
+                            //Below yellow
+                            belowText.color = new Color(1, 0.7176f, 0.3603f, 1);
+                            belowText.faceColor = new Color32(255, 255, 255, 255);
+                        }
+
+                        break;
                     }
                 }
             }
