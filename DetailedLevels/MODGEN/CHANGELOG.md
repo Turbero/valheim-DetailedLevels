@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 2.0.1
+
+* Added support for EpicLoot → equipment that increases skill values will also color with blue the corresponding skill buff value once equipped.
+
 ## 2.0.0
 
 * Finally! Skills values are shown below the buff icons, not as part of the title!
