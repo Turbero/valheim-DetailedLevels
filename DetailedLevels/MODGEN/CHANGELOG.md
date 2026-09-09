@@ -1,5 +1,12 @@
 ### CHANGELOG
 
+## 2.1.0
+
+* Compatibility with 1.0 Deep North
+* Fixed issues after update
+* Added "above"/"below" translations in options panel
+* Temporarily removed gamepad keys in stats window to avoid warnings flood in console
+
 ## 2.0.1
 
 * Added support for EpicLoot → equipment that increases skill values will also color with blue the corresponding skill buff value once equipped.
