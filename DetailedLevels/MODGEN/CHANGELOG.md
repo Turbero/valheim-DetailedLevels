@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 2.1.2
+
+* Fixed bundle with correct ServerSync for 1.0
+
 ## 2.1.1
 
 * ServerSync upgrade for version 1.0 compatibility
