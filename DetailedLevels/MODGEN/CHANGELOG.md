@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 2.1.1
+
+* ServerSync upgrade for version 1.0 compatibility
+
 ## 2.1.0
 
 * Compatibility with 1.0 Deep North
