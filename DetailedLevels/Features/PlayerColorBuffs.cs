@@ -8,36 +8,6 @@ namespace DetailedLevels.Features
     {
         private static bool campfireCheckActive = false;
 
-        [HarmonyPatch(typeof(SEMan), "AddStatusEffect", typeof(StatusEffect), typeof(bool), typeof(int), typeof(float))]
-        public class SEManAddStatusPatch1
-        {
-            [HarmonyPrefix]
-            public static void Postfix(StatusEffect statusEffect, bool resetTime, int itemLevel, float skillLevel, ref Character ___m_character)
-            {
-                if (SEMan.s_statusEffectCampFire == statusEffect.GetHashCode() && !campfireCheckActive)
-                    campfireCheckActive = true;
-
-                Logger.Log("SEMan.AddStatusEffect - SEManAddStatusPatch1");
-                _ = PlayerInventoryChanges.recalculateSkillsAsync(___m_character as Humanoid, null, 0.1f);
-            }
-        }
-
-        [HarmonyPatch(typeof(SEMan), "AddStatusEffect", typeof(int), typeof(bool), typeof(int), typeof(float))]
-        public class SEManAddStatusPatch2
-        {
-
-            [HarmonyPrefix]
-            public static void Postfix(int nameHash, bool resetTime, int itemLevel, float skillLevel, ref Character ___m_character)
-            {
-                if (nameHash == SEMan.s_statusEffectCampFire && !campfireCheckActive)
-                {
-                    campfireCheckActive = true;
-                    Logger.Log("SEMan.AddStatusEffect - SEManAddStatusPatch2");
-                    _ = PlayerInventoryChanges.recalculateSkillsAsync(___m_character as Humanoid, null, 0.1f);
-                }
-            }
-        }
-
         [HarmonyPatch(typeof(SEMan), "RemoveStatusEffect", typeof(StatusEffect), typeof(bool))]
         public class SEManRemoveStatusPatch1
         {
