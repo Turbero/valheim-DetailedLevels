@@ -253,7 +253,8 @@ namespace DetailedLevels.Tools
 
         private static Dictionary<PlayerStatType, float> getPlayerDictionaryStats()
         {
-            return ((PlayerProfile)ReflectionUtils.GetPrivateValue(Game.instance, "m_playerProfile"))?.m_playerStats.m_stats;
+            PlayerProfile.PlayerStats[] playerStats = ((PlayerProfile)ReflectionUtils.GetPrivateValue(Game.instance, "m_playerProfile"))?.m_playerStats;
+            return playerStats?[0].m_stats;
         }
 
         public GameObject getPanel() { return panel; }

@@ -52,10 +52,16 @@ namespace DetailedLevels.Tools
                 PlayerSkillupOptionsPatch.HideTabButtons();
             });
         }
+        
+        private static Dictionary<string, float> getPlayerEnemyStats()
+        {
+            PlayerProfile.PlayerStats[] playerStats = ((PlayerProfile)ReflectionUtils.GetPrivateValue(Game.instance, "m_playerProfile"))?.m_playerStats;
+            return playerStats?[0].m_enemyStats[0];
+        }
 
         private void LoadKillStats()
         {
-            Dictionary<string, float> killStats = ((PlayerProfile)ReflectionUtils.GetPrivateValue(Game.instance, "m_playerProfile")).m_enemyStats;
+            Dictionary<string, float> killStats = getPlayerEnemyStats();
             Dictionary<string, float> killStatsTranslated = new Dictionary<string, float>();
             foreach (var keyValuePair in killStats)
             {
