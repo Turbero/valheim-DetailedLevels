@@ -113,7 +113,7 @@ namespace DetailedLevels.Features
             tabStatsButtonObject = GameObject.Instantiate(closeButtonTransform.gameObject, skillsDialog.transform);
             tabStatsButtonObject.name = "TabStatsButton";
             tabStatsButtonObject.SetActive(false);
-            ControllerUtils.BindGamePad(tabStatsButtonObject.transform, KeyCode.JoystickButton14, InventoryGui.instance);
+            //ControllerUtils.BindGamePad(tabStatsButtonObject.transform, KeyCode.JoystickButton14, InventoryGui.instance);
             RectTransform tabStatsButtonRect = tabStatsButtonObject.GetComponent<RectTransform>();
             tabStatsButtonRect.anchoredPosition = new Vector2(-550, 843);
             tabStatsButtonRect.sizeDelta = new Vector2(140, 46);
@@ -130,7 +130,7 @@ namespace DetailedLevels.Features
             tabKillStatsButtonObject = GameObject.Instantiate(closeButtonTransform.gameObject, skillsDialog.transform);
             tabKillStatsButtonObject.name = "TabKillStatsButton";
             tabKillStatsButtonObject.SetActive(false);
-            ControllerUtils.BindGamePad(tabKillStatsButtonObject.transform, KeyCode.JoystickButton15, InventoryGui.instance);
+            //ControllerUtils.BindGamePad(tabKillStatsButtonObject.transform, KeyCode.JoystickButton15, InventoryGui.instance);
             RectTransform tabKillStatsButtonRect = tabKillStatsButtonObject.GetComponent<RectTransform>();
             tabKillStatsButtonRect.anchoredPosition = new Vector2(-400, 843);
             tabKillStatsButtonRect.sizeDelta = new Vector2(140, 46);
@@ -294,7 +294,9 @@ namespace DetailedLevels.Features
             {
                 Logger.Log("slider changed to " + value);
                 SkillBuffValuePosition format = value == 0 ? SkillBuffValuePosition.Above : SkillBuffValuePosition.Below;
-                customSliderSkillValuePosition.updateTextValue(format.ToString());
+                customSliderSkillValuePosition.updateTextValue(format == SkillBuffValuePosition.Above
+                    ? ConfigurationFile.skillValuePositionAboveText.Value
+                    : ConfigurationFile.skillValuePositionBelowText.Value);
                 ConfigurationFile.skillBuffValuePosition.Value = format;
             });
         }

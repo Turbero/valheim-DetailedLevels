@@ -54,6 +54,8 @@ namespace DetailedLevels
         public static ConfigEntry<string> deathPenaltyText;
         public static ConfigEntry<string> reloadAfterDyingText;
         public static ConfigEntry<string> skillValuePositionText;
+        public static ConfigEntry<string> skillValuePositionAboveText;
+        public static ConfigEntry<string> skillValuePositionBelowText;
         public static ConfigEntry<string> numberOfDecimalsText;
         public static ConfigEntry<string> skillValuesFormatText;
         public static ConfigEntry<string> skillUpMessageText;
@@ -102,6 +104,8 @@ namespace DetailedLevels
                 deathPenaltyText = config("4 - Language", "DeathPenaltyText", "Death Penalty", "Translation for <Death Penalty> text");
                 reloadAfterDyingText = config("4 - Language", "ReloadAfterDyingText", "Reload after dying", "Translation for <Reload after dying> text");
                 skillValuePositionText  = config("4 - Language", "SkillValuePositionText", "Skill value position", "Translation for <Skill value position> text");
+                skillValuePositionAboveText  = config("4 - Language", "SkillValuePositionAboveText", "Above", "Translation for <Above> text");
+                skillValuePositionBelowText  = config("4 - Language", "SkillValuePositionBelowText", "Below", "Translation for <Below> text");
                 numberOfDecimalsText  = config("4 - Language", "NumberOfDecimalsText", "Number of decimals", "Translation for <Number of decimals> text");
                 skillValuesFormatText  = config("4 - Language", "Skill Values Format Text", "Skill Values Format", "Translation for <Skill Values Format> text");
                 skillUpMessageText = config("4 - Language", "SkillUpMessageText", "Skill up message", "Translation for <Skill up message> text");
