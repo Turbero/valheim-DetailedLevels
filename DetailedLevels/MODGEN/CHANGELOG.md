@@ -1,5 +1,9 @@
 ### CHANGELOG
 
+## 2.1.3
+
+* Fixing blood magic skill updates when invocations hit a "T.W.I.G." dummy (yes, it's feasible! Thank you, SnazzyGames)
+
 ## 2.1.2
 
 * Fixed bundle with correct ServerSync for 1.0

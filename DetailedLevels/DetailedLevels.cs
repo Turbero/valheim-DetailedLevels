@@ -12,7 +12,7 @@ namespace DetailedLevels
     {
         public const string GUID = "Turbero.DetailedLevels";
         public const string NAME = "Detailed Levels";
-        public const string VERSION = "2.1.2";
+        public const string VERSION = "2.1.3";
 
         private readonly Harmony harmony = new Harmony(GUID);
 
