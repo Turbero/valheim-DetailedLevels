@@ -119,10 +119,13 @@ namespace DetailedLevels.Features
                 {
                     //Blood magic
                     Logger.Log("Checking blood magic skill up...");
-                    // if attacker is a pet/invocation and attacked is a monster there is a bloodmagic skillup!
+                    // if attacker is a pet/invocation and attacked is a monster, there is a bloodmagic skillup!
                     if (attacker.IsTamed() && __instance.IsMonsterFaction(0f))
                         _ = WaitForSecondsAsyncBloodMagic(null, 0.1f);
-                    // attacker is a monster and attacked is a player. If the magic barriers breaks, there is a bloodmagic skillup!
+                    // if attacker is a pet/invocation and attacked is a dummy, there is a bloodmagic skillup!
+                    else if (attacker.IsTamed() && isTrainingDummy(__instance))
+                        _ = WaitForSecondsAsyncBloodMagic(null, 0.1f);
+                    // attacker is a monster and attacked is a player. If a magic barriers breaks, there is a bloodmagic skillup!
                     else if  (attacker.IsMonsterFaction(0f) && __instance.GetType() == typeof(Player))
                         _ = WaitForSecondsAsyncBloodMagic(__instance as Player, 0.1f);
                     // attacker is a Troll_Summoned and attacked is Player or Tamed
@@ -133,6 +136,12 @@ namespace DetailedLevels.Features
                             _ = WaitForSecondsAsyncBloodMagic(null, 0.1f);
                 }
             }
+        }
+
+        private static bool isTrainingDummy(Character __instance)
+        {
+            Logger.Log("name: "+__instance.name);
+            return __instance.name.ToLowerInvariant().Contains("trainingdummy") && __instance.GetComponent<Piece>() != null;
         }
 
         private static async Task WaitForSecondsAsyncBloodMagic(Player player, float seconds)
