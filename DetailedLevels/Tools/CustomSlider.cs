@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.Events;
-using System.Reflection;
 using DetailedLevels.Features;
 
 namespace DetailedLevels.Tools
@@ -12,13 +11,14 @@ namespace DetailedLevels.Tools
         private readonly GameObject sliderObject;
         private readonly Slider slider;
         private readonly TextMeshProUGUI sliderValue;
-        public TextMeshProUGUI sliderLabelDescription;
+        public readonly TextMeshProUGUI sliderLabelDescription;
 
         public CustomSlider(string name, int maxValue,
                             Vector2 sizeDelta, Vector2 position,
                             int posXIcon, string spriteName,
                             int posXDescription, string description,
-                            int posXValue, int initValue, string valueDesc
+                            int posXValue, int initValue, string valueDesc,
+                            int labelSizeX = 250, int labelSizeY = 50
                             )
         {
             // Main container
@@ -93,6 +93,7 @@ namespace DetailedLevels.Tools
                 textObject.transform.SetParent(sliderObject.transform, false);
                 RectTransform textRect = textObject.GetComponent<RectTransform>();
                 textRect.anchoredPosition = new Vector2(posXDescription, 0);
+                textRect.sizeDelta = new Vector2(labelSizeX, labelSizeY);
                 sliderLabelDescription = textObject.GetComponent<TextMeshProUGUI>();
                 sliderLabelDescription.text = description;
                 sliderLabelDescription.fontSize = 18;
