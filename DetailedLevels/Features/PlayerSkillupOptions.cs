@@ -260,7 +260,7 @@ namespace DetailedLevels.Features
                 position: new Vector2(-17, 163),
                 posXIcon: -1,
                 spriteName: null,
-                posXDescription: -124,
+                posXDescription: -152,
                 description: ConfigurationFile.reloadAfterDyingText.Value,
                 posXValue: 123,
                 initValue: ConfigurationFile.saveSkillBuffs.Value ? 1 : 0,
@@ -283,7 +283,7 @@ namespace DetailedLevels.Features
                 position: new Vector2(-17, 135),
                 posXIcon: 0,
                 spriteName: null,
-                posXDescription: -124,
+                posXDescription: -152,
                 description: ConfigurationFile.skillValuePositionText.Value,
                 posXValue: 123,
                 initValue: (int)ConfigurationFile.skillBuffValuePosition.Value,
@@ -310,7 +310,7 @@ namespace DetailedLevels.Features
                 position: new Vector2(45, 105),
                 posXIcon: 0,
                 spriteName: null,
-                posXDescription: -186,
+                posXDescription: -214,
                 description: ConfigurationFile.numberOfDecimalsText.Value,
                 posXValue: 185,
                 initValue: ConfigurationFile.numberOfDecimals.Value,
@@ -334,7 +334,7 @@ namespace DetailedLevels.Features
                 position: new Vector2(-17, 75),
                 posXIcon: 0,
                 spriteName: null,
-                posXDescription: -124,
+                posXDescription: -150,
                 description: ConfigurationFile.skillValuesFormatText.Value,
                 posXValue: 123,
                 initValue: (int)ConfigurationFile.skillValuesFormat.Value,
@@ -367,7 +367,7 @@ namespace DetailedLevels.Features
                 position: new Vector2(45, 45),
                 posXIcon: 0,
                 spriteName: null,
-                posXDescription: -186,
+                posXDescription: -214,
                 description: ConfigurationFile.skillUpMessageText.Value,
                 posXValue: 185,
                 initValue: ConfigurationFile.skillUpMessageAfterMultipleLevel.Value,
@@ -391,7 +391,7 @@ namespace DetailedLevels.Features
                 position: new Vector2(45, 15),
                 posXIcon: 0,
                 spriteName: null,
-                posXDescription: -186,
+                posXDescription: -214,
                 description: ConfigurationFile.skillUpBigMessageText.Value,
                 posXValue: 185,
                 initValue: ConfigurationFile.skillUpBigMessageAfterMultipleLevel.Value,
@@ -415,7 +415,7 @@ namespace DetailedLevels.Features
                 position: new Vector2(-14, -15),
                 posXIcon: -1,
                 spriteName: null,
-                posXDescription: -124,
+                posXDescription: -150,
                 description: ConfigurationFile.skillsOrderText.Value,
                 posXValue: 123,
                 initValue: ConfigurationFile.saveSkillsOrder.Value ? 1 : 0,
@@ -444,15 +444,14 @@ namespace DetailedLevels.Features
 
         public static void InventoryShow()
         {
-            if (panel != null)
-            {
-                reloadTexts();
-                panel.getPanel()?.gameObject?.SetActive(false);
-                statsPanel.getPanel()?.gameObject?.SetActive(false);
-                statsPanelKills.getPanel()?.gameObject?.SetActive(false);
-                tabStatsButtonObject.SetActive(false);
-                tabKillStatsButtonObject.SetActive(false);
-            }
+            if (panel == null || panel.getPanel() == null || tabStatsButtonObject == null)
+                return;
+            reloadTexts();
+            panel.getPanel()?.gameObject?.SetActive(false);
+            statsPanel.getPanel()?.gameObject?.SetActive(false);
+            statsPanelKills.getPanel()?.gameObject?.SetActive(false);
+            tabStatsButtonObject.SetActive(false);
+            tabKillStatsButtonObject.SetActive(false);
         }
     }
 
