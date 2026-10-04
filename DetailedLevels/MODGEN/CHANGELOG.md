@@ -1,5 +1,10 @@
 ### CHANGELOG
 
+## 2.1.4
+
+* Fixed errors when logging out to the title screen and logging in back again.
+* Options panel width slightly increased to avoid text overlapping in some languages.
+
 ## 2.1.3
 
 * Fixing blood magic skill updates when invocations hit a "T.W.I.G." dummy (yes, it's feasible! Thank you, SnazzyGames)
