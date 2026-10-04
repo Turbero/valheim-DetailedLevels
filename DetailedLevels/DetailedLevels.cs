@@ -60,14 +60,9 @@ namespace DetailedLevels
             if (InventoryGui.instance.m_skillsDialog == null) return;
             
             InventoryGui.instance.m_skillsDialog.gameObject.SetActive(false);
-
-            if (InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/CustomSkillOptionsPanel") == null)
-                return;
-
-            InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/CustomSkillOptionsPanel").gameObject.SetActive(false);
-            
-            InventoryGui.instance.m_skillsDialog.transform.Find("TabStatsButton").gameObject.SetActive(false);
-            InventoryGui.instance.m_skillsDialog.transform.Find("TabKillStatsButton").gameObject.SetActive(false);
+            InventoryGui.instance.m_skillsDialog.transform.Find("SkillsFrame/CustomSkillOptionsPanel")?.gameObject.SetActive(false);
+            InventoryGui.instance.m_skillsDialog.transform.Find("TabStatsButton")?.gameObject.SetActive(false);
+            InventoryGui.instance.m_skillsDialog.transform.Find("TabKillStatsButton")?.gameObject.SetActive(false);
         }
         private static async Task WaitForSecondsAsync(float seconds)
         {
